@@ -1,0 +1,41 @@
+{
+  "data_seeds": [
+    1006,
+    1007,
+    1008,
+    1009,
+    1010
+  ],
+  "encoder_seeds": [
+    2001,
+    2002,
+    2003
+  ],
+  "dimension": 4096,
+  "levels": 32,
+  "blocks": 24,
+  "memory_blocks": 12,
+  "validation_blocks": 6,
+  "episodes_per_block": 100,
+  "local_weight": 1.0,
+  "context_weight": 2.0,
+  "handset_weight": 0.25,
+  "review_delay_s": 300,
+  "budgets": [
+    1,
+    2,
+    5,
+    10,
+    20
+  ],
+  "bootstrap_repeats": 1000,
+  "benchmark_repeats": 500,
+  "warmup": 50,
+  "refit_repeats": 7,
+  "refit_warmup": 2,
+  "update_batches": [
+    1,
+    20,
+    40
+  ]
+}

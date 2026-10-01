@@ -1,0 +1,41 @@
+{
+  "helps": {
+    "episode_id": "S1006-W00-E00-0",
+    "review_source_id": "S1006-W00-E00-0-REVIEW",
+    "label_status": "simulated_evidence_rule",
+    "review_ready_s": 1788249940,
+    "observed_at_s": 1788250000,
+    "encoder_hash": "1d9f62294bbd8b337ff933ad4d7047be047e4154ce91e654ff377455c6379199",
+    "changed": 20,
+    "corrected": 5,
+    "regressed": 0,
+    "net_correct": 5,
+    "probe_scope": "Fixed diagnostic memory-partition episodes; probes never select updates"
+  },
+  "hurts": {
+    "episode_id": "S1006-W00-E02-3",
+    "review_source_id": "S1006-W00-E02-3-REVIEW",
+    "label_status": "simulated_evidence_rule",
+    "review_ready_s": 1788250180,
+    "observed_at_s": 1788250240,
+    "encoder_hash": "1d9f62294bbd8b337ff933ad4d7047be047e4154ce91e654ff377455c6379199",
+    "changed": 1,
+    "corrected": 0,
+    "regressed": 1,
+    "net_correct": -1,
+    "probe_scope": "Fixed diagnostic memory-partition episodes; probes never select updates"
+  },
+  "unchanged": {
+    "episode_id": "S1006-W00-E01-0",
+    "review_source_id": "S1006-W00-E01-0-REVIEW",
+    "label_status": "simulated_evidence_rule",
+    "review_ready_s": 1788250060,
+    "observed_at_s": 1788250120,
+    "encoder_hash": "1d9f62294bbd8b337ff933ad4d7047be047e4154ce91e654ff377455c6379199",
+    "changed": 0,
+    "corrected": 0,
+    "regressed": 0,
+    "net_correct": 0,
+    "probe_scope": "Fixed diagnostic memory-partition episodes; probes never select updates"
+  }
+}

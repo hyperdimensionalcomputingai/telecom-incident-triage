@@ -1,0 +1,332 @@
+{
+  "retrieval": {
+    "hdc": {
+      "top1": {
+        "mean": 0.9847777777777778,
+        "lower": 0.9794444444444445,
+        "upper": 0.9895555555555555,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.975,
+        "maximum_run": 0.9916666666666667
+      },
+      "precision_at_5": {
+        "mean": 0.9625777777777778,
+        "lower": 0.9572649999999999,
+        "upper": 0.9672233333333333,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.95,
+        "maximum_run": 0.9723333333333334
+      },
+      "reciprocal_rank_at_10": {
+        "mean": 0.9911772486772487,
+        "lower": 0.9881654960317461,
+        "upper": 0.9940635185185185,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.9855555555555555,
+        "maximum_run": 0.9950555555555556
+      }
+    },
+    "structured": {
+      "top1": {
+        "mean": 0.9693333333333333,
+        "lower": 0.9593333333333333,
+        "upper": 0.9783333333333333,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.955,
+        "maximum_run": 0.9783333333333334
+      },
+      "precision_at_5": {
+        "mean": 0.9240666666666667,
+        "lower": 0.91653,
+        "upper": 0.9322,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.912,
+        "maximum_run": 0.931
+      },
+      "reciprocal_rank_at_10": {
+        "mean": 0.9829916666666667,
+        "lower": 0.9770816666666666,
+        "upper": 0.9882222916666666,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.9748611111111111,
+        "maximum_run": 0.9886111111111111
+      }
+    },
+    "hdc_without_paths": {
+      "top1": {
+        "mean": 0.6247777777777778,
+        "lower": 0.603775,
+        "upper": 0.642225,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.5883333333333334,
+        "maximum_run": 0.6466666666666666
+      },
+      "precision_at_5": {
+        "mean": 0.6059111111111111,
+        "lower": 0.5957333333333333,
+        "upper": 0.6147344444444445,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.5946666666666667,
+        "maximum_run": 0.6233333333333333
+      },
+      "reciprocal_rank_at_10": {
+        "mean": 0.7632967372134039,
+        "lower": 0.7508790564373898,
+        "upper": 0.774709136904762,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.7449801587301588,
+        "maximum_run": 0.7784768518518519
+      }
+    },
+    "hdc_without_order": {
+      "top1": {
+        "mean": 0.7325555555555555,
+        "lower": 0.7116638888888889,
+        "upper": 0.754225,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.6933333333333334,
+        "maximum_run": 0.77
+      },
+      "precision_at_5": {
+        "mean": 0.7003777777777778,
+        "lower": 0.6872422222222222,
+        "upper": 0.711183888888889,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.6816666666666666,
+        "maximum_run": 0.7193333333333334
+      },
+      "reciprocal_rank_at_10": {
+        "mean": 0.8360408289241622,
+        "lower": 0.8239889120370371,
+        "upper": 0.8495645745149911,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.8169272486772486,
+        "maximum_run": 0.8583095238095239
+      }
+    },
+    "hdc_lance_float16": {
+      "top1": {
+        "mean": 0.9847777777777778,
+        "lower": 0.9794444444444445,
+        "upper": 0.9895555555555555,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.975,
+        "maximum_run": 0.9916666666666667
+      },
+      "precision_at_5": {
+        "mean": 0.9625777777777778,
+        "lower": 0.9572649999999999,
+        "upper": 0.9672233333333333,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.95,
+        "maximum_run": 0.9723333333333334
+      },
+      "reciprocal_rank_at_10": {
+        "mean": 0.9911772486772487,
+        "lower": 0.9881654960317461,
+        "upper": 0.9940635185185185,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",
+        "minimum_run": 0.9855555555555555,
+        "maximum_run": 0.9950555555555556
+      }
+    }
+  },
+  "learning": {
+    "1": {
+      "hdc": {
+        "mean": 0.8228567645841678,
+        "lower": 0.7839952120699069,
+        "upper": 0.8547593849335868,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "logistic_regression": {
+        "mean": 0.7487987912090207,
+        "lower": 0.7064212797054834,
+        "upper": 0.7921534722907972,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "mlp": {
+        "mean": 0.7339401911993048,
+        "lower": 0.6972660609427649,
+        "upper": 0.769774966925307,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      }
+    },
+    "2": {
+      "hdc": {
+        "mean": 0.9101932767084295,
+        "lower": 0.885964688260076,
+        "upper": 0.935048148403875,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "logistic_regression": {
+        "mean": 0.8467432924509323,
+        "lower": 0.7802880572000032,
+        "upper": 0.8939239517567401,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "mlp": {
+        "mean": 0.8520019394083914,
+        "lower": 0.831589570103477,
+        "upper": 0.8708264962788276,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      }
+    },
+    "5": {
+      "hdc": {
+        "mean": 0.9646448286995478,
+        "lower": 0.9508706278097798,
+        "upper": 0.975700914284446,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "logistic_regression": {
+        "mean": 0.9483042955671951,
+        "lower": 0.9303118020232513,
+        "upper": 0.9634707540325506,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "mlp": {
+        "mean": 0.9627940862551934,
+        "lower": 0.9471203807378035,
+        "upper": 0.9782770190375921,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      }
+    },
+    "10": {
+      "hdc": {
+        "mean": 0.9846404234549829,
+        "lower": 0.9767457515372326,
+        "upper": 0.9931917459384555,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "logistic_regression": {
+        "mean": 0.9648177127193491,
+        "lower": 0.9512380009123772,
+        "upper": 0.9761518225435382,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "mlp": {
+        "mean": 0.9834979745623579,
+        "lower": 0.9763384026400412,
+        "upper": 0.990863356722009,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      }
+    },
+    "20": {
+      "hdc": {
+        "mean": 0.986729502982671,
+        "lower": 0.9819978804204498,
+        "upper": 0.9912059932779297,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "logistic_regression": {
+        "mean": 0.9829532144906129,
+        "lower": 0.9772118588632835,
+        "upper": 0.9886555123683979,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "mlp": {
+        "mean": 0.9910841647937597,
+        "lower": 0.984174860750896,
+        "upper": 0.9970039315621684,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      }
+    }
+  },
+  "paired_differences": {
+    "hdc_minus_hdc_without_paths": {
+      "mean": 0.35666666666666663,
+      "lower": 0.3460172222222222,
+      "upper": 0.3679577777777778,
+      "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+    },
+    "hdc_minus_hdc_without_order": {
+      "mean": 0.2622,
+      "lower": 0.2526661111111111,
+      "upper": 0.2741833333333333,
+      "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+    },
+    "hdc_minus_structured": {
+      "mean": 0.03851111111111106,
+      "lower": 0.0331094444444444,
+      "upper": 0.042957777777777734,
+      "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+    }
+  },
+  "learning_differences": {
+    "1": {
+      "hdc_minus_logistic_regression": {
+        "mean": 0.07405797337514707,
+        "lower": 0.05582390501145321,
+        "upper": 0.09805798755766469,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "hdc_minus_mlp": {
+        "mean": 0.08891657338486296,
+        "lower": 0.07342873202963947,
+        "upper": 0.10660357028100628,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      }
+    },
+    "2": {
+      "hdc_minus_logistic_regression": {
+        "mean": 0.06344998425749718,
+        "lower": 0.00043002436132563466,
+        "upper": 0.13036581192491992,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "hdc_minus_mlp": {
+        "mean": 0.058191337300038115,
+        "lower": 0.03199970914134127,
+        "upper": 0.0875702872172287,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      }
+    },
+    "5": {
+      "hdc_minus_logistic_regression": {
+        "mean": 0.016340533132352654,
+        "lower": -0.005820097753144143,
+        "upper": 0.03727673677329468,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "hdc_minus_mlp": {
+        "mean": 0.0018507424443544316,
+        "lower": -0.013512929098247278,
+        "upper": 0.02141174812276491,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      }
+    },
+    "10": {
+      "hdc_minus_logistic_regression": {
+        "mean": 0.019822710735633756,
+        "lower": 0.009210777911706472,
+        "upper": 0.030178922107792067,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "hdc_minus_mlp": {
+        "mean": 0.001142448892625024,
+        "lower": -0.002403712890360661,
+        "upper": 0.004824791795261986,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      }
+    },
+    "20": {
+      "hdc_minus_logistic_regression": {
+        "mean": 0.0037762884920581243,
+        "lower": -0.0026849023206788453,
+        "upper": 0.010730495190020173,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      },
+      "hdc_minus_mlp": {
+        "mean": -0.004354661811088743,
+        "lower": -0.008245366314317206,
+        "upper": -0.000891774558378146,
+        "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first"
+      }
+    }
+  },
+  "random_precision_at_5": 0.25002282863531244,
+  "n_seed_pairs": 15,
+  "final_queries_scored": 9000,
+  "independent_final_worlds": 30
+}

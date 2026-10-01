@@ -1,0 +1,2100 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1142361,
+      "properties": {
+        "centreline_id": 1142361,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.3909897880728,
+            43.6693829543637
+          ],
+          [
+            -79.3941414134514,
+            43.6687202589369
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1142512,
+      "properties": {
+        "centreline_id": 1142512,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.3973807918684,
+            43.668033224743
+          ],
+          [
+            -79.3983043058038,
+            43.6678434378347
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1142564,
+      "properties": {
+        "centreline_id": 1142564,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.3983043058038,
+            43.6678434378347
+          ],
+          [
+            -79.3998364772384,
+            43.6675168720603
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1142672,
+      "properties": {
+        "centreline_id": 1142672,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4015151850851,
+            43.6671691869245
+          ],
+          [
+            -79.4026872546459,
+            43.6669104391959
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1142720,
+      "properties": {
+        "centreline_id": 1142720,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4026872546459,
+            43.6669104391959
+          ],
+          [
+            -79.4038316245015,
+            43.6666676425084
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1142792,
+      "properties": {
+        "centreline_id": 1142792,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4045186458487,
+            43.666523764993
+          ],
+          [
+            -79.4053548050255,
+            43.6663588717851
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1142870,
+      "properties": {
+        "centreline_id": 1142870,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4066466049006,
+            43.6660965999572
+          ],
+          [
+            -79.4074718149966,
+            43.6659241211862
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1142919,
+      "properties": {
+        "centreline_id": 1142919,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4074718149966,
+            43.6659241211862
+          ],
+          [
+            -79.4086535975627,
+            43.6656789211038
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1143160,
+      "properties": {
+        "centreline_id": 1143160,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4136470363071,
+            43.6646105539374
+          ],
+          [
+            -79.4148585870861,
+            43.6643400993797
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1143206,
+      "properties": {
+        "centreline_id": 1143206,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4148585870861,
+            43.6643400993797
+          ],
+          [
+            -79.4159840914726,
+            43.6640936743453
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1143319,
+      "properties": {
+        "centreline_id": 1143319,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4184160600154,
+            43.6635768597084
+          ],
+          [
+            -79.4188388920993,
+            43.6634812874234
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1143498,
+      "properties": {
+        "centreline_id": 1143498,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4220599722745,
+            43.6627783009308
+          ],
+          [
+            -79.4232502990377,
+            43.66251493494
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1143545,
+      "properties": {
+        "centreline_id": 1143545,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4244072174076,
+            43.6622575473508
+          ],
+          [
+            -79.4246236747191,
+            43.6622114413879
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1143576,
+      "properties": {
+        "centreline_id": 1143576,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4246236747191,
+            43.6622114413879
+          ],
+          [
+            -79.4256477341801,
+            43.6619883026708
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1143766,
+      "properties": {
+        "centreline_id": 1143766,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4304208808964,
+            43.6609451354497
+          ],
+          [
+            -79.4311320991419,
+            43.6607909230365
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1143789,
+      "properties": {
+        "centreline_id": 1143789,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4311320991419,
+            43.6607909230365
+          ],
+          [
+            -79.4316469123491,
+            43.6606753397127
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1143821,
+      "properties": {
+        "centreline_id": 1143821,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4316469123491,
+            43.6606753397127
+          ],
+          [
+            -79.4324026967843,
+            43.6605105964497
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1143881,
+      "properties": {
+        "centreline_id": 1143881,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4338181201617,
+            43.660198780947
+          ],
+          [
+            -79.4340929120061,
+            43.6601399628913
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1143991,
+      "properties": {
+        "centreline_id": 1143991,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4364354327261,
+            43.6596353147991
+          ],
+          [
+            -79.4375976695155,
+            43.6594023162038
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1144031,
+      "properties": {
+        "centreline_id": 1144031,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4375976695155,
+            43.6594023162038
+          ],
+          [
+            -79.438658696305,
+            43.6591991899976
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1144052,
+      "properties": {
+        "centreline_id": 1144052,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.438658696305,
+            43.6591991899976
+          ],
+          [
+            -79.439145108301,
+            43.6591015963279
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1144099,
+      "properties": {
+        "centreline_id": 1144099,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4397312600787,
+            43.6589823689692
+          ],
+          [
+            -79.4403889770737,
+            43.6588585132456
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1144172,
+      "properties": {
+        "centreline_id": 1144172,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4417347767139,
+            43.6585615145361
+          ],
+          [
+            -79.4427340259447,
+            43.6583384169865
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1144219,
+      "properties": {
+        "centreline_id": 1144219,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4427340259447,
+            43.6583384169865
+          ],
+          [
+            -79.4439743138122,
+            43.6580738338477
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1144268,
+      "properties": {
+        "centreline_id": 1144268,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4439743138122,
+            43.6580738338477
+          ],
+          [
+            -79.445218622359,
+            43.6578341098941
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1144399,
+      "properties": {
+        "centreline_id": 1144399,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.448795335909,
+            43.6570719854175
+          ],
+          [
+            -79.4489175777572,
+            43.6570447480128
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1144885,
+      "properties": {
+        "centreline_id": 1144885,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4610157235404,
+            43.6544856317036
+          ],
+          [
+            -79.4623212522147,
+            43.6541941825304
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1145190,
+      "properties": {
+        "centreline_id": 1145190,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4686575346634,
+            43.6528023793927
+          ],
+          [
+            -79.4699907692696,
+            43.6525155488434
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1145241,
+      "properties": {
+        "centreline_id": 1145241,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4699907692696,
+            43.6525155488434
+          ],
+          [
+            -79.4711496642975,
+            43.6522572381766
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1145366,
+      "properties": {
+        "centreline_id": 1145366,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.472851398669,
+            43.6518840265938
+          ],
+          [
+            -79.4740356726935,
+            43.6516202738463
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1145494,
+      "properties": {
+        "centreline_id": 1145494,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4763045778989,
+            43.6511352153196
+          ],
+          [
+            -79.477204852952,
+            43.6509345330308
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3369787,
+      "properties": {
+        "centreline_id": 3369787,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4324026967843,
+            43.6605105964497
+          ],
+          [
+            -79.432886797554,
+            43.6604027755343
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3380259,
+      "properties": {
+        "centreline_id": 3380259,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4159840914726,
+            43.6640936743453
+          ],
+          [
+            -79.4160854712102,
+            43.664074089886
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3633129,
+      "properties": {
+        "centreline_id": 3633129,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.3905793510691,
+            43.6694821529456
+          ],
+          [
+            -79.3909897880728,
+            43.6693829543637
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3873095,
+      "properties": {
+        "centreline_id": 3873095,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.477204852952,
+            43.6509345330308
+          ],
+          [
+            -79.477642589547,
+            43.6508396911323
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3897184,
+      "properties": {
+        "centreline_id": 3897184,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.439145108301,
+            43.6591015963279
+          ],
+          [
+            -79.4397312600787,
+            43.6589823689692
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4697714,
+      "properties": {
+        "centreline_id": 4697714,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4480643919544,
+            43.657229530355
+          ],
+          [
+            -79.448795335909,
+            43.6570719854175
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6314757,
+      "properties": {
+        "centreline_id": 6314757,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4790473472805,
+            43.6505338029553
+          ],
+          [
+            -79.4804697629918,
+            43.6502057031599
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6710177,
+      "properties": {
+        "centreline_id": 6710177,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4353272024436,
+            43.65986121207
+          ],
+          [
+            -79.4364354327261,
+            43.6596353147991
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8353520,
+      "properties": {
+        "centreline_id": 8353520,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4124113315557,
+            43.6648733079963
+          ],
+          [
+            -79.4136470363071,
+            43.6646105539374
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8408204,
+      "properties": {
+        "centreline_id": 8408204,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.3894814610709,
+            43.6697057879646
+          ],
+          [
+            -79.3905793510691,
+            43.6694821529456
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8408552,
+      "properties": {
+        "centreline_id": 8408552,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.3941414134514,
+            43.6687202589369
+          ],
+          [
+            -79.3958757476091,
+            43.6683327872883
+          ],
+          [
+            -79.3973807918684,
+            43.668033224743
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8408589,
+      "properties": {
+        "centreline_id": 8408589,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.3998364772384,
+            43.6675168720603
+          ],
+          [
+            -79.4015151850851,
+            43.6671691869245
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8416823,
+      "properties": {
+        "centreline_id": 8416823,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4172180864183,
+            43.6638340668632
+          ],
+          [
+            -79.4184160600154,
+            43.6635768597084
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8416891,
+      "properties": {
+        "centreline_id": 8416891,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4160854712102,
+            43.664074089886
+          ],
+          [
+            -79.4172180864183,
+            43.6638340668632
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8417592,
+      "properties": {
+        "centreline_id": 8417592,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4062769941368,
+            43.6661750322015
+          ],
+          [
+            -79.4066466049006,
+            43.6660965999572
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8417856,
+      "properties": {
+        "centreline_id": 8417856,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4281379121213,
+            43.6614165096679
+          ],
+          [
+            -79.4294168201706,
+            43.6611565735643
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8418232,
+      "properties": {
+        "centreline_id": 8418232,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4038316245015,
+            43.6666676425084
+          ],
+          [
+            -79.404518645863,
+            43.6665237559916
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9638416,
+      "properties": {
+        "centreline_id": 9638416,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4407475119921,
+            43.6587817921326
+          ],
+          [
+            -79.4415787626296,
+            43.6585944338524
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9638422,
+      "properties": {
+        "centreline_id": 9638422,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4415787626296,
+            43.6585944338524
+          ],
+          [
+            -79.4417347767139,
+            43.6585615145361
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9638443,
+      "properties": {
+        "centreline_id": 9638443,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4498491794601,
+            43.6568545299054
+          ],
+          [
+            -79.4524538746396,
+            43.6563210256757
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9655344,
+      "properties": {
+        "centreline_id": 9655344,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4524538746396,
+            43.6563210256757
+          ],
+          [
+            -79.4538198288722,
+            43.6560395912925
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9655366,
+      "properties": {
+        "centreline_id": 9655366,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4538198288722,
+            43.6560395912925
+          ],
+          [
+            -79.4542596268496,
+            43.6559396550735
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9655404,
+      "properties": {
+        "centreline_id": 9655404,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4570501089068,
+            43.6553527151862
+          ],
+          [
+            -79.4586544349642,
+            43.6550190684383
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9655410,
+      "properties": {
+        "centreline_id": 9655410,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4568442039919,
+            43.6553957541211
+          ],
+          [
+            -79.4570501089068,
+            43.6553527151862
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9668210,
+      "properties": {
+        "centreline_id": 9668210,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4403889646754,
+            43.6588585132391
+          ],
+          [
+            -79.4407475119921,
+            43.6587817921326
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9694568,
+      "properties": {
+        "centreline_id": 9694568,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4586544349642,
+            43.6550190684383
+          ],
+          [
+            -79.4588143446,
+            43.6549912309672
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9694705,
+      "properties": {
+        "centreline_id": 9694705,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4588143446,
+            43.6549912309672
+          ],
+          [
+            -79.4600272657945,
+            43.6547115663909
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9909993,
+      "properties": {
+        "centreline_id": 9909993,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4781214855762,
+            43.6507337837671
+          ],
+          [
+            -79.4790473472805,
+            43.6505338029553
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9910035,
+      "properties": {
+        "centreline_id": 9910035,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.477642589547,
+            43.6508396911323
+          ],
+          [
+            -79.4781214855762,
+            43.6507337837671
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10250061,
+      "properties": {
+        "centreline_id": 10250061,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4637053319903,
+            43.6538990798471
+          ],
+          [
+            -79.4652642940846,
+            43.653546404984
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10250099,
+      "properties": {
+        "centreline_id": 10250099,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4717606352348,
+            43.6521242246418
+          ],
+          [
+            -79.472851398669,
+            43.6518840265938
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10250110,
+      "properties": {
+        "centreline_id": 10250110,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4711496642975,
+            43.6522572381766
+          ],
+          [
+            -79.4717606352348,
+            43.6521242246418
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10250117,
+      "properties": {
+        "centreline_id": 10250117,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4740356726935,
+            43.6516202738463
+          ],
+          [
+            -79.4743758381335,
+            43.6515395994067
+          ],
+          [
+            -79.4751812063023,
+            43.6513628373706
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10250156,
+      "properties": {
+        "centreline_id": 10250156,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4751812063023,
+            43.6513628373706
+          ],
+          [
+            -79.4755210078737,
+            43.6512855529533
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10257806,
+      "properties": {
+        "centreline_id": 10257806,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4755210078737,
+            43.6512855529533
+          ],
+          [
+            -79.4763045779024,
+            43.6511352063182
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10736589,
+      "properties": {
+        "centreline_id": 10736589,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4053548050255,
+            43.6663588717851
+          ],
+          [
+            -79.4062769941368,
+            43.6661750322015
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10736609,
+      "properties": {
+        "centreline_id": 10736609,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4086535975627,
+            43.6656789211038
+          ],
+          [
+            -79.4093235920505,
+            43.6655377824894
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10865133,
+      "properties": {
+        "centreline_id": 10865133,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4340929120061,
+            43.6601399628913
+          ],
+          [
+            -79.4353272024436,
+            43.65986121207
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10865147,
+      "properties": {
+        "centreline_id": 10865147,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.426829877056,
+            43.661730312853
+          ],
+          [
+            -79.4280186542799,
+            43.6614630345906
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10865172,
+      "properties": {
+        "centreline_id": 10865172,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4280186542799,
+            43.6614630345906
+          ],
+          [
+            -79.4281379121213,
+            43.6614165096679
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10877596,
+      "properties": {
+        "centreline_id": 10877596,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4256477341801,
+            43.6619883026708
+          ],
+          [
+            -79.426829877056,
+            43.661730312853
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10877626,
+      "properties": {
+        "centreline_id": 10877626,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4232502990377,
+            43.66251493494
+          ],
+          [
+            -79.4244072174076,
+            43.6622575473508
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11394542,
+      "properties": {
+        "centreline_id": 11394542,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4477408113591,
+            43.6572939405709
+          ],
+          [
+            -79.4480643919544,
+            43.657229530355
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12107157,
+      "properties": {
+        "centreline_id": 12107157,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4093235920505,
+            43.6655377824894
+          ],
+          [
+            -79.4099839166593,
+            43.6654016100696
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14018257,
+      "properties": {
+        "centreline_id": 14018257,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.432886797554,
+            43.6604027755343
+          ],
+          [
+            -79.4330362381417,
+            43.6603691981417
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14018258,
+      "properties": {
+        "centreline_id": 14018258,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4330362381417,
+            43.6603691981417
+          ],
+          [
+            -79.4338181201617,
+            43.660198780947
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14018278,
+      "properties": {
+        "centreline_id": 14018278,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4294168201706,
+            43.6611565735643
+          ],
+          [
+            -79.4302367400511,
+            43.6609836569901
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14018279,
+      "properties": {
+        "centreline_id": 14018279,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4302367524498,
+            43.6609836569977
+          ],
+          [
+            -79.4304208808964,
+            43.6609451354497
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14021285,
+      "properties": {
+        "centreline_id": 14021285,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4099839166593,
+            43.6654016100696
+          ],
+          [
+            -79.4105942098507,
+            43.6652543860771
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14021286,
+      "properties": {
+        "centreline_id": 14021286,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4105942098507,
+            43.6652543860771
+          ],
+          [
+            -79.4111954412483,
+            43.6651204017518
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14041668,
+      "properties": {
+        "centreline_id": 14041668,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4542596268496,
+            43.6559396550735
+          ],
+          [
+            -79.4543487565749,
+            43.655919716701
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14041669,
+      "properties": {
+        "centreline_id": 14041669,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4543487565749,
+            43.655919716701
+          ],
+          [
+            -79.4568442039919,
+            43.6553957541211
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14655227,
+      "properties": {
+        "centreline_id": 14655227,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.445218622359,
+            43.6578341098941
+          ],
+          [
+            -79.4452504542932,
+            43.6578274461429
+          ],
+          [
+            -79.4469547459173,
+            43.6574734164882
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14658932,
+      "properties": {
+        "centreline_id": 14658932,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4469547459173,
+            43.6574734164882
+          ],
+          [
+            -79.4469887856838,
+            43.6574651960435
+          ],
+          [
+            -79.4477408113591,
+            43.6572939405709
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30011986,
+      "properties": {
+        "centreline_id": 30011986,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4489175777572,
+            43.6570447480128
+          ],
+          [
+            -79.4496334437789,
+            43.6568991987744
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30011987,
+      "properties": {
+        "centreline_id": 30011987,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4496334437789,
+            43.6568991987744
+          ],
+          [
+            -79.4498491794601,
+            43.6568545299054
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30039478,
+      "properties": {
+        "centreline_id": 30039478,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4209149380606,
+            43.663025483444
+          ],
+          [
+            -79.4216234385491,
+            43.6628725345494
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30039479,
+      "properties": {
+        "centreline_id": 30039479,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4216234385491,
+            43.6628725345494
+          ],
+          [
+            -79.4220599722745,
+            43.6627783009308
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30039482,
+      "properties": {
+        "centreline_id": 30039482,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4202489726821,
+            43.6631712475518
+          ],
+          [
+            -79.4209149380606,
+            43.663025483444
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30042273,
+      "properties": {
+        "centreline_id": 30042273,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4623212522147,
+            43.6541941825304
+          ],
+          [
+            -79.4632178180265,
+            43.6540064902223
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30042274,
+      "properties": {
+        "centreline_id": 30042274,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4632178180265,
+            43.6540064902223
+          ],
+          [
+            -79.4637053319903,
+            43.6538990798471
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30042276,
+      "properties": {
+        "centreline_id": 30042276,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4668727257357,
+            43.6531965226067
+          ],
+          [
+            -79.4681149884968,
+            43.6529228475401
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30042277,
+      "properties": {
+        "centreline_id": 30042277,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4681149884968,
+            43.6529228475401
+          ],
+          [
+            -79.4686575346634,
+            43.6528023793927
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30107815,
+      "properties": {
+        "centreline_id": 30107815,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4111954412483,
+            43.6651204017518
+          ],
+          [
+            -79.4124113315557,
+            43.6648733079963
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30119699,
+      "properties": {
+        "centreline_id": 30119699,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4652642940846,
+            43.653546404984
+          ],
+          [
+            -79.4665705955706,
+            43.6532630806986
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30119700,
+      "properties": {
+        "centreline_id": 30119700,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4665705955706,
+            43.6532630806986
+          ],
+          [
+            -79.4668727257357,
+            43.6531965226067
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 60050534,
+      "properties": {
+        "centreline_id": 60050534,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4600272657945,
+            43.6547115663909
+          ],
+          [
+            -79.4610157235404,
+            43.6544856317036
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 60088092,
+      "properties": {
+        "centreline_id": 60088092,
+        "street": "Bloor St W"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -79.4188388920993,
+            43.6634812874234
+          ],
+          [
+            -79.4202489726821,
+            43.6631712475518
+          ]
+        ]
+      }
+    }
+  ]
+}
