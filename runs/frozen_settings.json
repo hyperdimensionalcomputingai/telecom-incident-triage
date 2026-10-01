@@ -1,0 +1,6116 @@
+{
+  "parameters": {
+    "1": {
+      "logistic_regression": {
+        "C": 10.0,
+        "scaling": "fixed_range"
+      },
+      "mlp": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      }
+    },
+    "2": {
+      "logistic_regression": {
+        "C": 1.0,
+        "scaling": "fixed_range"
+      },
+      "mlp": {
+        "width": 16,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      }
+    },
+    "5": {
+      "logistic_regression": {
+        "C": 10.0,
+        "scaling": "fixed_range"
+      },
+      "mlp": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      }
+    },
+    "10": {
+      "logistic_regression": {
+        "C": 10.0,
+        "scaling": "fixed_range"
+      },
+      "mlp": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      }
+    },
+    "20": {
+      "logistic_regression": {
+        "C": 10.0,
+        "scaling": "fixed_range"
+      },
+      "mlp": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      }
+    }
+  },
+  "trials": [
+    {
+      "budget_per_class": 1,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.7395057762170864,
+      "seed_scores": [
+        0.7395057762170864,
+        0.7395057762170864,
+        0.7395057762170864
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 6.460291013354436,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            8
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 0.9713750041555613,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            8
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 0.8194159890990704,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            8
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.3384580864844023,
+      "seed_scores": [
+        0.3384580864844023,
+        0.3384580864844023,
+        0.3384580864844023
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.4287499943748116,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            15
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.3615829811897129,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            15
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.4696670114062726,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            15
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 1.0,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.7778506726940786,
+      "seed_scores": [
+        0.7778506726940786,
+        0.7778506726940786,
+        0.7778506726940786
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 0.9137919987551868,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            12
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 0.8302920032292604,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            12
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 0.8162909944076091,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            12
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 1.0,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.4088257344198209,
+      "seed_scores": [
+        0.40882573441982084,
+        0.40882573441982084,
+        0.40882573441982084
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.2904590112157166,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            20
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.1587920016609132,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            20
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.18862499948591,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            20
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 10.0,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.8107330449833262,
+      "seed_scores": [
+        0.8107330449833262,
+        0.8107330449833262,
+        0.8107330449833262
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.2755840143654495,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            25
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.2854580127168447,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            25
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.4297079760581255,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            25
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 10.0,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.4246146255358874,
+      "seed_scores": [
+        0.42461462553588747,
+        0.42461462553588747,
+        0.42461462553588747
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.3281250139698386,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            22
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.3038749748375267,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            22
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.248750020749867,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            22
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.001,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.7747906633475704,
+      "seed_scores": [
+        0.7927695273695349,
+        0.7529511255703615,
+        0.7786513371028145
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 8.347416005562991,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 96,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 5.178166989935562,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 60,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 11.163749994011596,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 133,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.001,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.439861667571793,
+      "seed_scores": [
+        0.44544005644203527,
+        0.4349633269511044,
+        0.4391816193222394
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 5.056750000221655,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 56,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 4.718583018984646,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 52,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 4.774041997734457,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 49,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.7770760766013686,
+      "seed_scores": [
+        0.7859781194008446,
+        0.8056853969334966,
+        0.7395647134697648
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 3.762417007237673,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 32,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 9.19137499295175,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 90,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 3.971041995100677,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 37,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.42207640723036083,
+      "seed_scores": [
+        0.4266547113852275,
+        0.4167567538969314,
+        0.4228177564089235
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 5.6545409897807986,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 56,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 5.834040988702327,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 65,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 4.831665981328115,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 61,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.001,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.8003060605596937,
+      "seed_scores": [
+        0.8062495904558361,
+        0.7953979018709756,
+        0.7992706893522694
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 9.41083300858736,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 76,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 14.472041017143056,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 132,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 7.840415986720473,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 66,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.001,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.44170690128514517,
+      "seed_scores": [
+        0.43833287873767635,
+        0.4443959158199999,
+        0.4423919092977593
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 6.278167013078928,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 55,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 6.504999997559935,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 59,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 5.978917004540563,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 53,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.8010713163494528,
+      "seed_scores": [
+        0.8073736489101174,
+        0.7932545274333259,
+        0.8025857727049153
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 15.221915993606672,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 108,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 18.049250007607043,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 134,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 5.933000007644296,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 42,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 1,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.42788589489293405,
+      "seed_scores": [
+        0.42277846659334906,
+        0.4264758542191829,
+        0.43440336386627026
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 6.488624989287928,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 58,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 8.687957975780591,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 71,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 9.424874995602295,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 69,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.8576367542219495,
+      "seed_scores": [
+        0.8576367542219494,
+        0.8576367542219494,
+        0.8576367542219494
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 2.1312499884516,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            9
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.3782079913653433,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            9
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.5795000072102994,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            9
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.5050372132624338,
+      "seed_scores": [
+        0.5050372132624338,
+        0.5050372132624338,
+        0.5050372132624338
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 2.0421250083018094,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            17
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 2.2951249848119915,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            17
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 2.070208021905273,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            17
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 1.0,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.8950576663288845,
+      "seed_scores": [
+        0.8950576663288845,
+        0.8950576663288845,
+        0.8950576663288845
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.4877919747959822,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            14
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.1252920085098594,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            14
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.1682499898597598,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            14
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 1.0,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.5510396353706003,
+      "seed_scores": [
+        0.5510396353706003,
+        0.5510396353706003,
+        0.5510396353706003
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 2.2842499893158674,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            20
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 2.2549589921254665,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            20
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 2.220166992628947,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            20
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 10.0,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.8705166632798211,
+      "seed_scores": [
+        0.8705166632798211,
+        0.8705166632798211,
+        0.8705166632798211
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.6851250256877393,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            39
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.6359169967472553,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            39
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.7442080134060234,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            39
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 10.0,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.554452182600209,
+      "seed_scores": [
+        0.554452182600209,
+        0.554452182600209,
+        0.554452182600209
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.5966659993864596,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            27
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.6941659850999713,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            27
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.633917010622099,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            27
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.001,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.8174595652560201,
+      "seed_scores": [
+        0.8418422820775899,
+        0.8230121945033005,
+        0.7875242191871697
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 14.938874985091388,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 170,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 17.67849997850135,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 212,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 10.480500000994653,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 149,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.001,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.584150276956246,
+      "seed_scores": [
+        0.5697035511782612,
+        0.6041342894791171,
+        0.5786129902113598
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 5.600208998657763,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 74,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 4.87354100914672,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 67,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 3.710333025082946,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 47,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.8454535135671629,
+      "seed_scores": [
+        0.8376910583077901,
+        0.8654208816667024,
+        0.833248600726996
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 9.359874995425344,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 107,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 10.259500006213784,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 134,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 5.796083016321063,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 72,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.5814989074815878,
+      "seed_scores": [
+        0.5809373631364649,
+        0.5835332621338982,
+        0.5800260971744001
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 12.66141698579304,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 161,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 7.530874980147928,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 86,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 10.969958995701745,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 120,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.001,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.8247193675824468,
+      "seed_scores": [
+        0.8195889037493491,
+        0.8329054563195645,
+        0.8216637426784268
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 14.306041994132102,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 154,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 14.79712498257868,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 157,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 19.638291996670887,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 203,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.001,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.5837401891347597,
+      "seed_scores": [
+        0.5787766870194634,
+        0.589839400036698,
+        0.5826044803481178
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 5.094583990285173,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 57,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 8.932374999858439,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 83,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 8.084458007942885,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 91,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.8403054398827337,
+      "seed_scores": [
+        0.8343093227142446,
+        0.845441264760698,
+        0.8411657321732582
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 10.382165986811742,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 99,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 16.342291986802593,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 163,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 15.158250025706366,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 137,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 2,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.5816374283533038,
+      "seed_scores": [
+        0.5759289195692308,
+        0.5832966048203252,
+        0.5856867606703553
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 12.360125023405999,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 117,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 16.313959000399336,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 148,
+          "convergence_warnings": [
+            "lbfgs failed to converge after 148 iteration(s) (status=2):\nABNORMAL: \n\nYou might also want to scale the data as shown in:\n    https://scikit-learn.org/stable/modules/preprocessing.html"
+          ],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 15.260416985256597,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 153,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9052450574108515,
+      "seed_scores": [
+        0.9052450574108515,
+        0.9052450574108515,
+        0.9052450574108515
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.802250015316531,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            9
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.8255409959238023,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            9
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.8653329752851278,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            9
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9133212100431186,
+      "seed_scores": [
+        0.9133212100431186,
+        0.9133212100431186,
+        0.9133212100431186
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.0314579994883388,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            13
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.1485829891171306,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            13
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.459833001717925,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            13
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 1.0,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9460025624543884,
+      "seed_scores": [
+        0.9460025624543884,
+        0.9460025624543884,
+        0.9460025624543884
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.9271250057499856,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            16
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 2.200416987761855,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            16
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.8903750169556588,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            16
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 1.0,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9098106425398983,
+      "seed_scores": [
+        0.9098106425398983,
+        0.9098106425398983,
+        0.9098106425398983
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.9116250041406602,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            20
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.757374993758276,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            20
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.4372500008903444,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            20
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 10.0,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9733086272593648,
+      "seed_scores": [
+        0.9733086272593648,
+        0.9733086272593648,
+        0.9733086272593648
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 2.3800000199116766,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            54
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 2.5212079926859587,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            54
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 3.263333986978978,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            54
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 10.0,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9000118439697063,
+      "seed_scores": [
+        0.9000118439697065,
+        0.9000118439697065,
+        0.9000118439697065
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.647208002395928,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            24
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.4915420033503324,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            24
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.5687090053688735,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            24
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.001,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9714494863349211,
+      "seed_scores": [
+        0.9714316415054043,
+        0.9647471596000832,
+        0.978169657899276
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 16.578165988903493,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 214,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 13.187249976908788,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 196,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 31.300958013162017,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 432,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.001,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9058633041541418,
+      "seed_scores": [
+        0.9087353143932091,
+        0.9051721134615871,
+        0.9036824846076292
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 8.38129100156948,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 116,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 8.73549998505041,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 117,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 5.656707973685116,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 78,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9769902693017641,
+      "seed_scores": [
+        0.9797970712786022,
+        0.9747545019550496,
+        0.9764192346716403
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 20.476958015933633,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 247,
+          "convergence_warnings": [
+            "lbfgs failed to converge after 247 iteration(s) (status=2):\nABNORMAL: \n\nYou might also want to scale the data as shown in:\n    https://scikit-learn.org/stable/modules/preprocessing.html"
+          ],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 9.989874990424141,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 125,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 13.22270801756531,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 174,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9109758073348678,
+      "seed_scores": [
+        0.9091433730036071,
+        0.9109986330416437,
+        0.9127854159593526
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 17.428542021661997,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 219,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 14.619916008086875,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 187,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 19.435333990259096,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 258,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.001,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.978713123111176,
+      "seed_scores": [
+        0.9747572267975152,
+        0.9781894705185994,
+        0.9831926720174136
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 31.792291993042454,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 335,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 34.68258399516344,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 376,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 34.903708001365885,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 375,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.001,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.90582728396333,
+      "seed_scores": [
+        0.906825125088073,
+        0.9087353143932091,
+        0.9019214124087078
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 9.209416020894423,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 98,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 10.773834015708417,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 113,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 9.813917014980689,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 109,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9837958177707796,
+      "seed_scores": [
+        0.9832250274539795,
+        0.9832407989807647,
+        0.9849216268775944
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 39.83641698141582,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 399,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 38.64091698778793,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 317,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 51.795124978525564,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 524,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 5,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9103841024241719,
+      "seed_scores": [
+        0.9092795761288051,
+        0.9127293581401037,
+        0.9091433730036071
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 22.095416992669925,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 228,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 36.26033398904838,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 391,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 50.43887501233257,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 496,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.919330249845343,
+      "seed_scores": [
+        0.919330249845343,
+        0.919330249845343,
+        0.919330249845343
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.3111250009387732,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            11
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.3675420195795596,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            11
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.0447079839650542,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            11
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9286292290175667,
+      "seed_scores": [
+        0.9286292290175667,
+        0.9286292290175667,
+        0.9286292290175667
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.4768750115763396,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            14
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.7513329803477973,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            14
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.3748339843004942,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            14
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 1.0,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.96305908717545,
+      "seed_scores": [
+        0.9630590871754501,
+        0.9630590871754501,
+        0.9630590871754501
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.6623749979771674,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            26
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.6495409945491701,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            26
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.5993750130292028,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            26
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 1.0,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.927279982741311,
+      "seed_scores": [
+        0.927279982741311,
+        0.927279982741311,
+        0.927279982741311
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.4697080187033862,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            22
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.7347910034004599,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            22
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.8467500049155205,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            22
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 10.0,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9782606006397224,
+      "seed_scores": [
+        0.9782606006397224,
+        0.9782606006397224,
+        0.9782606006397224
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 3.1584170064888895,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            70
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 2.8689579921774566,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            70
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 3.2864160020835698,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            70
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 10.0,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9217925159282098,
+      "seed_scores": [
+        0.9217925159282098,
+        0.9217925159282098,
+        0.9217925159282098
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 2.6884170074481517,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            31
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 2.4975420092232525,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            31
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 2.4404999858234078,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            31
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.001,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9831951127338251,
+      "seed_scores": [
+        0.9882625825453032,
+        0.9814946296486344,
+        0.9798281260075377
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 13.708040991332382,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 168,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 16.7990829795599,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 213,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 13.67504199151881,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 175,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.001,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9395840460428233,
+      "seed_scores": [
+        0.9407496782496783,
+        0.937252995648954,
+        0.9407494642298377
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 7.315416005440056,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 96,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 6.816709006670862,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 93,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 9.12991599761881,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 118,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9831799842714902,
+      "seed_scores": [
+        0.9865717375630858,
+        0.9814841076256925,
+        0.9814841076256925
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 22.71087499684654,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 259,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 17.362166981911287,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 226,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 14.417083992157131,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 188,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9459860371892121,
+      "seed_scores": [
+        0.9442570323446002,
+        0.9459786068227753,
+        0.9477224724002608
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 36.87224999885075,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 511,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 49.354624992702156,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 735,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 37.720833002822474,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 528,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.001,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9815090992260854,
+      "seed_scores": [
+        0.9798003531556163,
+        0.9781338495145195,
+        0.9865930950081203
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 24.600792006822303,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 262,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 18.947500007925555,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 206,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 21.652249997714534,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 228,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.001,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9413423356522195,
+      "seed_scores": [
+        0.9442376385957423,
+        0.9390070913232097,
+        0.9407822770377066
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 13.768042001174763,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 146,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 14.424166991375387,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 134,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 18.80116600659676,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 202,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9888195329184281,
+      "seed_scores": [
+        0.9848802068971652,
+        0.9882625825453032,
+        0.993315809312816
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 61.93941697711125,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 600,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 19.541374989785254,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 198,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 28.973250009585172,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 293,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 10,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9471509223363926,
+      "seed_scores": [
+        0.9477224724002608,
+        0.9477224724002608,
+        0.9460078222086563
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 81.81883400538936,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 913,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 56.686833006097004,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 629,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 94.80391599936411,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 1052,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9362899116914613,
+      "seed_scores": [
+        0.9362899116914613,
+        0.9362899116914613,
+        0.9362899116914613
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.308042003074661,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            16
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.1453749903012067,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            16
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.1204170004930347,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            16
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9459990852908943,
+      "seed_scores": [
+        0.9459990852908942,
+        0.9459990852908942,
+        0.9459990852908942
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.578833005623892,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            15
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.5749160083942115,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            15
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.4974170189816505,
+          "parameters": {
+            "C": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            15
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 1.0,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9798443870957788,
+      "seed_scores": [
+        0.9798443870957787,
+        0.9798443870957787,
+        0.9798443870957787
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.7669579829089344,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            37
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.8472909869160503,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            37
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.813791983295232,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            37
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 1.0,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9328489876603084,
+      "seed_scores": [
+        0.9328489876603084,
+        0.9328489876603084,
+        0.9328489876603084
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.4843749813735485,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            21
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.3344170001801103,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            21
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.4802090008743107,
+          "parameters": {
+            "C": 1.0,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            21
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 10.0,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9883308697206029,
+      "seed_scores": [
+        0.9883308697206029,
+        0.9883308697206029,
+        0.9883308697206029
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 2.975833020173013,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": [
+            72
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 3.1337910040747374,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": [
+            72
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 2.872499986551702,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": [
+            72
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "logistic_regression",
+      "parameters": {
+        "C": 10.0,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9346140930381891,
+      "seed_scores": [
+        0.9346140930381891,
+        0.9346140930381891,
+        0.9346140930381891
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 1.7560420092195272,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": [
+            33
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.8373750208411366,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": [
+            33
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 1.7892910109367222,
+          "parameters": {
+            "C": 10.0,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": [
+            33
+          ],
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.001,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9877683745385072,
+      "seed_scores": [
+        0.9933321479374111,
+        0.9849864878390552,
+        0.9849864878390552
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 17.976874980377033,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 245,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 12.103999993996695,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 169,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 25.593166996259242,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 373,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.001,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9760746005218666,
+      "seed_scores": [
+        0.9766322265395031,
+        0.9749593484865936,
+        0.9766322265395031
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 5.359415983548388,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 70,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 5.6690000055823475,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 73,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 7.032624998828396,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 96,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9933300718206227,
+      "seed_scores": [
+        0.9966665185119339,
+        0.9966665185119339,
+        0.9866571784380004
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 24.60350000183098,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 313,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 30.924958002287894,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 405,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 33.44091700273566,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 457,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "mlp",
+      "parameters": {
+        "width": 16,
+        "alpha": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9849597979270089,
+      "seed_scores": [
+        0.9849597979270089,
+        0.9849597979270089,
+        0.9849597979270089
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 17.68616700428538,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 236,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 22.4148329871241,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 300,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 29.60700000403449,
+          "parameters": {
+            "width": 16,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 393,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.001,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9933287737218661,
+      "seed_scores": [
+        0.9849864878390552,
+        0.9966665185119339,
+        0.9983333148146091
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 18.408333999104798,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 187,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 46.40587497851811,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 467,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 24.613542016595602,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 251,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.001,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9766336722214531,
+      "seed_scores": [
+        0.9783094416382625,
+        0.9766322265395031,
+        0.9749593484865936
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 13.85916699655354,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 141,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 9.054499998455867,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 85,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 9.764249989530072,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.001,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 96,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "fixed_range"
+      },
+      "validation_macro_f1": 0.9944412693557395,
+      "seed_scores": [
+        0.9866571784380004,
+        0.9983333148146091,
+        0.9983333148146091
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 43.38179202750325,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2001,
+          "iterations": 418,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 47.69954099901952,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2002,
+          "iterations": 463,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 37.81491701374762,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "fixed_range"
+          },
+          "seed": 2003,
+          "iterations": 351,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    },
+    {
+      "budget_per_class": 20,
+      "method": "mlp",
+      "parameters": {
+        "width": 32,
+        "alpha": 0.1,
+        "scaling": "standard"
+      },
+      "validation_macro_f1": 0.9838446137005644,
+      "seed_scores": [
+        0.9849597979270089,
+        0.9849597979270089,
+        0.9816142452476752
+      ],
+      "fit_diagnostics": [
+        {
+          "fit_ms": 41.94041699520312,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2001,
+          "iterations": 416,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 41.42883300664835,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2002,
+          "iterations": 416,
+          "convergence_warnings": [],
+          "other_warnings": []
+        },
+        {
+          "fit_ms": 35.94629198778421,
+          "parameters": {
+            "width": 32,
+            "alpha": 0.1,
+            "scaling": "standard"
+          },
+          "seed": 2003,
+          "iterations": 367,
+          "convergence_warnings": [],
+          "other_warnings": []
+        }
+      ],
+      "review_episode_ids": [
+        "S1006-W00-E00-0",
+        "S1006-W00-E00-1",
+        "S1006-W00-E00-2",
+        "S1006-W00-E00-3",
+        "S1006-W00-E01-0",
+        "S1006-W00-E01-1",
+        "S1006-W00-E01-2",
+        "S1006-W00-E01-3",
+        "S1006-W00-E02-0",
+        "S1006-W00-E02-1",
+        "S1006-W00-E02-2",
+        "S1006-W00-E02-3",
+        "S1006-W00-E03-0",
+        "S1006-W00-E03-1",
+        "S1006-W00-E03-2",
+        "S1006-W00-E03-3",
+        "S1006-W00-E04-0",
+        "S1006-W00-E04-1",
+        "S1006-W00-E04-2",
+        "S1006-W00-E04-3",
+        "S1006-W00-E05-0",
+        "S1006-W00-E05-1",
+        "S1006-W00-E05-2",
+        "S1006-W00-E05-3",
+        "S1006-W00-E06-0",
+        "S1006-W00-E06-1",
+        "S1006-W00-E06-2",
+        "S1006-W00-E06-3",
+        "S1006-W00-E07-0",
+        "S1006-W00-E07-1",
+        "S1006-W00-E07-2",
+        "S1006-W00-E07-3",
+        "S1006-W00-E08-0",
+        "S1006-W00-E08-1",
+        "S1006-W00-E08-2",
+        "S1006-W00-E08-3",
+        "S1006-W00-E09-0",
+        "S1006-W00-E09-1",
+        "S1006-W00-E09-2",
+        "S1006-W00-E09-3",
+        "S1006-W00-E10-0",
+        "S1006-W00-E10-1",
+        "S1006-W00-E10-2",
+        "S1006-W00-E10-3",
+        "S1006-W00-E11-0",
+        "S1006-W00-E11-1",
+        "S1006-W00-E11-2",
+        "S1006-W00-E11-3",
+        "S1006-W00-E12-0",
+        "S1006-W00-E12-1",
+        "S1006-W00-E12-2",
+        "S1006-W00-E12-3",
+        "S1006-W00-E13-0",
+        "S1006-W00-E13-1",
+        "S1006-W00-E13-2",
+        "S1006-W00-E13-3",
+        "S1006-W00-E14-0",
+        "S1006-W00-E14-1",
+        "S1006-W00-E14-2",
+        "S1006-W00-E14-3",
+        "S1006-W00-E15-0",
+        "S1006-W00-E15-1",
+        "S1006-W00-E15-2",
+        "S1006-W00-E15-3",
+        "S1006-W00-E16-0",
+        "S1006-W00-E16-1",
+        "S1006-W00-E16-2",
+        "S1006-W00-E16-3",
+        "S1006-W00-E17-0",
+        "S1006-W00-E17-1",
+        "S1006-W00-E17-2",
+        "S1006-W00-E17-3",
+        "S1006-W00-E18-0",
+        "S1006-W00-E18-1",
+        "S1006-W00-E18-2",
+        "S1006-W00-E18-3",
+        "S1006-W00-E19-0",
+        "S1006-W00-E19-1",
+        "S1006-W00-E19-2",
+        "S1006-W00-E19-3"
+      ]
+    }
+  ],
+  "selection": "First data seed validation worlds only, per review budget; mean across three initialization seeds; frozen before final testing",
+  "training": "LR and one-hidden-layer ReLU MLP optimized with L-BFGS, max_iter=3000 and tol=1e-7; MLP max_fun=100000; warnings retained",
+  "preprocessing": "Validation chooses fixed physical range scaling or an additional StandardScaler fitted only to reviewed memory examples at each budget",
+  "precision": "Float32 input boundary; scikit-learn/SciPy optimizer and model state can use float64",
+  "label_budget": "Counts reviewed memory examples; separate labelled validation worlds are used for model selection",
+  "hdc_settings": {
+    "local_weight": 1.0,
+    "context_weight": 2.0,
+    "handset_weight": 0.25,
+    "levels": 32,
+    "dimension": 4096,
+    "selection": "Connected-context weight 2 selected using the archived validation diagnosis on data seeds 1001\u20131005; frozen before evaluation on fresh data seeds 1006\u20131010. No HDC setting search in the active suite."
+  }
+}
