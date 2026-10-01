@@ -5,7 +5,7 @@ from time import perf_counter_ns, process_time_ns
 import torch
 
 from classifiers import METHODS, fit_classifier
-from encoding import explicit_features
+from encoding import model_input_features
 from evaluation import latency_summary
 from learning import Prototype, budget_indices
 
@@ -68,7 +68,7 @@ def learning_update_cost(encoder, episodes, raws, features, labels, memory, conf
                         (
                             encoder.encode(episodes[i])
                             if method == "hdc"
-                            else explicit_features(episodes[i])
+                            else model_input_features(episodes[i])
                         )
                         for i in extra
                     ]

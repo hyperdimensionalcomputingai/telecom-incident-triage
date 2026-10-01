@@ -260,7 +260,8 @@ class Encoder:
         )
 
 
-def explicit_features(episode, handset=True):
+def model_input_features(episode, handset=True):
+    """The 21 ordered, scaled inputs shared by LR and MLP."""
     values = [
         scaled(row[field], field)
         for row in episode["observations"]
@@ -270,7 +271,3 @@ def explicit_features(episode, handset=True):
     if handset:
         values += [float(episode["handset"] == f"model_{i}") * 0.25 for i in range(3)]
     return torch.tensor(values, dtype=torch.float32)
-
-
-def structured_scores(query_features, candidate_features):
-    return 1 - (candidate_features - query_features).abs().mean(1)

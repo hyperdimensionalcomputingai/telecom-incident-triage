@@ -1,13 +1,13 @@
 {
   "code_hash": "69586e53635e52cd7abb82996746927f519b04af6820afea9e925aeca029d258",
   "report_generator_hash": "9d60a90374272caea2f53fd982320ffe115bb2b9adfc0366c7149674320904c7",
-  "summary_hash": "d659fe791527e9e77b9c79a6a4d4e48c5e15e0bd2c34a7b4f4c8f5b2a98fd41d",
+  "summary_hash": "0fc1a7727bdb8ab2130078bb29ab5678cbd30e2c3f92e25deb0abc777627e804",
   "figure_hashes": {
     "figures/compute.png": "eed3a22d4321e6d2896b4b1476e5a98b9bb242fc9df5a4d34bb8ed5dfd6d8d98",
     "figures/incident.png": "e2e0612131f7cee2f34ec5e4efdf06a89244d5f8565e05a342bdff4283d49c27",
     "figures/learning-updates.png": "1a39894fe8f65272e00864798bd615701e21e0f7823a5fb6c047c4be98e95fc7",
     "figures/learning.png": "fb7267a7d81dccdb583caf285d3acd9a94314a2ec0f25b59b1af561537c0c96b",
-    "figures/retrieval.png": "28b80fd5d764928339849e777e9e76d1f19e982836ee3c225064d466b2d8076e",
+    "figures/retrieval.png": "5ac62b27e555c56ada34b71d9231ee35a6e77c2158f9fee823caec34c3e55ef5",
     "figures/schema.html": "5dcd743c4c3965dda277cde7beb68620af04d26c4cb5b5e2ee6a7c2a9013416d",
     "figures/schema.png": "168c7de35207927b3bcb7e4030d5b6b88b5c3ac4fb25b99f24e341aace58e68a",
     "figures/schema.svg": "f0387b1a50096da70608fd3d217389974a641746a76ba29313c37cfb4b1d3279"
@@ -35,10 +35,10 @@
     },
     {
       "claim": "Storage",
-      "evidence": "16,384 bytes per raw hypervector versus 84 bytes per explicit feature vector.",
+      "evidence": "16,384 bytes per raw hypervector versus 84 bytes per LR/MLP input vector.",
       "boundary": "This study shows no storage saving from HDC."
     }
   ],
-  "report_hash": "a4503ebea3a8681b84a6bbf99d63cf328acc573ef941c53a48d395b03c5de8c8",
+  "report_hash": "bde4068060c6ae6424363383c967aac978146eecbf480a5ba26617a15013f03b",
   "source_layout": "src/; flat Python modules and simple scripts; original experiment hashes retained"
 }

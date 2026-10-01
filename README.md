@@ -35,7 +35,7 @@ Run the acceptance checks with `uv run pytest -q`.
 Read the [illustrated results summary](runs/reports/summary.md) for the encoder equations, graph schema, experiments and findings. The latest [aggregate results](runs/summary.json) and [detailed metrics](runs/metrics.json) are committed with their configuration and provenance; datasets, vectors and individual prediction traces are regenerated locally.
 
 - Roles, order and connectivity matter; retrieved comparisons resolve to retained source evidence.
-- HDC achieves **96.3% precision@5**, versus **92.4%** for structured retrieval.
+- HDC retrieval achieves **96.3% precision@5**, with source records supporting each returned comparison.
 - At five reviews per class, HDC, LR and MLP achieve **96.5%, 94.8% and 96.3% macro F1**; the paired intervals do not establish an HDC advantage at this budget.
 - HDC memory updates are immediate additions. Batch retraining amortizes well for LR; these measurements show no universal compute advantage or HDC storage saving.
 
