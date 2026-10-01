@@ -27,7 +27,7 @@ The experiments examine four questions:
 - **Learning:** How useful does class memory become as reviewed examples arrive, and when do updates help or hurt?
 - **Resources:** What do encoding, prediction, learning updates, retrieval and storage cost, including the cost per new review?
 
-An explicit structured comparator tests retrieval using the same ordered measurements and connected context. Regularized logistic regression and a small MLP provide familiar trained-model comparisons for triage-pattern prediction. All three learners receive the same reviewed incidents. These comparisons determine the practical tradeoffs; the operator demonstrations explain how the representation works.
+The learning comparison evaluates HDC against regularized logistic regression and a small MLP. All three learners receive the same reviewed incidents and connected measurements. Retrieval evaluates HDC itself, with order and connectivity ablations as internal representation checks. These checks are not additional comparison models.
 
 ## The dataset
 
@@ -224,7 +224,7 @@ Hyperdimensional computing (HDC) represents information in long numeric arrays c
 
 In this implementation, binding multiplies arrays element by element, bundling adds them, and permutation rotates their coordinates by a fixed number of positions. Binding gives radio strength a different meaning from link loss. A position-specific rotation distinguishes the same observations in reverse order. The connected channel follows the time-valid phone → cell → backhaul dependency before encoding its measurements and peer context.
 
-The operator vocabulary is small: `bind(role, value)` keeps a measurement attached to its meaning; `bundle(facts)` combines contributions; `permute(observation, position)` marks order. Learning reuses addition: `class_memory += normalize(episode_vector)`. The encoder implements these operations with TorchHD; no text embedding model is needed for these structured records.
+The operator vocabulary is small: `bind(role, value)` keeps a measurement attached to its meaning; `bundle(facts)` combines contributions; `permute(observation, position)` marks order. Learning reuses addition: `class_memory += normalize(episode_vector)`. The encoder implements these operations with TorchHD; no text embedding model is needed for these tabular records.
 
 **Result.** Swapping good/bad states between phone radio and an upstream link gives cosine 0.039. Omitting binding makes the two accumulators equal within 0. Reversing the observations gives cosine 0.901; omitting order leaves error 9.5e-07. Rewiring one serving edge gives cosine 0.942; pooling the same network measurements without their connections leaves error 0. The adjacent numeric-level cosine is 0.962, compared with 0.018 for distant levels.
 
@@ -236,14 +236,13 @@ The handset contribution can be removed from a raw query without re-encoding the
 
 **Question.** Does the representation return earlier incidents with the same independently checked triage pattern, and can their source evidence be inspected?
 
-**Setup.** Every query uses an exact corridor/time filter and a memory-only candidate set. All three observations must qualify. Lance and independently registered GeoDataFusion agree on selected observation identities. The first run has 79–420 candidates per query (mean 319.3). Relevance means the same triage pattern, not the same real-world cause. The numeric comparator receives the same ordered measurements and connected context as HDC. Connectivity and order are removed separately in ablations.
+**Setup.** Every query uses an exact corridor/time filter and a memory-only candidate set. All three observations must qualify. Lance and independently registered GeoDataFusion agree on selected observation identities. The first run has 79–420 candidates per query (mean 319.3). Relevance means the same triage pattern, not the same real-world cause. Connectivity and order are removed separately in HDC ablations to check their contribution to retrieval.
 
 ![Retrieval precision with grouped uncertainty intervals](figures/retrieval.png)
 
 | Method | Precision@5, 95% interval | Top-1 match | Reciprocal rank@10 |
 |---|---:|---:|---:|
 | HDC | 96.3% [95.7%, 96.7%] | 98.5% | 0.991 |
-| Explicit structured comparator | 92.4% [91.7%, 93.2%] | 96.9% | 0.983 |
 | HDC: connectivity omitted | 60.6% [59.6%, 61.5%] | 62.5% | 0.763 |
 | HDC: order omitted | 70.0% [68.7%, 71.1%] | 73.3% | 0.836 |
 | HDC in Lance (float16) | 96.3% [95.7%, 96.7%] | 98.5% | 0.991 |
@@ -262,13 +261,13 @@ Random ranking yields expected precision 25.0%, based on each query's eligible l
 | S1006-W22-E14-0 | shared transport impairment | normal service |
 | S1006-W22-E17-3 | normal service | transient disruption and recovery |
 
-**Interpretation.** Compare HDC with the explicit comparator directly. The ablations reveal the value of the information represented by order and connected context, not an exclusive HDC capability. The comparator can represent those facts too. Float16 search storage is independently verified against its quantized vectors; its mean precision difference from float32 is 0.000 points. Float32 accumulators remain authoritative for arithmetic and updates.
+**Interpretation.** The HDC ablations reveal the value of retaining order and connected context. This retrieval experiment does not establish an advantage over LR or MLP, which are evaluated as classifiers in Experiment 3. Float16 search storage is independently verified against its quantized vectors; its mean precision difference from float32 is 0.000 points. Float32 accumulators remain authoritative for arithmetic and updates.
 
 ## Experiment 3: how does memory grow through reviews?
 
 **Question.** How useful is class memory with few labelled incidents, and what happens when feedback arrives after a decision?
 
-**Setup.** Each class starts with no vector. Encoding produces an episode hypervector; a review adds its normalized vector to the appropriate float32 class accumulator. Prediction compares the episode with normalized class memories. The comparison models are regularized multinomial logistic regression and a small one-hidden-layer ReLU MLP. Both receive the same 21 explicit features: six measurements at each of three ordered observations, plus three handset-category indicators. The connected measurements come from the same valid graph joins as HDC. Validation chooses between the already declared physical range scaling and an additional StandardScaler fitted only to the reviewed memory examples at each budget. Both models use L-BFGS optimization to a declared tolerance; they are not limited to one training pass. LR regularization and MLP width/regularization are selected separately at each budget using the first data seed's validation worlds, averaged across three initialization seeds, then frozen for every final test. Every method receives the same reviewed incidents. Review budgets count training labels; additional labelled validation worlds support model selection.
+**Setup.** Each class starts with no vector. Encoding produces an episode hypervector; a review adds its normalized vector to the appropriate float32 class accumulator. Prediction compares the episode with normalized class memories. The comparison models are regularized multinomial logistic regression and a small one-hidden-layer ReLU MLP. Both receive the same 21 input features: six measurements at each of three ordered observations, plus three handset-category indicators. The connected measurements come from the same valid graph joins as HDC. Validation chooses between the already declared physical range scaling and an additional StandardScaler fitted only to the reviewed memory examples at each budget. Both models use L-BFGS optimization to a declared tolerance; they are not limited to one training pass. LR regularization and MLP width/regularization are selected separately at each budget using the first data seed's validation worlds, averaged across three initialization seeds, then frozen for every final test. Every method receives the same reviewed incidents. Review budgets count training labels; additional labelled validation worlds support model selection.
 
 ![Learning from reviewed incidents with no encoder retraining](figures/learning.png)
 
@@ -323,14 +322,14 @@ These examples use a fixed diagnostic probe within the memory partition, includi
 | LR encode–refit–predict | 3.7061 ms | 3.7999 ms |
 | MLP encode–refit–predict | 37.3624 ms | 37.7802 ms |
 
-HDC's raw accumulator uses 16,384 bytes per episode; its search vector uses 8,192 bytes in float16. The explicit comparator uses 84 bytes in float32. Four HDC class accumulators use 65,536 bytes, before mappings, counters, audit history and exact-undo snapshots. These sizes describe representations, not the complete trained models. This dataset supports no compression claim.
+HDC's raw accumulator uses 16,384 bytes per episode; its search vector uses 8,192 bytes in float16. The LR/MLP input vector uses 84 bytes in float32. Four HDC class accumulators use 65,536 bytes, before mappings, counters, audit history and exact-undo snapshots. These sizes describe representations, not the complete trained models. This dataset supports no compression claim.
 
 Measured resource totals in the first fixed run:
 
 | Resource | Size |
 |---|---:|
 | All float32 HDC episode tensors | 37.50 MiB |
-| All explicit feature tensors | 0.19 MiB |
+| All LR/MLP input tensors | 0.19 MiB |
 | Cached encoder basis tensors | 11.92 MiB |
 | Lance vector store, raw/search vectors and manifests | 62.61 MiB |
 | Lance source-record store | 3.16 MiB |
@@ -425,7 +424,7 @@ Stage medians need not sum exactly to the median complete-operation latency. Raw
 | Inspectable evidence | All 9,000 retrieved top hits resolve to source records and reconstruct their float32 reference scores. | Provenance is retained alongside vectors; arithmetic contributions include interference and do not establish causes. Float16 search has a separately recorded quantization residual. |
 | Online learning | Frozen encoder, delayed reviews, additive class memories, exact reversal; HDC reaches mean macro F1 ≥0.80 with 1 review per class (4 total). | Supervised learning still requires labels. Updates can regress, and the scenarios are simulated. |
 | Compute cost | Addition, prediction and review incorporation are measured separately on CPU against trained LR and MLP. | Fast addition alone is not serving latency, energy efficiency, or an advantage over the measured controls. |
-| Storage | 16,384 bytes per raw hypervector versus 84 bytes per explicit feature vector. | This study shows no storage saving from HDC. |
+| Storage | 16,384 bytes per raw hypervector versus 84 bytes per LR/MLP input vector. | This study shows no storage saving from HDC. |
 
 The simulator uses simple observed rules and deliberately balanced classes, with complete telemetry. This makes the mechanisms observable and supplies a compact feature table that conventional trained classifiers can use effectively. It does not demonstrate operational diagnosis, realistic class prevalence, continual adaptation under drift, robustness to missing telemetry, or coverage across new incident types. Those would need separate experiments.
 
@@ -435,7 +434,7 @@ In this controlled study, HDC combines role-sensitive, ordered representations w
 
 HDC performs well with few reviewed examples. Its advantage is clearest at the smallest label budgets; LR and the MLP become competitive as more reviews arrive. The results support composable representation and incremental memory building, with usefulness measured against familiar trained classifiers.
 
-The resource comparison depends on the update strategy and batch size. HDC incorporates individual reviews quickly, while LR batch retraining amortizes well and is cheaper per review at the largest measured batch. HDC uses more representation storage than the explicit feature vector. These findings apply to the simulated patterns and measured CPU workload; operational telemetry, missing data and drift remain untested.
+The resource comparison depends on the update strategy and batch size. HDC incorporates individual reviews quickly, while LR batch retraining amortizes well and is cheaper per review at the largest measured batch. HDC uses more representation storage than the LR/MLP input vector. These findings apply to the simulated patterns and measured CPU workload; operational telemetry, missing data and drift remain untested.
 
 ## Reproduce and inspect
 

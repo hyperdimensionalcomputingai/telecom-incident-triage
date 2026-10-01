@@ -191,7 +191,7 @@
       "threadpoolctl": "3.7.0"
     }
   },
-  "summary_hash": "d659fe791527e9e77b9c79a6a4d4e48c5e15e0bd2c34a7b4f4c8f5b2a98fd41d",
+  "summary_hash": "0fc1a7727bdb8ab2130078bb29ab5678cbd30e2c3f92e25deb0abc777627e804",
   "result_hashes": {
     "1006/2001": "0a1f34ea0120eaf19181ff4ca5b75b55cd65edfc818e38ac9670f2cb6c3c7ab2",
     "1006/2002": "c6d46121b2670fe1f44e3212abcb40ba6eddfee61ab406551c9b775dafebadfd",
@@ -420,6 +420,8 @@
     "pairs/data-1010_encoder-2003/models/mlp-budget-10.joblib": "f3299020ff2defcb43e3d5ce8e6bbb3a6f97dca5f141e340d729328e7b4bd7a3",
     "pairs/data-1010_encoder-2003/models/mlp-budget-2.joblib": "593f0ae74843ee2b8b75b18257ea28ab3ff4e011d6f69edfbfbaa4a9afdc7f7f",
     "pairs/data-1010_encoder-2003/models/mlp-budget-20.joblib": "e51621cbe11b1d7e6b1685049b313d2ae97dc768fafd9b3552bef2de1835ce99",
-    "pairs/data-1010_encoder-2003/models/mlp-budget-5.joblib": "171aec03adb6835142b5a9a423c1d7408db58652a6b669bbc710c8b2ad9f81b7"
-  }
+    "pairs/data-1010_encoder-2003/models/mlp-budget-5.joblib": "171aec03adb6835142b5a9a423c1d7408db58652a6b669bbc710c8b2ad9f81b7",
+    "metrics.json": "88c2b6da7ea7532f96d0c6bfabed7335329e60ccdcd3da6ffe5c9833fd0d5c2f"
+  },
+  "publication_scope": "Retained evidence projects original measurements onto HDC retrieval diagnostics and HDC/LR/MLP learning. Original experiment and source-result hashes remain unchanged."
 }

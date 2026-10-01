@@ -11,13 +11,11 @@ COLOURS = {
     "hdc": "#287b78",
     "logistic_regression": "#a06935",
     "mlp": "#7461a2",
-    "structured": "#a06935",
     "hdc_without_paths": "#929eaa",
     "hdc_without_order": "#7461a2",
 }
 NAMES = {
     "hdc": "HDC",
-    "structured": "Explicit structured comparator",
     "hdc_without_paths": "HDC: connectivity omitted",
     "hdc_without_order": "HDC: order omitted",
     "hdc_lance_float16": "HDC in Lance (float16)",
@@ -277,18 +275,17 @@ def make_schema_figure(root, plt):
     plt.close(figure)
 
 
-def make_figures(root, summary, results, case, config, geography_root):
-    plt = figure_style()
-    root.mkdir(parents=True, exist_ok=True)
-    make_schema_figure(root, plt)
+def make_retrieval_figure(root, summary, plt):
     figure, axis = plt.subplots(figsize=(9, 4.8), layout="constrained")
-    methods = ["hdc", "structured", "hdc_without_paths", "hdc_without_order"]
+    methods = ["hdc", "hdc_without_paths", "hdc_without_order"]
     points = [summary["retrieval"][method]["precision_at_5"] for method in methods]
     means = [point["mean"] for point in points]
-    axis.barh(range(4), means, color=[COLOURS[method] for method in methods], height=0.62)
+    axis.barh(
+        range(len(methods)), means, color=[COLOURS[method] for method in methods], height=0.62
+    )
     axis.errorbar(
         means,
-        range(4),
+        range(len(methods)),
         xerr=[
             [point["mean"] - point["lower"] for point in points],
             [point["upper"] - point["mean"] for point in points],
@@ -297,7 +294,7 @@ def make_figures(root, summary, results, case, config, geography_root):
         ecolor="#243342",
         capsize=4,
     )
-    axis.set_yticks(range(4), [NAMES[method] for method in methods])
+    axis.set_yticks(range(len(methods)), [NAMES[method] for method in methods])
     axis.invert_yaxis()
     axis.set_xlim(0, 1.06)
     axis.set_xlabel("Share of the first five retrieved incidents with the same triage pattern")
@@ -312,6 +309,13 @@ def make_figures(root, summary, results, case, config, geography_root):
     )
     axis.legend(loc="lower right", frameon=False)
     save_figure(figure, root, "retrieval", plt)
+
+
+def make_figures(root, summary, results, case, config, geography_root):
+    plt = figure_style()
+    root.mkdir(parents=True, exist_ok=True)
+    make_schema_figure(root, plt)
+    make_retrieval_figure(root, summary, plt)
 
     figure, axis = plt.subplots(figsize=(8.6, 5), layout="constrained")
     for method in ("hdc", "logistic_regression", "mlp"):
@@ -801,13 +805,12 @@ def create_report(run_dir):
     online = read(paths[0] / "online.json")
     geography = read(run_dir / "data" / str(config.data_seeds[0]) / "manifest.json")["geography"]
     root = run_dir / "reports"
-    source_link = os.path.relpath(ROOT / "src", root)
+    source_link = os.path.relpath((ROOT / "src").resolve(), root.resolve())
     make_figures(root / "figures", summary, results, case, config, run_dir / "geography")
     retrieval_rows = "\n".join(
         f"| {NAMES[method]} | {interval_text(summary['retrieval'][method]['precision_at_5'])} | {percent(summary['retrieval'][method]['top1']['mean'])} | {summary['retrieval'][method]['reciprocal_rank_at_10']['mean']:.3f} |"
         for method in (
             "hdc",
-            "structured",
             "hdc_without_paths",
             "hdc_without_order",
             "hdc_lance_float16",
@@ -975,7 +978,7 @@ def create_report(run_dir):
         ),
         (
             "Storage",
-            f"{results[0]['resources']['hdc_raw_vector_bytes']:,} bytes per raw hypervector versus {results[0]['resources']['explicit_feature_bytes']} bytes per explicit feature vector.",
+            f"{results[0]['resources']['hdc_raw_vector_bytes']:,} bytes per raw hypervector versus {results[0]['resources']['model_input_bytes']} bytes per LR/MLP input vector.",
             "This study shows no storage saving from HDC.",
         ),
     ]
@@ -1011,7 +1014,7 @@ The experiments examine four questions:
 - **Learning:** How useful does class memory become as reviewed examples arrive, and when do updates help or hurt?
 - **Resources:** What do encoding, prediction, learning updates, retrieval and storage cost, including the cost per new review?
 
-An explicit structured comparator tests retrieval using the same ordered measurements and connected context. Regularized logistic regression and a small MLP provide familiar trained-model comparisons for triage-pattern prediction. All three learners receive the same reviewed incidents. These comparisons determine the practical tradeoffs; the operator demonstrations explain how the representation works.
+The learning comparison evaluates HDC against regularized logistic regression and a small MLP. All three learners receive the same reviewed incidents and connected measurements. Retrieval evaluates HDC itself, with order and connectivity ablations as internal representation checks. These checks are not additional comparison models.
 
 ## The dataset
 
@@ -1080,7 +1083,7 @@ Hyperdimensional computing (HDC) represents information in long numeric arrays c
 
 In this implementation, binding multiplies arrays element by element, bundling adds them, and permutation rotates their coordinates by a fixed number of positions. Binding gives radio strength a different meaning from link loss. A position-specific rotation distinguishes the same observations in reverse order. The connected channel follows the time-valid phone → cell → backhaul dependency before encoding its measurements and peer context.
 
-The operator vocabulary is small: `bind(role, value)` keeps a measurement attached to its meaning; `bundle(facts)` combines contributions; `permute(observation, position)` marks order. Learning reuses addition: `class_memory += normalize(episode_vector)`. The encoder implements these operations with TorchHD; no text embedding model is needed for these structured records.
+The operator vocabulary is small: `bind(role, value)` keeps a measurement attached to its meaning; `bundle(facts)` combines contributions; `permute(observation, position)` marks order. Learning reuses addition: `class_memory += normalize(episode_vector)`. The encoder implements these operations with TorchHD; no text embedding model is needed for these tabular records.
 
 **Result.** Swapping good/bad states between phone radio and an upstream link gives cosine {operator["role_binding"]["bound_cosine"]:.3f}. Omitting binding makes the two accumulators equal within {operator["role_binding"]["without_binding_max_error"]:.2g}. Reversing the observations gives cosine {operator["event_order"]["with_order_cosine"]:.3f}; omitting order leaves error {operator["event_order"]["without_order_max_error"]:.2g}. Rewiring one serving edge gives cosine {operator["connectivity"]["with_path_cosine"]:.3f}; pooling the same network measurements without their connections leaves error {operator["connectivity"]["without_path_max_error"]:.2g}. The adjacent numeric-level cosine is {operator["numeric_neighbourhood"]["adjacent_cosine"]:.3f}, compared with {operator["numeric_neighbourhood"]["far_cosine"]:.3f} for distant levels.
 
@@ -1092,7 +1095,7 @@ The handset contribution can be removed from a raw query without re-encoding the
 
 **Question.** Does the representation return earlier incidents with the same independently checked triage pattern, and can their source evidence be inspected?
 
-**Setup.** Every query uses an exact corridor/time filter and a memory-only candidate set. All three observations must qualify. Lance and independently registered GeoDataFusion agree on selected observation identities. The first run has {counts["min"]}–{counts["max"]} candidates per query (mean {counts["mean"]:.1f}). Relevance means the same triage pattern, not the same real-world cause. The numeric comparator receives the same ordered measurements and connected context as HDC. Connectivity and order are removed separately in ablations.
+**Setup.** Every query uses an exact corridor/time filter and a memory-only candidate set. All three observations must qualify. Lance and independently registered GeoDataFusion agree on selected observation identities. The first run has {counts["min"]}–{counts["max"]} candidates per query (mean {counts["mean"]:.1f}). Relevance means the same triage pattern, not the same real-world cause. Connectivity and order are removed separately in HDC ablations to check their contribution to retrieval.
 
 ![Retrieval precision with grouped uncertainty intervals](figures/retrieval.png)
 
@@ -1110,13 +1113,13 @@ Random ranking yields expected precision {percent(summary["random_precision_at_5
 |---|---|---|
 {error_text}
 
-**Interpretation.** Compare HDC with the explicit comparator directly. The ablations reveal the value of the information represented by order and connected context, not an exclusive HDC capability. The comparator can represent those facts too. Float16 search storage is independently verified against its quantized vectors; its mean precision difference from float32 is {statistics.mean(r["float16_quantization"]["precision_at_5_change"] for r in results) * 100:.3f} points. Float32 accumulators remain authoritative for arithmetic and updates.
+**Interpretation.** The HDC ablations reveal the value of retaining order and connected context. This retrieval experiment does not establish an advantage over LR or MLP, which are evaluated as classifiers in Experiment 3. Float16 search storage is independently verified against its quantized vectors; its mean precision difference from float32 is {statistics.mean(r["float16_quantization"]["precision_at_5_change"] for r in results) * 100:.3f} points. Float32 accumulators remain authoritative for arithmetic and updates.
 
 ## Experiment 3: how does memory grow through reviews?
 
 **Question.** How useful is class memory with few labelled incidents, and what happens when feedback arrives after a decision?
 
-**Setup.** Each class starts with no vector. Encoding produces an episode hypervector; a review adds its normalized vector to the appropriate float32 class accumulator. Prediction compares the episode with normalized class memories. The comparison models are regularized multinomial logistic regression and a small one-hidden-layer ReLU MLP. Both receive the same 21 explicit features: six measurements at each of three ordered observations, plus three handset-category indicators. The connected measurements come from the same valid graph joins as HDC. Validation chooses between the already declared physical range scaling and an additional StandardScaler fitted only to the reviewed memory examples at each budget. Both models use L-BFGS optimization to a declared tolerance; they are not limited to one training pass. LR regularization and MLP width/regularization are selected separately at each budget using the first data seed's validation worlds, averaged across three initialization seeds, then frozen for every final test. Every method receives the same reviewed incidents. Review budgets count training labels; additional labelled validation worlds support model selection.
+**Setup.** Each class starts with no vector. Encoding produces an episode hypervector; a review adds its normalized vector to the appropriate float32 class accumulator. Prediction compares the episode with normalized class memories. The comparison models are regularized multinomial logistic regression and a small one-hidden-layer ReLU MLP. Both receive the same 21 input features: six measurements at each of three ordered observations, plus three handset-category indicators. The connected measurements come from the same valid graph joins as HDC. Validation chooses between the already declared physical range scaling and an additional StandardScaler fitted only to the reviewed memory examples at each budget. Both models use L-BFGS optimization to a declared tolerance; they are not limited to one training pass. LR regularization and MLP width/regularization are selected separately at each budget using the first data seed's validation worlds, averaged across three initialization seeds, then frozen for every final test. Every method receives the same reviewed incidents. Review budgets count training labels; additional labelled validation worlds support model selection.
 
 ![Learning from reviewed incidents with no encoder retraining](figures/learning.png)
 
@@ -1154,14 +1157,14 @@ These examples use a fixed diagnostic probe within the memory partition, includi
 |---|---:|---:|
 {timing_rows}
 
-HDC's raw accumulator uses {results[0]["resources"]["hdc_raw_vector_bytes"]:,} bytes per episode; its search vector uses {results[0]["resources"]["hdc_search_vector_bytes"]:,} bytes in float16. The explicit comparator uses {results[0]["resources"]["explicit_feature_bytes"]} bytes in float32. Four HDC class accumulators use {results[0]["resources"]["class_memory_bytes"]["hdc"]:,} bytes, before mappings, counters, audit history and exact-undo snapshots. These sizes describe representations, not the complete trained models. This dataset supports no compression claim.
+HDC's raw accumulator uses {results[0]["resources"]["hdc_raw_vector_bytes"]:,} bytes per episode; its search vector uses {results[0]["resources"]["hdc_search_vector_bytes"]:,} bytes in float16. The LR/MLP input vector uses {results[0]["resources"]["model_input_bytes"]} bytes in float32. Four HDC class accumulators use {results[0]["resources"]["class_memory_bytes"]["hdc"]:,} bytes, before mappings, counters, audit history and exact-undo snapshots. These sizes describe representations, not the complete trained models. This dataset supports no compression claim.
 
 Measured resource totals in the first fixed run:
 
 | Resource | Size |
 |---|---:|
 | All float32 HDC episode tensors | {results[0]["resources"]["hdc_representation_tensor_bytes"] / 2**20:.2f} MiB |
-| All explicit feature tensors | {results[0]["resources"]["explicit_representation_tensor_bytes"] / 2**20:.2f} MiB |
+| All LR/MLP input tensors | {results[0]["resources"]["model_input_tensor_bytes"] / 2**20:.2f} MiB |
 | Cached encoder basis tensors | {results[0]["resources"]["encoder_cached_basis_bytes"] / 2**20:.2f} MiB |
 | Lance vector store, raw/search vectors and manifests | {results[0]["resources"]["vector_store_bytes"] / 2**20:.2f} MiB |
 | Lance source-record store | {results[0]["resources"]["source_store_bytes"] / 2**20:.2f} MiB |
@@ -1200,7 +1203,7 @@ In this controlled study, HDC combines role-sensitive, ordered representations w
 
 HDC performs well with few reviewed examples. Its advantage is clearest at the smallest label budgets; LR and the MLP become competitive as more reviews arrive. The results support composable representation and incremental memory building, with usefulness measured against familiar trained classifiers.
 
-The resource comparison depends on the update strategy and batch size. HDC incorporates individual reviews quickly, while LR batch retraining amortizes well and is cheaper per review at the largest measured batch. HDC uses more representation storage than the explicit feature vector. These findings apply to the simulated patterns and measured CPU workload; operational telemetry, missing data and drift remain untested.
+The resource comparison depends on the update strategy and batch size. HDC incorporates individual reviews quickly, while LR batch retraining amortizes well and is cheaper per review at the largest measured batch. HDC uses more representation storage than the LR/MLP input vector. These findings apply to the simulated patterns and measured CPU workload; operational telemetry, missing data and drift remain untested.
 
 ## Reproduce and inspect
 

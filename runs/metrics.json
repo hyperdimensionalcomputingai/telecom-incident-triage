@@ -1,5 +1,5 @@
 {
-  "scope": "Exact projection of result records; excludes retrieval query traces, individual predictions and full connectivity-fixture episodes. Resources include raw repeated timings.",
+  "scope": "Retained measured result values with LR/MLP input-storage keys renamed; excludes retired retrieval comparisons, individual query traces, predictions and full connectivity-fixture episodes. Resources include raw repeated timings.",
   "source_result_hashes": {
     "pairs/data-1006_encoder-2001/results.json": "0a1f34ea0120eaf19181ff4ca5b75b55cd65edfc818e38ac9670f2cb6c3c7ab2",
     "pairs/data-1006_encoder-2002/results.json": "c6d46121b2670fe1f44e3212abcb40ba6eddfee61ab406551c9b775dafebadfd",
@@ -179,13 +179,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65655556,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -203,11 +201,6 @@
           "hdc": {
             "median_ms": 0.424771,
             "p95_ms": 0.7882458499999997,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.025062,
-            "p95_ms": 0.03894374999999994,
             "n": 600
           },
           "hdc_without_paths": {
@@ -2689,7 +2682,9 @@
           "generation_and_parquet_s": 0.24960591702256352,
           "factual_joins_and_source_validation_s": 0.4798353750084061,
           "source_lance_persistence_s": 0.2304794999945443
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -2728,45 +2723,6 @@
               "top1": 1.0,
               "precision_at_5": 0.958,
               "reciprocal_rank_at_10": 1.0
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.97,
-            "precision_at_5": 0.9213333333333333,
-            "reciprocal_rank_at_10": 0.98375
-          },
-          "per_world": {
-            "S1006-W18": {
-              "top1": 0.94,
-              "precision_at_5": 0.912,
-              "reciprocal_rank_at_10": 0.9658333333333333
-            },
-            "S1006-W19": {
-              "top1": 0.98,
-              "precision_at_5": 0.92,
-              "reciprocal_rank_at_10": 0.9883333333333333
-            },
-            "S1006-W20": {
-              "top1": 0.99,
-              "precision_at_5": 0.93,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1006-W21": {
-              "top1": 0.95,
-              "precision_at_5": 0.926,
-              "reciprocal_rank_at_10": 0.9733333333333334
-            },
-            "S1006-W22": {
-              "top1": 0.98,
-              "precision_at_5": 0.922,
-              "reciprocal_rank_at_10": 0.99
-            },
-            "S1006-W23": {
-              "top1": 0.98,
-              "precision_at_5": 0.918,
-              "reciprocal_rank_at_10": 0.99
             }
           }
         },
@@ -9631,13 +9587,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65830213,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -9655,11 +9609,6 @@
           "hdc": {
             "median_ms": 0.275521,
             "p95_ms": 0.3771065999999999,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.0234165,
-            "p95_ms": 0.028916050000000002,
             "n": 600
           },
           "hdc_without_paths": {
@@ -12141,7 +12090,9 @@
           "generation_and_parquet_s": 0.24960591702256352,
           "factual_joins_and_source_validation_s": 0.4798353750084061,
           "source_lance_persistence_s": 0.2304794999945443
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -12180,45 +12131,6 @@
               "top1": 0.99,
               "precision_at_5": 0.96,
               "reciprocal_rank_at_10": 0.995
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.97,
-            "precision_at_5": 0.9213333333333333,
-            "reciprocal_rank_at_10": 0.98375
-          },
-          "per_world": {
-            "S1006-W18": {
-              "top1": 0.94,
-              "precision_at_5": 0.912,
-              "reciprocal_rank_at_10": 0.9658333333333333
-            },
-            "S1006-W19": {
-              "top1": 0.98,
-              "precision_at_5": 0.92,
-              "reciprocal_rank_at_10": 0.9883333333333333
-            },
-            "S1006-W20": {
-              "top1": 0.99,
-              "precision_at_5": 0.93,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1006-W21": {
-              "top1": 0.95,
-              "precision_at_5": 0.926,
-              "reciprocal_rank_at_10": 0.9733333333333334
-            },
-            "S1006-W22": {
-              "top1": 0.98,
-              "precision_at_5": 0.922,
-              "reciprocal_rank_at_10": 0.99
-            },
-            "S1006-W23": {
-              "top1": 0.98,
-              "precision_at_5": 0.918,
-              "reciprocal_rank_at_10": 0.99
             }
           }
         },
@@ -19083,13 +18995,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65594180,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -19107,11 +19017,6 @@
           "hdc": {
             "median_ms": 0.2945835,
             "p95_ms": 0.4763184499999999,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.023333,
-            "p95_ms": 0.028752049999999998,
             "n": 600
           },
           "hdc_without_paths": {
@@ -21607,7 +21512,9 @@
           "generation_and_parquet_s": 0.24960591702256352,
           "factual_joins_and_source_validation_s": 0.4798353750084061,
           "source_lance_persistence_s": 0.2304794999945443
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -21645,45 +21552,6 @@
             "S1006-W23": {
               "top1": 0.98,
               "precision_at_5": 0.974,
-              "reciprocal_rank_at_10": 0.99
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.97,
-            "precision_at_5": 0.9213333333333333,
-            "reciprocal_rank_at_10": 0.98375
-          },
-          "per_world": {
-            "S1006-W18": {
-              "top1": 0.94,
-              "precision_at_5": 0.912,
-              "reciprocal_rank_at_10": 0.9658333333333333
-            },
-            "S1006-W19": {
-              "top1": 0.98,
-              "precision_at_5": 0.92,
-              "reciprocal_rank_at_10": 0.9883333333333333
-            },
-            "S1006-W20": {
-              "top1": 0.99,
-              "precision_at_5": 0.93,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1006-W21": {
-              "top1": 0.95,
-              "precision_at_5": 0.926,
-              "reciprocal_rank_at_10": 0.9733333333333334
-            },
-            "S1006-W22": {
-              "top1": 0.98,
-              "precision_at_5": 0.922,
-              "reciprocal_rank_at_10": 0.99
-            },
-            "S1006-W23": {
-              "top1": 0.98,
-              "precision_at_5": 0.918,
               "reciprocal_rank_at_10": 0.99
             }
           }
@@ -28549,13 +28417,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65716868,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -28573,11 +28439,6 @@
           "hdc": {
             "median_ms": 0.2814375,
             "p95_ms": 0.92816875,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.0237705,
-            "p95_ms": 0.028794049999999998,
             "n": 600
           },
           "hdc_without_paths": {
@@ -31059,7 +30920,9 @@
           "generation_and_parquet_s": 0.23415479200775735,
           "factual_joins_and_source_validation_s": 0.4411985829938203,
           "source_lance_persistence_s": 0.04509483301080763
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -31098,45 +30961,6 @@
               "top1": 0.97,
               "precision_at_5": 0.972,
               "reciprocal_rank_at_10": 0.985
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.97,
-            "precision_at_5": 0.9273333333333333,
-            "reciprocal_rank_at_10": 0.9825972222222222
-          },
-          "per_world": {
-            "S1007-W18": {
-              "top1": 0.96,
-              "precision_at_5": 0.924,
-              "reciprocal_rank_at_10": 0.9783333333333334
-            },
-            "S1007-W19": {
-              "top1": 0.99,
-              "precision_at_5": 0.948,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1007-W20": {
-              "top1": 0.98,
-              "precision_at_5": 0.926,
-              "reciprocal_rank_at_10": 0.987
-            },
-            "S1007-W21": {
-              "top1": 0.97,
-              "precision_at_5": 0.916,
-              "reciprocal_rank_at_10": 0.97825
-            },
-            "S1007-W22": {
-              "top1": 0.96,
-              "precision_at_5": 0.904,
-              "reciprocal_rank_at_10": 0.977
-            },
-            "S1007-W23": {
-              "top1": 0.96,
-              "precision_at_5": 0.946,
-              "reciprocal_rank_at_10": 0.98
             }
           }
         },
@@ -38001,13 +37825,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65409093,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -38025,11 +37847,6 @@
           "hdc": {
             "median_ms": 0.2630415,
             "p95_ms": 0.3468937499999999,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.0236665,
-            "p95_ms": 0.0277521,
             "n": 600
           },
           "hdc_without_paths": {
@@ -40511,7 +40328,9 @@
           "generation_and_parquet_s": 0.23415479200775735,
           "factual_joins_and_source_validation_s": 0.4411985829938203,
           "source_lance_persistence_s": 0.04509483301080763
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -40550,45 +40369,6 @@
               "top1": 0.98,
               "precision_at_5": 0.966,
               "reciprocal_rank_at_10": 0.99
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.97,
-            "precision_at_5": 0.9273333333333333,
-            "reciprocal_rank_at_10": 0.9825972222222222
-          },
-          "per_world": {
-            "S1007-W18": {
-              "top1": 0.96,
-              "precision_at_5": 0.924,
-              "reciprocal_rank_at_10": 0.9783333333333334
-            },
-            "S1007-W19": {
-              "top1": 0.99,
-              "precision_at_5": 0.948,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1007-W20": {
-              "top1": 0.98,
-              "precision_at_5": 0.926,
-              "reciprocal_rank_at_10": 0.987
-            },
-            "S1007-W21": {
-              "top1": 0.97,
-              "precision_at_5": 0.916,
-              "reciprocal_rank_at_10": 0.97825
-            },
-            "S1007-W22": {
-              "top1": 0.96,
-              "precision_at_5": 0.904,
-              "reciprocal_rank_at_10": 0.977
-            },
-            "S1007-W23": {
-              "top1": 0.96,
-              "precision_at_5": 0.946,
-              "reciprocal_rank_at_10": 0.98
             }
           }
         },
@@ -47453,13 +47233,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65664901,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -47477,11 +47255,6 @@
           "hdc": {
             "median_ms": 0.254687,
             "p95_ms": 0.335625,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.023625,
-            "p95_ms": 0.02775,
             "n": 600
           },
           "hdc_without_paths": {
@@ -49963,7 +49736,9 @@
           "generation_and_parquet_s": 0.23415479200775735,
           "factual_joins_and_source_validation_s": 0.4411985829938203,
           "source_lance_persistence_s": 0.04509483301080763
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -50002,45 +49777,6 @@
               "top1": 0.99,
               "precision_at_5": 0.966,
               "reciprocal_rank_at_10": 0.995
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.97,
-            "precision_at_5": 0.9273333333333333,
-            "reciprocal_rank_at_10": 0.9825972222222222
-          },
-          "per_world": {
-            "S1007-W18": {
-              "top1": 0.96,
-              "precision_at_5": 0.924,
-              "reciprocal_rank_at_10": 0.9783333333333334
-            },
-            "S1007-W19": {
-              "top1": 0.99,
-              "precision_at_5": 0.948,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1007-W20": {
-              "top1": 0.98,
-              "precision_at_5": 0.926,
-              "reciprocal_rank_at_10": 0.987
-            },
-            "S1007-W21": {
-              "top1": 0.97,
-              "precision_at_5": 0.916,
-              "reciprocal_rank_at_10": 0.97825
-            },
-            "S1007-W22": {
-              "top1": 0.96,
-              "precision_at_5": 0.904,
-              "reciprocal_rank_at_10": 0.977
-            },
-            "S1007-W23": {
-              "top1": 0.96,
-              "precision_at_5": 0.946,
-              "reciprocal_rank_at_10": 0.98
             }
           }
         },
@@ -56905,13 +56641,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65752325,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -56929,11 +56663,6 @@
           "hdc": {
             "median_ms": 0.262417,
             "p95_ms": 0.35274854999999994,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.023416,
-            "p95_ms": 0.027793099999999998,
             "n": 600
           },
           "hdc_without_paths": {
@@ -59415,7 +59144,9 @@
           "generation_and_parquet_s": 0.25068270799238235,
           "factual_joins_and_source_validation_s": 0.4462497080094181,
           "source_lance_persistence_s": 0.04247762501472607
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -59454,45 +59185,6 @@
               "top1": 0.95,
               "precision_at_5": 0.9380000000000001,
               "reciprocal_rank_at_10": 0.9733333333333334
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.955,
-            "precision_at_5": 0.912,
-            "reciprocal_rank_at_10": 0.9748611111111111
-          },
-          "per_world": {
-            "S1008-W18": {
-              "top1": 0.95,
-              "precision_at_5": 0.91,
-              "reciprocal_rank_at_10": 0.9733333333333334
-            },
-            "S1008-W19": {
-              "top1": 0.98,
-              "precision_at_5": 0.924,
-              "reciprocal_rank_at_10": 0.99
-            },
-            "S1008-W20": {
-              "top1": 0.93,
-              "precision_at_5": 0.9,
-              "reciprocal_rank_at_10": 0.9566666666666667
-            },
-            "S1008-W21": {
-              "top1": 0.97,
-              "precision_at_5": 0.928,
-              "reciprocal_rank_at_10": 0.9833333333333333
-            },
-            "S1008-W22": {
-              "top1": 0.96,
-              "precision_at_5": 0.918,
-              "reciprocal_rank_at_10": 0.98
-            },
-            "S1008-W23": {
-              "top1": 0.94,
-              "precision_at_5": 0.892,
-              "reciprocal_rank_at_10": 0.9658333333333333
             }
           }
         },
@@ -66357,13 +66049,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65173061,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -66381,11 +66071,6 @@
           "hdc": {
             "median_ms": 0.262,
             "p95_ms": 0.36307739999999994,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.023709,
-            "p95_ms": 0.028169049999999998,
             "n": 600
           },
           "hdc_without_paths": {
@@ -68867,7 +68552,9 @@
           "generation_and_parquet_s": 0.25068270799238235,
           "factual_joins_and_source_validation_s": 0.4462497080094181,
           "source_lance_persistence_s": 0.04247762501472607
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -68906,45 +68593,6 @@
               "top1": 0.95,
               "precision_at_5": 0.9420000000000001,
               "reciprocal_rank_at_10": 0.9725
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.955,
-            "precision_at_5": 0.912,
-            "reciprocal_rank_at_10": 0.9748611111111111
-          },
-          "per_world": {
-            "S1008-W18": {
-              "top1": 0.95,
-              "precision_at_5": 0.91,
-              "reciprocal_rank_at_10": 0.9733333333333334
-            },
-            "S1008-W19": {
-              "top1": 0.98,
-              "precision_at_5": 0.924,
-              "reciprocal_rank_at_10": 0.99
-            },
-            "S1008-W20": {
-              "top1": 0.93,
-              "precision_at_5": 0.9,
-              "reciprocal_rank_at_10": 0.9566666666666667
-            },
-            "S1008-W21": {
-              "top1": 0.97,
-              "precision_at_5": 0.928,
-              "reciprocal_rank_at_10": 0.9833333333333333
-            },
-            "S1008-W22": {
-              "top1": 0.96,
-              "precision_at_5": 0.918,
-              "reciprocal_rank_at_10": 0.98
-            },
-            "S1008-W23": {
-              "top1": 0.94,
-              "precision_at_5": 0.892,
-              "reciprocal_rank_at_10": 0.9658333333333333
             }
           }
         },
@@ -75809,13 +75457,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65371140,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -75833,11 +75479,6 @@
           "hdc": {
             "median_ms": 0.268917,
             "p95_ms": 0.4453395999999998,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.0235,
-            "p95_ms": 0.02804615,
             "n": 600
           },
           "hdc_without_paths": {
@@ -78319,7 +77960,9 @@
           "generation_and_parquet_s": 0.25068270799238235,
           "factual_joins_and_source_validation_s": 0.4462497080094181,
           "source_lance_persistence_s": 0.04247762501472607
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -78358,45 +78001,6 @@
               "top1": 0.96,
               "precision_at_5": 0.958,
               "reciprocal_rank_at_10": 0.9783333333333334
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.955,
-            "precision_at_5": 0.912,
-            "reciprocal_rank_at_10": 0.9748611111111111
-          },
-          "per_world": {
-            "S1008-W18": {
-              "top1": 0.95,
-              "precision_at_5": 0.91,
-              "reciprocal_rank_at_10": 0.9733333333333334
-            },
-            "S1008-W19": {
-              "top1": 0.98,
-              "precision_at_5": 0.924,
-              "reciprocal_rank_at_10": 0.99
-            },
-            "S1008-W20": {
-              "top1": 0.93,
-              "precision_at_5": 0.9,
-              "reciprocal_rank_at_10": 0.9566666666666667
-            },
-            "S1008-W21": {
-              "top1": 0.97,
-              "precision_at_5": 0.928,
-              "reciprocal_rank_at_10": 0.9833333333333333
-            },
-            "S1008-W22": {
-              "top1": 0.96,
-              "precision_at_5": 0.918,
-              "reciprocal_rank_at_10": 0.98
-            },
-            "S1008-W23": {
-              "top1": 0.94,
-              "precision_at_5": 0.892,
-              "reciprocal_rank_at_10": 0.9658333333333333
             }
           }
         },
@@ -85263,13 +84867,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65659781,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -85287,11 +84889,6 @@
           "hdc": {
             "median_ms": 0.2685415,
             "p95_ms": 0.3558402,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.022979,
-            "p95_ms": 0.0275,
             "n": 600
           },
           "hdc_without_paths": {
@@ -87773,7 +87370,9 @@
           "generation_and_parquet_s": 0.21376225000130944,
           "factual_joins_and_source_validation_s": 0.37662599998293445,
           "source_lance_persistence_s": 0.04206224999506958
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -87812,45 +87411,6 @@
               "top1": 1.0,
               "precision_at_5": 0.964,
               "reciprocal_rank_at_10": 1.0
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.9783333333333334,
-            "precision_at_5": 0.931,
-            "reciprocal_rank_at_10": 0.9886111111111111
-          },
-          "per_world": {
-            "S1009-W18": {
-              "top1": 0.94,
-              "precision_at_5": 0.896,
-              "reciprocal_rank_at_10": 0.9683333333333334
-            },
-            "S1009-W19": {
-              "top1": 1.0,
-              "precision_at_5": 0.932,
-              "reciprocal_rank_at_10": 1.0
-            },
-            "S1009-W20": {
-              "top1": 0.99,
-              "precision_at_5": 0.948,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1009-W21": {
-              "top1": 0.97,
-              "precision_at_5": 0.956,
-              "reciprocal_rank_at_10": 0.9833333333333333
-            },
-            "S1009-W22": {
-              "top1": 0.99,
-              "precision_at_5": 0.932,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1009-W23": {
-              "top1": 0.98,
-              "precision_at_5": 0.922,
-              "reciprocal_rank_at_10": 0.99
             }
           }
         },
@@ -94717,13 +94277,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65439493,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -94741,11 +94299,6 @@
           "hdc": {
             "median_ms": 0.25229199999999996,
             "p95_ms": 0.34589134999999993,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.023271,
-            "p95_ms": 0.0279191,
             "n": 600
           },
           "hdc_without_paths": {
@@ -97227,7 +96780,9 @@
           "generation_and_parquet_s": 0.21376225000130944,
           "factual_joins_and_source_validation_s": 0.37662599998293445,
           "source_lance_persistence_s": 0.04206224999506958
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -97266,45 +96821,6 @@
               "top1": 1.0,
               "precision_at_5": 0.964,
               "reciprocal_rank_at_10": 1.0
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.9783333333333334,
-            "precision_at_5": 0.931,
-            "reciprocal_rank_at_10": 0.9886111111111111
-          },
-          "per_world": {
-            "S1009-W18": {
-              "top1": 0.94,
-              "precision_at_5": 0.896,
-              "reciprocal_rank_at_10": 0.9683333333333334
-            },
-            "S1009-W19": {
-              "top1": 1.0,
-              "precision_at_5": 0.932,
-              "reciprocal_rank_at_10": 1.0
-            },
-            "S1009-W20": {
-              "top1": 0.99,
-              "precision_at_5": 0.948,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1009-W21": {
-              "top1": 0.97,
-              "precision_at_5": 0.956,
-              "reciprocal_rank_at_10": 0.9833333333333333
-            },
-            "S1009-W22": {
-              "top1": 0.99,
-              "precision_at_5": 0.932,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1009-W23": {
-              "top1": 0.98,
-              "precision_at_5": 0.922,
-              "reciprocal_rank_at_10": 0.99
             }
           }
         },
@@ -104169,13 +103685,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65137861,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -104193,11 +103707,6 @@
           "hdc": {
             "median_ms": 0.25387499999999996,
             "p95_ms": 0.3663979,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.02325,
-            "p95_ms": 0.027631249999999996,
             "n": 600
           },
           "hdc_without_paths": {
@@ -106679,7 +106188,9 @@
           "generation_and_parquet_s": 0.21376225000130944,
           "factual_joins_and_source_validation_s": 0.37662599998293445,
           "source_lance_persistence_s": 0.04206224999506958
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -106718,45 +106229,6 @@
               "top1": 1.0,
               "precision_at_5": 0.978,
               "reciprocal_rank_at_10": 1.0
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.9783333333333334,
-            "precision_at_5": 0.931,
-            "reciprocal_rank_at_10": 0.9886111111111111
-          },
-          "per_world": {
-            "S1009-W18": {
-              "top1": 0.94,
-              "precision_at_5": 0.896,
-              "reciprocal_rank_at_10": 0.9683333333333334
-            },
-            "S1009-W19": {
-              "top1": 1.0,
-              "precision_at_5": 0.932,
-              "reciprocal_rank_at_10": 1.0
-            },
-            "S1009-W20": {
-              "top1": 0.99,
-              "precision_at_5": 0.948,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1009-W21": {
-              "top1": 0.97,
-              "precision_at_5": 0.956,
-              "reciprocal_rank_at_10": 0.9833333333333333
-            },
-            "S1009-W22": {
-              "top1": 0.99,
-              "precision_at_5": 0.932,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1009-W23": {
-              "top1": 0.98,
-              "precision_at_5": 0.922,
-              "reciprocal_rank_at_10": 0.99
             }
           }
         },
@@ -113621,13 +113093,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65726276,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -113645,11 +113115,6 @@
           "hdc": {
             "median_ms": 0.2731665,
             "p95_ms": 0.36218155,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.024125,
-            "p95_ms": 0.0277521,
             "n": 600
           },
           "hdc_without_paths": {
@@ -116131,7 +115596,9 @@
           "generation_and_parquet_s": 0.21520704199792817,
           "factual_joins_and_source_validation_s": 0.4517906669934746,
           "source_lance_persistence_s": 0.043052875000284985
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -116170,45 +115637,6 @@
               "top1": 0.98,
               "precision_at_5": 0.96,
               "reciprocal_rank_at_10": 0.9883333333333333
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.9733333333333334,
-            "precision_at_5": 0.9286666666666666,
-            "reciprocal_rank_at_10": 0.9851388888888889
-          },
-          "per_world": {
-            "S1010-W18": {
-              "top1": 0.95,
-              "precision_at_5": 0.914,
-              "reciprocal_rank_at_10": 0.9733333333333334
-            },
-            "S1010-W19": {
-              "top1": 0.99,
-              "precision_at_5": 0.9400000000000001,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1010-W20": {
-              "top1": 0.99,
-              "precision_at_5": 0.922,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1010-W21": {
-              "top1": 0.99,
-              "precision_at_5": 0.926,
-              "reciprocal_rank_at_10": 0.9933333333333333
-            },
-            "S1010-W22": {
-              "top1": 0.95,
-              "precision_at_5": 0.9440000000000001,
-              "reciprocal_rank_at_10": 0.9733333333333334
-            },
-            "S1010-W23": {
-              "top1": 0.97,
-              "precision_at_5": 0.926,
-              "reciprocal_rank_at_10": 0.9808333333333333
             }
           }
         },
@@ -123073,13 +122501,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 66001157,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -123097,11 +122523,6 @@
           "hdc": {
             "median_ms": 0.279771,
             "p95_ms": 0.3837416499999999,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.024333,
-            "p95_ms": 0.0280021,
             "n": 600
           },
           "hdc_without_paths": {
@@ -125583,7 +125004,9 @@
           "generation_and_parquet_s": 0.21520704199792817,
           "factual_joins_and_source_validation_s": 0.4517906669934746,
           "source_lance_persistence_s": 0.043052875000284985
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -125622,45 +125045,6 @@
               "top1": 0.99,
               "precision_at_5": 0.968,
               "reciprocal_rank_at_10": 0.995
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.9733333333333334,
-            "precision_at_5": 0.9286666666666666,
-            "reciprocal_rank_at_10": 0.9851388888888889
-          },
-          "per_world": {
-            "S1010-W18": {
-              "top1": 0.95,
-              "precision_at_5": 0.914,
-              "reciprocal_rank_at_10": 0.9733333333333334
-            },
-            "S1010-W19": {
-              "top1": 0.99,
-              "precision_at_5": 0.9400000000000001,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1010-W20": {
-              "top1": 0.99,
-              "precision_at_5": 0.922,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1010-W21": {
-              "top1": 0.99,
-              "precision_at_5": 0.926,
-              "reciprocal_rank_at_10": 0.9933333333333333
-            },
-            "S1010-W22": {
-              "top1": 0.95,
-              "precision_at_5": 0.9440000000000001,
-              "reciprocal_rank_at_10": 0.9733333333333334
-            },
-            "S1010-W23": {
-              "top1": 0.97,
-              "precision_at_5": 0.926,
-              "reciprocal_rank_at_10": 0.9808333333333333
             }
           }
         },
@@ -132525,13 +131909,11 @@
         },
         "hdc_raw_vector_bytes": 16384,
         "hdc_search_vector_bytes": 8192,
-        "explicit_feature_bytes": 84,
         "class_memory_bytes": {
           "hdc": 65536
         },
         "vector_store_bytes": 65384901,
         "hdc_representation_tensor_bytes": 39321600,
-        "explicit_representation_tensor_bytes": 201600,
         "encoder_cached_basis_bytes": 12500992,
         "not_measured": [
           "Energy",
@@ -132549,11 +131931,6 @@
           "hdc": {
             "median_ms": 0.2748335,
             "p95_ms": 0.3689943999999997,
-            "n": 600
-          },
-          "structured": {
-            "median_ms": 0.024208,
-            "p95_ms": 0.027423249999999996,
             "n": 600
           },
           "hdc_without_paths": {
@@ -135035,7 +134412,9 @@
           "generation_and_parquet_s": 0.21520704199792817,
           "factual_joins_and_source_validation_s": 0.4517906669934746,
           "source_lance_persistence_s": 0.043052875000284985
-        }
+        },
+        "model_input_bytes": 84,
+        "model_input_tensor_bytes": 201600
       },
       "retrieval": {
         "hdc": {
@@ -135074,45 +134453,6 @@
               "top1": 0.99,
               "precision_at_5": 0.974,
               "reciprocal_rank_at_10": 0.995
-            }
-          }
-        },
-        "structured": {
-          "metrics": {
-            "top1": 0.9733333333333334,
-            "precision_at_5": 0.9286666666666666,
-            "reciprocal_rank_at_10": 0.9851388888888889
-          },
-          "per_world": {
-            "S1010-W18": {
-              "top1": 0.95,
-              "precision_at_5": 0.914,
-              "reciprocal_rank_at_10": 0.9733333333333334
-            },
-            "S1010-W19": {
-              "top1": 0.99,
-              "precision_at_5": 0.9400000000000001,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1010-W20": {
-              "top1": 0.99,
-              "precision_at_5": 0.922,
-              "reciprocal_rank_at_10": 0.995
-            },
-            "S1010-W21": {
-              "top1": 0.99,
-              "precision_at_5": 0.926,
-              "reciprocal_rank_at_10": 0.9933333333333333
-            },
-            "S1010-W22": {
-              "top1": 0.95,
-              "precision_at_5": 0.9440000000000001,
-              "reciprocal_rank_at_10": 0.9733333333333334
-            },
-            "S1010-W23": {
-              "top1": 0.97,
-              "precision_at_5": 0.926,
-              "reciprocal_rank_at_10": 0.9808333333333333
             }
           }
         },

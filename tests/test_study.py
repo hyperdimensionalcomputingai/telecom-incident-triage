@@ -10,7 +10,7 @@ import torch
 
 from config import BASE_TS, LABELS, Config, digest
 from data import build_episodes, generate, source_lookup
-from encoding import Encoder, Term, explicit_features, unit
+from encoding import Encoder, Term, model_input_features, unit
 from fixtures import operator_diagnostics
 from geography import load_geography, polygon_for
 from learning import Prototype, delayed_feedback, learning_curves
@@ -331,7 +331,7 @@ def test_delayed_reviews_do_not_leak_test_labels(sample):
 
 def test_matched_label_budgets_and_held_out_curves(sample):
     _, config, _, episodes, _, raws, _, labels, *_ = sample
-    features = torch.stack([explicit_features(e) for e in episodes])
+    features = torch.stack([model_input_features(e) for e in episodes])
     memory = [i for i, e in enumerate(episodes) if e["split"] == "memory"]
     testing = [i for i, e in enumerate(episodes) if e["split"] == "test"]
     settings = {
@@ -357,7 +357,7 @@ def test_classifier_scaler_and_training_use_reviewed_examples_only(sample, tmp_p
     from learning import budget_indices
 
     _, _, _, episodes, _, _, _, labels, *_ = sample
-    features = torch.stack([explicit_features(e) for e in episodes])
+    features = torch.stack([model_input_features(e) for e in episodes])
     memory = [i for i, e in enumerate(episodes) if e["split"] == "memory"]
     selected = budget_indices(memory, labels, 2, episodes)
     for method, parameters in [
@@ -377,7 +377,7 @@ def test_model_selection_rejects_test_partition(sample):
     from classifiers import select_settings
 
     _, config, _, episodes, _, _, _, labels, *_ = sample
-    features = torch.stack([explicit_features(e) for e in episodes])
+    features = torch.stack([model_input_features(e) for e in episodes])
     memory = [i for i, e in enumerate(episodes) if e["split"] == "memory"]
     testing = [i for i, e in enumerate(episodes) if e["split"] == "test"]
     with pytest.raises(ValueError, match="validation"):
@@ -389,7 +389,7 @@ def test_classifiers_ignore_labels_outside_training(sample):
     from learning import budget_indices
 
     _, _, _, episodes, _, _, _, labels, *_ = sample
-    features = torch.stack([explicit_features(e) for e in episodes])
+    features = torch.stack([model_input_features(e) for e in episodes])
     memory = [i for i, e in enumerate(episodes) if e["split"] == "memory"]
     selected = budget_indices(memory, labels, 2, episodes)
     changed = labels.clone()
@@ -499,7 +499,7 @@ def test_learning_update_cost_uses_matched_memory_reviews_and_exact_updates(samp
     from update_cost import learning_update_cost
 
     _, config, _, episodes, encoder, raws, _, labels, *_ = sample
-    features = torch.stack([explicit_features(e) for e in episodes])
+    features = torch.stack([model_input_features(e) for e in episodes])
     memory = [i for i, e in enumerate(episodes) if e["split"] == "memory"]
     config = replace(
         config, budgets=(2,), update_batches=(1, 4, 40), refit_warmup=1, refit_repeats=2

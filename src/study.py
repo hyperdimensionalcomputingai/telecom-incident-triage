@@ -16,7 +16,7 @@ from threadpoolctl import threadpool_info
 from classifiers import METHODS, fit_classifier, select_settings
 from config import BASE_TS, LABELS, ROOT, Config, digest, file_hash, save_json
 from data import TABLES, build_episodes, generate, load_tables, source_lookup
-from encoding import Encoder, Term, explicit_features, structured_scores, unit
+from encoding import Encoder, Term, model_input_features, unit
 from evaluation import benchmark, grouped_interval, latency_summary, retrieval_metrics
 from fixtures import operator_diagnostics
 from geography import load_geography, polygon_for
@@ -237,12 +237,12 @@ def resource_measurements(
         hdc.update(vector, int(labels[extra]))
 
     def encode_predict(method):
-        vector = explicit_features(episode)
+        vector = model_input_features(episode)
         models[method].predict(vector.numpy().reshape(1, -1))
 
     def review_refit(method):
         # Retain earlier reviewed features; encode the new review, refit, then predict it.
-        new_vector = explicit_features(episode)
+        new_vector = model_input_features(episode)
         training = torch.cat((features[selected], new_vector[None, :]), dim=0)
         truth = torch.cat((labels[selected], labels[extra : extra + 1]))
         model, _ = fit_classifier(
@@ -284,11 +284,11 @@ def resource_measurements(
         "fit_diagnostics": fit_diagnostics,
         "hdc_raw_vector_bytes": encoder.dimension * 4,
         "hdc_search_vector_bytes": encoder.dimension * 2,
-        "explicit_feature_bytes": features.shape[1] * 4,
+        "model_input_bytes": features.shape[1] * 4,
         "class_memory_bytes": {"hdc": len(LABELS) * encoder.dimension * 4},
         "vector_store_bytes": directory_bytes(store_path),
         "hdc_representation_tensor_bytes": raws.numel() * raws.element_size(),
-        "explicit_representation_tensor_bytes": features.numel() * 4,
+        "model_input_tensor_bytes": features.numel() * 4,
         "encoder_cached_basis_bytes": encoder.basis.cache_info().currsize * encoder.dimension * 4,
         "not_measured": [
             "Energy",
@@ -325,7 +325,7 @@ def evaluate_pair(
     raws = torch.stack([encoder.encode(episode) for episode in episodes])
     encode_s = time.perf_counter() - start
     vectors = F.normalize(raws, dim=1)
-    features = torch.stack([explicit_features(episode) for episode in episodes])
+    features = torch.stack([model_input_features(episode) for episode in episodes])
     memory = [i for i, episode in enumerate(episodes) if episode["split"] == "memory"]
     testing = [i for i, episode in enumerate(episodes) if episode["split"] == "test"]
     by_id = {episode["episode_id"]: i for i, episode in enumerate(episodes)}
@@ -335,7 +335,6 @@ def evaluate_pair(
     rank_sets, times = {}, {}
     for method in (
         "hdc",
-        "structured",
         "hdc_without_paths",
         "hdc_without_order",
         "hdc_lance_float16",
@@ -367,11 +366,7 @@ def evaluate_pair(
                         "Stored-vector retrieval disagrees with exhaustive float32 verification"
                     )
             else:
-                scores = (
-                    structured_scores(features[query], features[indices])
-                    if method == "structured"
-                    else x[indices] @ x[query]
-                )
+                scores = x[indices] @ x[query]
                 order = indices[torch.argsort(scores, descending=True, stable=True)[:10]].tolist()
                 duration = (time.perf_counter_ns() - start) / 1e6
             rankings.append(order)
@@ -583,7 +578,7 @@ def summarize(results, config):
                 },
                 config.bootstrap_repeats,
             )
-    for other in ("hdc_without_paths", "hdc_without_order", "structured"):
+    for other in ("hdc_without_paths", "hdc_without_order"):
         worlds = defaultdict(lambda: defaultdict(list))
         for result in results:
             for world, values in result["retrieval"]["hdc"]["per_world"].items():
@@ -633,7 +628,7 @@ def run(run_dir):
         reviews = {row["episode_id"]: row for row in tables["reviews"].to_pylist()}
         labels = torch.tensor([LABELS.index(reviews[e["episode_id"]]["label"]) for e in episodes])
         lookup = source_lookup(tables)
-        features = torch.stack([explicit_features(episode) for episode in episodes])
+        features = torch.stack([model_input_features(episode) for episode in episodes])
         memory = [i for i, episode in enumerate(episodes) if episode["split"] == "memory"]
         validation = [i for i, episode in enumerate(episodes) if episode["split"] == "validation"]
         if setting is None:
