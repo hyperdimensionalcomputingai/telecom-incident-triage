@@ -1,0 +1,49 @@
+{
+  "code_hash": "69586e53635e52cd7abb82996746927f519b04af6820afea9e925aeca029d258",
+  "report_generator_hash": "9d60a90374272caea2f53fd982320ffe115bb2b9adfc0366c7149674320904c7",
+  "summary_hash": "d659fe791527e9e77b9c79a6a4d4e48c5e15e0bd2c34a7b4f4c8f5b2a98fd41d",
+  "figure_hashes": {
+    "figures/compute.png": "eed3a22d4321e6d2896b4b1476e5a98b9bb242fc9df5a4d34bb8ed5dfd6d8d98",
+    "figures/compute.svg": "093134a46d894919cd27e68ad50a93734875418fd6c0c3ef5c4990f94ed7bd49",
+    "figures/incident.png": "e2e0612131f7cee2f34ec5e4efdf06a89244d5f8565e05a342bdff4283d49c27",
+    "figures/incident.svg": "0d5f189ce58933aea28eac71e39fed256a12bb9e1f478d0e576163eab77817e2",
+    "figures/learning-updates.png": "1a39894fe8f65272e00864798bd615701e21e0f7823a5fb6c047c4be98e95fc7",
+    "figures/learning-updates.svg": "5afd0e8d533e9aca3dd1f40f25b0c06cb9503ab464bcd443729310ad48fa8060",
+    "figures/learning.png": "fb7267a7d81dccdb583caf285d3acd9a94314a2ec0f25b59b1af561537c0c96b",
+    "figures/learning.svg": "d48082abd5a3eadfa0884d5a174a1c094237034ec39a4e73fa876ef4567d923e",
+    "figures/retrieval.png": "28b80fd5d764928339849e777e9e76d1f19e982836ee3c225064d466b2d8076e",
+    "figures/retrieval.svg": "094e99e7cd813c4eb35f868cd884901ec8c7936374e0c925c826d153db8cd0ec",
+    "figures/schema.html": "5dcd743c4c3965dda277cde7beb68620af04d26c4cb5b5e2ee6a7c2a9013416d",
+    "figures/schema.png": "168c7de35207927b3bcb7e4030d5b6b88b5c3ac4fb25b99f24e341aace58e68a",
+    "figures/schema.svg": "f0387b1a50096da70608fd3d217389974a641746a76ba29313c37cfb4b1d3279"
+  },
+  "claims": [
+    {
+      "claim": "Composable representation",
+      "evidence": "Role swaps, order changes and edge rewiring are detectable; controls without the relevant operator remain invariant.",
+      "boundary": "Controlled illustrations and ablations support the designed representation, not arbitrary graph reasoning."
+    },
+    {
+      "claim": "Inspectable evidence",
+      "evidence": "All 9,000 retrieved top hits resolve to source records and reconstruct their float32 reference scores.",
+      "boundary": "Provenance is retained alongside vectors; arithmetic contributions include interference and do not establish causes. Float16 search has a separately recorded quantization residual."
+    },
+    {
+      "claim": "Online learning",
+      "evidence": "Frozen encoder, delayed reviews, additive class memories, exact reversal; HDC reaches mean macro F1 \u22650.80 with 1 review per class (4 total).",
+      "boundary": "Supervised learning still requires labels. Updates can regress, and the scenarios are simulated."
+    },
+    {
+      "claim": "Compute cost",
+      "evidence": "Addition, prediction and review incorporation are measured separately on CPU against trained LR and MLP.",
+      "boundary": "Fast addition alone is not serving latency, energy efficiency, or an advantage over the measured controls."
+    },
+    {
+      "claim": "Storage",
+      "evidence": "16,384 bytes per raw hypervector versus 84 bytes per explicit feature vector.",
+      "boundary": "This study shows no storage saving from HDC."
+    }
+  ],
+  "report_hash": "a4503ebea3a8681b84a6bbf99d63cf328acc573ef941c53a48d395b03c5de8c8",
+  "source_layout": "src/; flat Python modules and simple scripts; original experiment hashes retained"
+}
