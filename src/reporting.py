@@ -45,7 +45,8 @@ def figure_style():
 
 def save_figure(figure, root, name, plt):
     figure.savefig(root / f'{name}.png', dpi=180, bbox_inches='tight')
-    figure.savefig(root / f'{name}.svg', bbox_inches='tight')
+    # The report links PNG charts; remove legacy duplicate exports on reruns.
+    (root / f'{name}.svg').unlink(missing_ok=True)
     plt.close(figure)
 
 

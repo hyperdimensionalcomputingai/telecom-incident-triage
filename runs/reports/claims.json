@@ -4,15 +4,10 @@
   "summary_hash": "d659fe791527e9e77b9c79a6a4d4e48c5e15e0bd2c34a7b4f4c8f5b2a98fd41d",
   "figure_hashes": {
     "figures/compute.png": "eed3a22d4321e6d2896b4b1476e5a98b9bb242fc9df5a4d34bb8ed5dfd6d8d98",
-    "figures/compute.svg": "093134a46d894919cd27e68ad50a93734875418fd6c0c3ef5c4990f94ed7bd49",
     "figures/incident.png": "e2e0612131f7cee2f34ec5e4efdf06a89244d5f8565e05a342bdff4283d49c27",
-    "figures/incident.svg": "0d5f189ce58933aea28eac71e39fed256a12bb9e1f478d0e576163eab77817e2",
     "figures/learning-updates.png": "1a39894fe8f65272e00864798bd615701e21e0f7823a5fb6c047c4be98e95fc7",
-    "figures/learning-updates.svg": "5afd0e8d533e9aca3dd1f40f25b0c06cb9503ab464bcd443729310ad48fa8060",
     "figures/learning.png": "fb7267a7d81dccdb583caf285d3acd9a94314a2ec0f25b59b1af561537c0c96b",
-    "figures/learning.svg": "d48082abd5a3eadfa0884d5a174a1c094237034ec39a4e73fa876ef4567d923e",
     "figures/retrieval.png": "28b80fd5d764928339849e777e9e76d1f19e982836ee3c225064d466b2d8076e",
-    "figures/retrieval.svg": "094e99e7cd813c4eb35f868cd884901ec8c7936374e0c925c826d153db8cd0ec",
     "figures/schema.html": "5dcd743c4c3965dda277cde7beb68620af04d26c4cb5b5e2ee6a7c2a9013416d",
     "figures/schema.png": "168c7de35207927b3bcb7e4030d5b6b88b5c3ac4fb25b99f24e341aace58e68a",
     "figures/schema.svg": "f0387b1a50096da70608fd3d217389974a641746a76ba29313c37cfb4b1d3279"
