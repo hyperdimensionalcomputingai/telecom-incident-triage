@@ -1,0 +1,13 @@
+{
+  "data_seeds": [1101],
+  "encoder_seeds": [2001],
+  "blocks": 3,
+  "memory_blocks": 1,
+  "validation_blocks": 1,
+  "episodes_per_block": 24,
+  "budgets": [1, 2, 5],
+  "bootstrap_repeats": 100,
+  "benchmark_repeats": 50,
+  "warmup": 5,
+  "update_batches": [1]
+}

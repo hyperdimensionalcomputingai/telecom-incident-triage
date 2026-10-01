@@ -1,0 +1,35 @@
+[project]
+name = "hdc-telecom-tutorial"
+version = "0.3.0"
+description = "Reproducible HDC telecom tutorial with public geography and synthetic network worlds"
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+  "numpy==2.5.3",
+  "polars==1.44.2",
+  "pyarrow==25.0.1",
+  "geoarrow-pyarrow==0.3.0",
+  "geodatafusion==0.3.1",
+  "datafusion==53.0.0",
+  "lancedb==0.39.0",
+  "pylance==12.0.0",
+  "torch==2.14.1",
+  "torch-hd==5.8.4",
+  "matplotlib>=3.10,<4",
+  "scikit-learn==1.9.1",
+]
+[dependency-groups]
+dev = ["pytest==9.1.1"]
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple"
+default = true
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

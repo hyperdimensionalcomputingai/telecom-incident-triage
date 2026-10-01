@@ -1,0 +1,22 @@
+{
+  "dataset": "Toronto Centreline (TCL)",
+  "dataset_url": "https://ckan0.cf.opendata.inter.prod-toronto.ca/en/dataset/toronto-centreline-tcl",
+  "request_url": "https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=ad296ebf-fca6-4e67-b3ce-48040a20e6cd&filters=%7B%22LINEAR_NAME_FULL%22%3A+%22Bloor+St+W%22%7D&limit=1000&sort=CENTRELINE_ID+asc",
+  "retrieved_at_utc": "2026-10-01T15:06:26.704785+00:00",
+  "coordinate_system": "EPSG:4326; longitude, latitude; angular coordinates only; no distance computation",
+  "selection": "Bloor St W segments intersecting longitude [-79.48,-79.39], latitude [43.65,43.68]",
+  "source_records": 195,
+  "corridor_segments": 99,
+  "source_sha256": "ce2ae9a2b3ac2d7b96e81f0922443081e118509d835a340ea44113f23aa2cede",
+  "corridor_sha256": "9f74a10d8731d8192d60ea6b96477a6eb07ca7f72076a146c4bcdc2735260373",
+  "licence_url": "https://www.toronto.ca/city-government/data-research-maps/open-data/open-data-licence/",
+  "attribution": "Contains information licensed under the Open Government Licence \u2013 Toronto.",
+  "telecom_data": "All subscribers, phone trajectories, cells, links, topology and telemetry are simulated. Public streets do not describe network coverage.",
+  "formatting_provenance": {
+    "original_byte_checksums": {
+      "source_sha256": "6545a779e21f07981caef7374db74d398a6fc5d0228582f3d7f934630a86bf15",
+      "corridor_sha256": "9f74a10d8731d8192d60ea6b96477a6eb07ca7f72076a146c4bcdc2735260373"
+    },
+    "change": "JSON formatting only; parsed records verified equal to the published run snapshot in runs/geography"
+  }
+}

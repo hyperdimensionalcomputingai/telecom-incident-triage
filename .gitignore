@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local
+.DS_Store
+# Keep only the latest published evidence; new run directories remain local.
+runs/*
+!runs/config.json
+!runs/frozen_settings.json
+!runs/manifest.json
+!runs/summary.json
+!runs/metrics.json
+!runs/reports/
