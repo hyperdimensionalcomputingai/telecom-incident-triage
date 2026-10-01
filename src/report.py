@@ -1,4 +1,5 @@
 """Build the illustrated report from the completed experiment results."""
+
 from settings import RUN_DIR
 from study import report
 

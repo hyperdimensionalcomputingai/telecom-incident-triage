@@ -19,7 +19,10 @@ dependencies = [
   "scikit-learn==1.9.1",
 ]
 [dependency-groups]
-dev = ["pytest==9.1.1"]
+dev = [
+    "pytest==9.1.1",
+    "ruff>=0.16.10",
+]
 [tool.uv.sources]
 torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
 [[tool.uv.index]]
@@ -33,3 +36,6 @@ default = true
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
