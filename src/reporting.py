@@ -986,14 +986,14 @@ def create_report(run_dir):
     )
     strengths = [
         f"- {few}",
-        (
-            f"- **Learning from a new review costs almost nothing, and the cost does not grow.** HDC adds a reviewed "
-            f"incident to memory in {ms(single['hdc'])} ms: one vector addition, however many reviews came before. "
-            f"Retraining LR or the MLP on all retained reviews takes {ms(single['logistic_regression'])} ms or "
-            f"{ms(single['mlp'])} ms per update, and training time grows with the training set: in our initial fits, "
-            f"from {fits['logistic_regression'][0]:.2f} to {fits['logistic_regression'][-1]:.2f} ms for LR and from "
-            f"{fits['mlp'][0]:.0f} to {fits['mlp'][-1]:.0f} ms for the MLP, between {min(config.budgets) * 4} and "
-            f"{max(config.budgets) * 4} reviews. HDC also needs no earlier reviews kept, and every update can be undone exactly."
+        "\n".join(
+            [
+                "- **Learning from a new review costs almost nothing, and the cost does not grow.**",
+                f"  - **HDC:** {ms(single['hdc'])} ms to add a reviewed incident to memory: one vector addition, however many reviews came before.",
+                f"  - **LR and the MLP:** {ms(single['logistic_regression'])} ms and {ms(single['mlp'])} ms to retrain on all retained reviews, every update.",
+                f"  - **Retraining slows as reviews accumulate:** in our initial fits, from {fits['logistic_regression'][0]:.2f} to {fits['logistic_regression'][-1]:.2f} ms for LR and from {fits['mlp'][0]:.0f} to {fits['mlp'][-1]:.0f} ms for the MLP, between {min(config.budgets) * 4} and {max(config.budgets) * 4} reviews.",
+                "  - **No retained history:** HDC needs no earlier reviews kept, and every update can be undone exactly.",
+            ]
         ),
         (
             f"- **Finds comparable incidents and shows why.** Retrieval reaches {precision} precision@5, against {random_precision} "

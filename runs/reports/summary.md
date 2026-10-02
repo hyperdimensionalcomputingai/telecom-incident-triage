@@ -34,7 +34,11 @@ The learning and cost experiments compare HDC with regularized logistic regressi
 **Where HDC adds value**
 
 - **Learns from very few reviews.** With 1 review per class, HDC scores 7.4–8.9 points higher macro F1 than LR and the MLP.
-- **Learning from a new review costs almost nothing, and the cost does not grow.** HDC adds a reviewed incident to memory in 0.130 ms: one vector addition, however many reviews came before. Retraining LR or the MLP on all retained reviews takes 3.726 ms or 39.7 ms per update, and training time grows with the training set: in our initial fits, from 1.92 to 3.55 ms for LR and from 10 to 37 ms for the MLP, between 4 and 80 reviews. HDC also needs no earlier reviews kept, and every update can be undone exactly.
+- **Learning from a new review costs almost nothing, and the cost does not grow.**
+  - **HDC:** 0.130 ms to add a reviewed incident to memory: one vector addition, however many reviews came before.
+  - **LR and the MLP:** 3.726 ms and 39.7 ms to retrain on all retained reviews, every update.
+  - **Retraining slows as reviews accumulate:** in our initial fits, from 1.92 to 3.55 ms for LR and from 10 to 37 ms for the MLP, between 4 and 80 reviews.
+  - **No retained history:** HDC needs no earlier reviews kept, and every update can be undone exactly.
 - **Finds comparable incidents and shows why.** Retrieval reaches 96.3% precision@5, against 25.0% for random ranking. Every similarity score breaks down exactly into contributions from individual facts, each traceable to its source records.
 - **One representation, many uses.** The same hypervector serves retrieval, classification, explanation and editing; a fact such as the handset can be removed from a query without re-encoding the rest.
 
