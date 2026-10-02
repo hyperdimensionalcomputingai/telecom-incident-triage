@@ -58,6 +58,8 @@ class SourceStore:
         groups = {}
         for row in rows:
             groups.setdefault(row["episode_id"], set()).add(row["observation_id"])
+        # Eligibility requires all three episode observations inside the requested
+        # map/time region. This is an exact record filter, not hypervector similarity.
         return sorted(
             identity
             for identity, observations in groups.items()
@@ -96,7 +98,12 @@ class VectorStore:
             ]
         )
         table = pa.Table.from_pylist(metadata, schema=schema)
+        # Normalize only after all weighted episode terms are bundled. Keep raw
+        # float32 sums as well, so component removal and reconstruction are possible.
         normalized = torch.stack([unit(raw) for raw in raws])
+        # float16 storage rounds coordinates and slightly changes vector length.
+        # Re-normalize the rounded values in float32 for the in-memory cosine
+        # crosscheck; this does not recover the precision lost during storage.
         self.quantized = torch.nn.functional.normalize(
             normalized.to(torch.float16).to(torch.float32), dim=1
         )
@@ -120,6 +127,9 @@ class VectorStore:
         where = (
             f"split = 'memory' AND decision_s < {int(decision_s)} AND episode_id IN ({identities})"
         )
+        # Compare directions using cosine distance (1 - cosine similarity), with
+        # exact eligibility applied first. Exhaustive search avoids approximations
+        # from a vector index; float16 rounding remains a separate approximation.
         return (
             self.table.search(unit(raw).tolist(), vector_column_name="vector")
             .distance_type("cosine")

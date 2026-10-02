@@ -13,7 +13,7 @@ from encoding import Term, unit
 
 
 def connectivity_pair(tables, episodes, reviews):
-    """Rewire one unobserved peer cell's edge; keep every measured value unchanged."""
+    """Rewire a serving cell without peer records; keep measured values unchanged."""
     selected = None
     for episode in episodes:
         if reviews[episode["episode_id"]]["label"] != "normal":
@@ -37,6 +37,9 @@ def connectivity_pair(tables, episodes, reviews):
     )
     edges = deepcopy(tables["edges"].to_pylist())
     changed = next(r for r in edges if r["edge_id"] == middle["edge_id"])
+    # Rewire the commuter's serving cell, chosen to have no peer observations at
+    # this time. Raw telemetry remains identical; the rejoin selects another link
+    # and its peers. The encoder responds to changed selected facts, not an edge ID.
     before_edge = deepcopy(changed)
     changed["link_id"] = alternate["link_id"]
     changed.pop("source_sha256")
@@ -71,13 +74,21 @@ def operator_diagnostics(encoder, tables, episodes, reviews):
     bag_b = encoder.encode_terms(terms_b, binding=False, sequence=False)
     role = encoder.atom("role:phone_radio")
     value = encoder.atom("value:good")
+    # For bipolar MAP roles, each coordinate squared is +1. Binding a role twice
+    # therefore cancels it exactly: role * (role * value) = value. In a bundle,
+    # unbinding one role would also leave interference from the other terms.
     unbound = torchhd.bind(torchhd.bind(role, value), role)
     query = next(e for e in episodes if reviews[e["episode_id"]]["label"] == "radio_deteriorating")
     reversed_episode = deepcopy(query)
+    # Hold the measurements fixed and change their ordinal placement. Without
+    # outer time rotations, bundling the same terms in reverse order is the same
+    # algebraic sum (up to floating-point addition order).
     reversed_episode["observations"].reverse()
     graph_before, graph_after, graph_evidence = connectivity_pair(tables, episodes, reviews)
     full = encoder.encode(query)
     handset = encoder.components(query)["handset"]
+    # Remove the handset from the raw sum, then normalize for any comparison.
+    # Subtracting it from an already unit-normalized episode would change the edit.
     rebuilt = encoder.encode(query, handset=False)
     return {
         "role_binding": {
