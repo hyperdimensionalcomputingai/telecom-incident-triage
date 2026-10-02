@@ -1,8 +1,8 @@
-# From connected telecom records to hypervectors and class prototypes
+# Walkthrough: connected telecom records, hypervectors and class prototypes
 
-This conceptual walkthrough is a handoff for building teaching slides about the representation and prototype learner in this codebase. It assumes no telecom knowledge. It follows one generated incident through value bucketing, role-value binding, structural permutation, observation-order permutation, weighting and bundling. The final section explains how the same represented episodes become class prototypes through supervised learning.
+This walkthrough explains the representation and prototype learner in this codebase. It assumes no telecom knowledge. It follows one generated incident through value bucketing, role-value binding, structural permutation, observation-order permutation, weighting and bundling. The final section explains how the same represented episodes become class prototypes through supervised learning.
 
-The teaching prose from the conversation is retained, with the clarified terminology and consistent mathematical notation. Visuals are already present in the repository and are not reproduced here.
+Related figures are available under `runs/reports/figures/`.
 
 ## 1. First, what is happening in the telecom example?
 
@@ -396,7 +396,7 @@ That says, structurally, **“this measurement belongs here in the dependency de
 
 So structural rotation is a reasonable way to represent ordered paths, but **we have not demonstrated that these rotations are indispensable for the current feature set**. They could be redundant here.
 
-The existing “without paths” comparison cannot answer that question: it changes the selected network measurements and removes path roles together. To isolate the value of structural tagging, we would need to keep the joins, roles and observation-order rotations identical, and remove **only the structural shifts**. This is a qualification of the explanation, not an additional experiment performed for this handoff.
+The existing “without paths” comparison cannot answer that question: it changes the selected network measurements and removes path roles together. To isolate the value of structural tagging, we would need to keep the joins, roles and observation-order rotations identical, and remove **only the structural shifts**. That experiment has not been performed here.
 
 ## 10. Build the context path hypervectors
 
@@ -575,16 +575,13 @@ The complete construction is therefore:
 
 **Select connected facts → bucket values → bind role-value pairs and connected meanings → tag observation order → weight → bundle → normalize.**
 
-## Handoff notes for the slide-making agent
+## Representation recap
 
-- Complete the representation explanation before introducing the prototype learner in the final section. Show how it reuses the represented episodes rather than introducing a new feature encoder.
-- Introduce each telecom term before relying on it. Keep the distinction between phone signal, connected network context and handset model explicit.
-- Say **three phone signal terms** and **fifteen context terms**, bundled into three component hypervectors and then one episode hypervector. Term counts are not counts of network objects.
-- Use $h$ with descriptive suffixes for every hypervector, $\otimes$ for binding, $\oplus$ for bundling and $\rho$ for permutation. Use property and role-value terminology when introducing binding.
-- Treat value bucketing, range bounds, feature selection, weights and structural positions as modelling choices. Do not imply that the 32 levels, 4,096 coordinates or chosen bounds are universal HDC or telecom requirements.
-- Distinguish following a particular graph path from representing its typed shape. Structural position 4 is not four graph hops.
-- Preserve the qualification about structural rotations: the current comparison does not isolate their necessity or individual benefit.
-- Use the existing figures under `runs/reports/figures/` when appropriate; no visuals are embedded in this document.
+- **Three phone signal terms**, **fifteen context terms** and one handset term form three component hypervectors, then one episode hypervector. Term counts are not counts of network objects.
+- Every hypervector uses $h$ with a descriptive suffix. Binding uses $\otimes$, bundling uses $\oplus$ and permutation uses $\rho$.
+- Value bucketing, range bounds, feature selection, weights and structural positions are modelling choices. The 32 levels, 4,096 coordinates and chosen bounds are not universal HDC or telecom requirements.
+- Following a particular graph path selects the evidence; representing its typed shape encodes its meaning. Structural position 4 is not four graph hops, and the current comparison does not isolate the benefit of structural rotations.
+- The prototype learner reuses these represented episodes rather than introducing a new feature encoder.
 
 The implementation anchors are [the encoder](../src/encoding.py), [the connected dataset builder](../src/data.py), [the frozen configuration](../src/config.py) and [vector storage](../src/storage.py). The broader study is documented in [the results summary](../runs/reports/summary.md).
 
@@ -742,7 +739,7 @@ The review budgets are 1, 2, 5, 10 and 20 examples per class. With four classes,
 
 These are comparisons on controlled synthetic patterns. A composable representation and a simple class-memory update do not by themselves establish a universal accuracy, compute or storage advantage over conventional ML.
 
-### The learning story to carry into the slides
+### How the primitives connect representation and learning
 
 **Binding attaches values to meanings. Permutation preserves positions. Bundling first creates an episode, then accumulates reviewed episodes into class prototypes. Similarity compares a new episode with those prototypes.**
 
