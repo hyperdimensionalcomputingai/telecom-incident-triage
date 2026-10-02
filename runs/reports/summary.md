@@ -18,7 +18,7 @@ We narrow that broader use case to one question:
 
 The study evaluates two tasks: retrieving comparable earlier incidents, and assigning a triage pattern using previously reviewed examples. Each incident includes a short sequence of phone measurements and the network context connected to that phone at those times. Triage happens after the full observation window, so the available evidence can include deterioration or recovery.
 
-**Hyperdimensional computing (HDC)** represents these facts in long numeric arrays called hypervectors. Its operations can attach a value to a role, combine contributions, and preserve order. We study whether an episode built with those operations can support retrieval, inspection of its source evidence, and learning through additions to labelled class memory while the encoder stays fixed.
+We study whether **hyperdimensional computing (HDC)** can represent these connected, time-ordered facts in a way that supports retrieval, inspection of the source evidence, and learning from reviewed incidents without retraining.
 
 The experiments examine four questions:
 
@@ -29,17 +29,36 @@ The experiments examine four questions:
 
 The learning and cost experiments compare HDC with regularized logistic regression (LR) and a small MLP, all given the same reviewed incidents and connected measurements. Retrieval evaluates HDC on its own, removing order and connectivity as internal checks.
 
+## How HDC works here, in brief
+
+HDC represents each incident as one long list of 4,096 numbers, called a **hypervector**, built with simple arithmetic. Nothing in the encoder is learned from the reviewed incidents: its random hypervectors are fixed by a seed, and its few weights were chosen in advance.
+
+1. **Every kind of fact gets its own random hypervector**, such as "phone signal", "backhaul link" or "packet loss". Random hypervectors this long are almost unrelated to one another, so each one works as a distinct label.
+2. **Measurements get hypervectors too**, chosen so that nearby values, such as −90 and −92 dBm, receive similar ones.
+3. **Binding** multiplies a value's hypervector by its role's. The result means "this value, in this role": a weak signal *at the phone* encodes differently from the same reading *in a peer phone's average*.
+4. **Permutation** shifts a hypervector's coordinates to record when a fact was observed: before, during or after the disruption.
+5. **Bundling** adds all of an incident's facts into one hypervector. The sum still resembles each of its parts, so incidents with similar facts in the same roles end up with similar hypervectors.
+
+That single hypervector then does several jobs:
+
+- **Retrieval:** comparable earlier incidents are found by comparing hypervectors with cosine similarity.
+- **Explanation:** because the hypervector is a sum, each similarity score splits exactly into contributions from individual facts.
+- **Editing:** a fact can be removed from a query by subtracting its contribution.
+- **Learning:** each pattern's **class memory** is the sum of its reviewed incidents' hypervectors. A new incident gets the pattern whose class memory it most resembles, and learning from a new review is one more addition, with no retraining.
+
+The [representation walkthrough](../../docs/representation-walkthrough.md) follows one incident through every step with real numbers; [How the encoder is built](#how-the-encoder-is-built) gives the equations.
+
 ## Key findings
 
 **Where HDC adds value**
 
-- **Learns from very few reviews.** With 1 review per class, HDC scores 7.4–8.9 points higher macro F1 than LR and the MLP.
+- **Learns from very few reviews.** With just 1 reviewed incident per pattern, HDC's classification score (macro F1) is 7.4–8.9 points higher than LR's and the MLP's.
 - **Learning from a new review costs almost nothing, and the cost does not grow.**
   - **HDC:** 0.130 ms to add a reviewed incident to memory: one vector addition, however many reviews came before.
   - **LR and the MLP:** 3.726 ms and 39.7 ms to retrain on all retained reviews, every update.
   - **Retraining slows as reviews accumulate:** in our initial fits, from 1.92 to 3.55 ms for LR and from 10 to 37 ms for the MLP, between 4 and 80 reviews.
   - **No retained history:** HDC needs no earlier reviews kept, and every update can be undone exactly.
-- **Finds comparable incidents and shows why.** Retrieval reaches 96.3% precision@5, against 25.0% for random ranking. Every similarity score breaks down exactly into contributions from individual facts, each traceable to its source records.
+- **Finds comparable incidents and shows why.** On average, 96.3% of its top five results have the query's pattern (precision@5), against 25.0% for random ranking. Every similarity score breaks down exactly into contributions from individual facts, each traceable to its source records.
 - **One representation, many uses.** The same hypervector serves retrieval, classification, explanation and editing; a fact such as the handset can be removed from a query without re-encoding the rest.
 
 **Tradeoffs and limits**
@@ -82,7 +101,7 @@ The unit of analysis is an **episode**: three observations at 0, 20 and 40 secon
 | Pattern | What the observations show |
 |---|---|
 | Deteriorating radio | The phone's received signal becomes weaker across the episode. |
-| Transient recovery | The phone's received signal improves by the end of the episode. |
+| Transient disruption and recovery | The phone's received signal improves by the end of the episode. |
 | Shared transport impairment | The shared backhaul link and peer phones show packet loss; the phone's own signal profile can vary. |
 | Normal service | Neither a large signal change nor the shared backhaul impairment occurs. |
 
@@ -98,7 +117,7 @@ The street snapshot contains 99 Bloor Street segments, with frozen source checks
 
 ![A simulated commute, three signal-strength observations, and the connected network facts](figures/incident.png)
 
-Consider a simulated commuter travelling along Bloor Street West. In this walkthrough, the phone's received signal strength changes from -80.6 dBm before the disruption to -110.6 dBm afterwards. At the middle observation, the connected backhaul link reports 0.9% packet loss, and peer phones using that dependency report 1.0% mean loss.
+Consider a simulated commuter travelling along Bloor Street West. In this walkthrough, the phone's received signal strength changes from −80.6 dBm before the disruption to −110.6 dBm afterwards. At the middle observation, the connected backhaul link reports 0.9% packet loss, and peer phones using that dependency report 1.0% mean loss.
 
 The task is to find earlier episodes with a similar signal trajectory and network conditions, then show the engineer what they have in common.
 
@@ -108,7 +127,7 @@ A retrieved comparison is a lead for the engineer to inspect, not a confirmed ca
 
 ## How the encoder is built
 
-The encoder turns an episode into one **4,096-dimensional hypervector**. Think of it as an additive description: a measurement contributes according to what it measures, where it sits in the dependency path, and when it occurs.
+The encoder turns an episode into one **4,096-dimensional hypervector**. Think of it as an additive description: a measurement contributes according to what it measures, where it sits in the dependency path, and when it occurs. The [representation walkthrough](../../docs/representation-walkthrough.md) works through each step below with one real incident.
 
 ### 1. Resolve the facts before encoding
 
@@ -244,7 +263,7 @@ The $t_j$ are hypervector contributions, combined by bundling; each $a_j$ is a s
 
 | What differs between the two episodes | Operator under test | Cosine with the operator | Without the operator |
 |---|---|---:|---|
-| Good and bad states swap between the phone's radio and an upstream link | Binding | 0.039 | Identical encodings (max difference 0) |
+| A good state and a bad state, swapped between the phone's signal and an upstream network link | Binding | 0.039 | Identical encodings (max difference 0) |
 | The same three observations, in reverse order | Permutation | 0.901 | Identical encodings (max difference 9.5e-07) |
 | The same network measurements, with one serving edge rewired | Graph-joined context | 0.942 | Identical encodings (max difference 0) |
 
@@ -258,7 +277,7 @@ Numeric levels behave as intended too: adjacent levels have cosine 0.962, while 
 
 **Question.** Does HDC return earlier incidents with the same independently checked triage pattern, and can each result be traced to its source evidence?
 
-**Setup.** For each final-test query, exact corridor and time filters first select the eligible earlier incidents in memory: 79–420 per query in the first run (mean 319.3). Lance and an independently registered GeoDataFusion query agree on that selection. HDC then ranks the candidates by cosine similarity. A result counts as relevant when it has the query's triage pattern, which is not necessarily the same real-world cause.
+**Setup.** For each final-test query, exact corridor and time filters first select the eligible earlier incidents in memory: 79–420 per query in the first run (mean 319.3). Lance and an independently registered GeoDataFusion query agree on that selection. HDC then ranks the candidates by cosine similarity. A result counts as relevant when it has the query's triage pattern, which is not necessarily the same real-world cause. Precision@5 is the share of the top five results that are relevant; reciprocal rank@10 is 1 when the first result is relevant, 0.5 when the first relevant result is second, and so on.
 
 ![Retrieval precision with grouped uncertainty intervals](figures/retrieval.png)
 
@@ -440,9 +459,9 @@ The simulator uses simple observed rules and deliberately balanced classes, with
 
 ## Potential enhancements: more geographic capabilities
 
-**This demo only scratches the surface of GeoArrow and GeoDataFusion.** GeoArrow carries observation points with coordinate-system metadata. Lance applies the geographic and time filters, and GeoDataFusion independently checks that they select the same observations. LanceDB then ranks eligible episode hypervectors by cosine distance. These are distinct operations: geographic selection determines which incidents qualify; hypervector similarity compares their represented telecom patterns.
+**This demo only scratches the surface of GeoArrow and GeoDataFusion.** GeoArrow carries observation points with coordinate-system metadata. Lance applies the geographic and time filters, and GeoDataFusion independently checks that they select the same observations. LanceDB then ranks eligible episode hypervectors by cosine similarity, which it computes as a cosine distance. These are distinct operations: geographic selection determines which incidents qualify; hypervector similarity compares their represented telecom patterns.
 
-**Lance's type system is Arrow-native.** It uses Apache Arrow types and in-memory arrays, with support for extension-type metadata. This shared foundation lets us build on compatible developments across the larger Arrow ecosystem, including GeoArrow geometry types and GeoDataFusion spatial queries. The demo already checks that GeoArrow geometry and coordinate-system metadata survive the Lance round trip. Additional operations still need integration and validation in the relevant query engine; shared types do not automatically make every operation available inside Lance. [Lance data types](https://lance.org/guide/data_types/), [Lance schema and extension types](https://lance.org/format/table/schema/)
+**Lance's type system is Arrow-native.** It uses Apache Arrow types and in-memory arrays, with support for extension-type metadata. This shared foundation lets us build on compatible developments across the larger Arrow ecosystem, including GeoArrow geometry types and GeoDataFusion spatial queries. The demo already checks that GeoArrow geometry and coordinate-system metadata survive the Lance round trip. Additional operations still need integration and validation in the relevant query engine; shared types do not automatically make every operation available inside Lance. See [Lance data types](https://lance.org/guide/data_types/) and [Lance schema and extension types](https://lance.org/format/table/schema/).
 
 Potential extensions include:
 
@@ -450,7 +469,7 @@ Potential extensions include:
 - **Spatial joins with GeoDataFusion.** Match observations to service-area polygons using containment or intersection, then count or summarize incidents by area. These queries would extend its current role as an independent filter check. [GeoDataFusion spatial relationships](https://github.com/datafusion-contrib/geodatafusion#spatial-relationships)
 - **Distance-based candidate selection.** Use geometry distance to select observations near a road or infrastructure location, or to support a geographic-radius filter. GeoDataFusion supports `ST_Distance`; a metre-based query would first require geometries in an appropriate coordinate system whose units are metres. Our current longitude/latitude geometry calculations use angular units. [GeoDataFusion measurement functions](https://github.com/datafusion-contrib/geodatafusion#measurement-functions)
 
-For example, a future query could **find incidents within 500 metres of a location, apply the time and earlier-memory filters, then rank their hypervectors by similarity in LanceDB**. That would extend candidate selection while reusing the existing encoder and prototype learner. Geography could remain outside the hypervector; adding geographic features to the encoding would be a separate modelling choice.
+For example, a future query could **find incidents within 500 metres of a location, apply the time filter and keep only earlier incidents in memory, then rank their hypervectors by similarity in LanceDB**. That would extend candidate selection while reusing the existing encoder and class memory. Geography could remain outside the hypervector; adding geographic features to the encoding would be a separate modelling choice.
 
 
 
@@ -497,7 +516,7 @@ On average the correct pattern wins by only 0.013, so a modest pull from the pho
 
 ## Reproduce and inspect
 
-Inspect the [source code](../../../src) for the implementation. Run `uv run src/prepare.py`, `uv run src/run.py`, then `uv run src/report.py` from the repository root. All three scripts use the paths in `src/settings.py`. The manifest records dependency versions, source checksums, configuration, encoder and code hashes, and all completed seed pairs. The committed metrics retain block-level results, per-class errors and repeated timing measurements. Reproducing a run generates the detailed predictions, review logs, retrieval errors, query edits and source witnesses locally.
+Inspect the [source code](../../src) for the implementation. Run `uv run src/prepare.py`, `uv run src/run.py`, then `uv run src/report.py` from the repository root. All three scripts use the paths in `src/settings.py`. The manifest records dependency versions, source checksums, configuration, encoder and code hashes, and all completed seed pairs. The committed metrics retain block-level results, per-class errors and repeated timing measurements. Reproducing a run generates the detailed predictions, review logs, retrieval errors, query edits and source witnesses locally.
 
 The [LR](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) and [MLP](https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html) implementations come from locked scikit-learn 1.9.1. The encoder weighting was selected on separate validation worlds (data seeds 1001–1005) and frozen before this evaluation. This run uses fresh data seeds 1006, 1007, 1008, 1009, 1010: new independent simulated worlds, not external carrier validation. LR and the MLP receive 21 inputs: six connected measurements at each of three ordered observations, plus three handset-category indicators. Both are optimized with L-BFGS to a declared tolerance, not limited to one training pass. Their settings are selected separately at each review budget, using only this run's first data seed's validation worlds and averaging across three initialization seeds, then frozen before final testing.
 

@@ -1,6 +1,6 @@
 ## How the encoder is built
 
-The encoder turns an episode into one **{{ dimension }}-dimensional hypervector**. Think of it as an additive description: a measurement contributes according to what it measures, where it sits in the dependency path, and when it occurs.
+The encoder turns an episode into one **{{ dimension }}-dimensional hypervector**. Think of it as an additive description: a measurement contributes according to what it measures, where it sits in the dependency path, and when it occurs. The [representation walkthrough](../../docs/representation-walkthrough.md) works through each step below with one real incident.
 
 ### 1. Resolve the facts before encoding
 

@@ -1160,8 +1160,10 @@ def create_report(run_dir):
         for method in ("logistic_regression", "mlp")
     }
     few = (
-        f"**Learns from very few reviews.** With {learned['first']} review per class, HDC scores "
-        f"{min(learned['gaps']):.1f}–{max(learned['gaps']):.1f} points higher macro F1 than LR and the MLP."
+        f"**Learns from very few reviews.** With just {learned['first']} reviewed "
+        + ("incident" if learned["first"] == 1 else "incidents")
+        + f" per pattern, HDC's classification score (macro F1) is {min(learned['gaps']):.1f}–{max(learned['gaps']):.1f} "
+        "points higher than LR's and the MLP's."
         if learned["ahead"]
         else "**Learns from few reviews.** Experiment 3 compares macro F1 at every review budget."
     )
@@ -1177,8 +1179,8 @@ def create_report(run_dir):
             ]
         ),
         (
-            f"- **Finds comparable incidents and shows why.** Retrieval reaches {precision} precision@5, against {random_precision} "
-            "for random ranking. Every similarity score breaks down exactly into contributions from individual facts, "
+            f"- **Finds comparable incidents and shows why.** On average, {precision} of its top five results have the query's pattern "
+            f"(precision@5), against {random_precision} for random ranking. Every similarity score breaks down exactly into contributions from individual facts, "
             "each traceable to its source records."
         ),
         (
@@ -1258,8 +1260,12 @@ def create_report(run_dir):
             "geography_attribution": geography["attribution"],
             "geography_dataset_url": geography["dataset_url"],
             "geography_licence_url": geography["licence_url"],
-            "first_phone_signal": f"{case['query']['observations'][0]['radio_dbm']:.1f}",
-            "last_phone_signal": f"{case['query']['observations'][2]['radio_dbm']:.1f}",
+            "first_phone_signal": f"{case['query']['observations'][0]['radio_dbm']:.1f}".replace(
+                "-", "−"
+            ),
+            "last_phone_signal": f"{case['query']['observations'][2]['radio_dbm']:.1f}".replace(
+                "-", "−"
+            ),
             "middle_link_loss": f"{case['query']['observations'][1]['link_loss_pct']:.1f}",
             "middle_peer_loss": f"{case['query']['observations'][1]['peer_loss_pct']:.1f}",
             "query_episode_id": case["query"]["episode_id"],

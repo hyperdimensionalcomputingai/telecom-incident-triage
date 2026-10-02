@@ -18,7 +18,7 @@ We narrow that broader use case to one question:
 
 The study evaluates two tasks: retrieving comparable earlier incidents, and assigning a triage pattern using previously reviewed examples. Each incident includes a short sequence of phone measurements and the network context connected to that phone at those times. Triage happens after the full observation window, so the available evidence can include deterioration or recovery.
 
-**Hyperdimensional computing (HDC)** represents these facts in long numeric arrays called hypervectors. Its operations can attach a value to a role, combine contributions, and preserve order. We study whether an episode built with those operations can support retrieval, inspection of its source evidence, and learning through additions to labelled class memory while the encoder stays fixed.
+We study whether **hyperdimensional computing (HDC)** can represent these connected, time-ordered facts in a way that supports retrieval, inspection of the source evidence, and learning from reviewed incidents without retraining.
 
 The experiments examine four questions:
 
@@ -28,6 +28,25 @@ The experiments examine four questions:
 - **Resources:** How long do prediction and learning from new reviews take, and how much storage does each representation need?
 
 The learning and cost experiments compare HDC with regularized logistic regression (LR) and a small MLP, all given the same reviewed incidents and connected measurements. Retrieval evaluates HDC on its own, removing order and connectivity as internal checks.
+
+## How HDC works here, in brief
+
+HDC represents each incident as one long list of {{ dimension }} numbers, called a **hypervector**, built with simple arithmetic. Nothing in the encoder is learned from the reviewed incidents: its random hypervectors are fixed by a seed, and its few weights were chosen in advance.
+
+1. **Every kind of fact gets its own random hypervector**, such as "phone signal", "backhaul link" or "packet loss". Random hypervectors this long are almost unrelated to one another, so each one works as a distinct label.
+2. **Measurements get hypervectors too**, chosen so that nearby values, such as −90 and −92 dBm, receive similar ones.
+3. **Binding** multiplies a value's hypervector by its role's. The result means "this value, in this role": a weak signal *at the phone* encodes differently from the same reading *in a peer phone's average*.
+4. **Permutation** shifts a hypervector's coordinates to record when a fact was observed: before, during or after the disruption.
+5. **Bundling** adds all of an incident's facts into one hypervector. The sum still resembles each of its parts, so incidents with similar facts in the same roles end up with similar hypervectors.
+
+That single hypervector then does several jobs:
+
+- **Retrieval:** comparable earlier incidents are found by comparing hypervectors with cosine similarity.
+- **Explanation:** because the hypervector is a sum, each similarity score splits exactly into contributions from individual facts.
+- **Editing:** a fact can be removed from a query by subtracting its contribution.
+- **Learning:** each pattern's **class memory** is the sum of its reviewed incidents' hypervectors. A new incident gets the pattern whose class memory it most resembles, and learning from a new review is one more addition, with no retraining.
+
+The [representation walkthrough](../../docs/representation-walkthrough.md) follows one incident through every step with real numbers; [How the encoder is built](#how-the-encoder-is-built) gives the equations.
 
 ## Key findings
 
@@ -70,7 +89,7 @@ The unit of analysis is an **episode**: three observations at 0, 20 and 40 secon
 | Pattern | What the observations show |
 |---|---|
 | Deteriorating radio | The phone's received signal becomes weaker across the episode. |
-| Transient recovery | The phone's received signal improves by the end of the episode. |
+| Transient disruption and recovery | The phone's received signal improves by the end of the episode. |
 | Shared transport impairment | The shared backhaul link and peer phones show packet loss; the phone's own signal profile can vary. |
 | Normal service | Neither a large signal change nor the shared backhaul impairment occurs. |
 
@@ -104,7 +123,7 @@ A retrieved comparison is a lead for the engineer to inspect, not a confirmed ca
 
 | What differs between the two episodes | Operator under test | Cosine with the operator | Without the operator |
 |---|---|---:|---|
-| Good and bad states swap between the phone's radio and an upstream link | Binding | {{ bound_cosine }} | Identical encodings (max difference {{ unbound_error }}) |
+| A good state and a bad state, swapped between the phone's signal and an upstream network link | Binding | {{ bound_cosine }} | Identical encodings (max difference {{ unbound_error }}) |
 | The same three observations, in reverse order | Permutation | {{ ordered_cosine }} | Identical encodings (max difference {{ unordered_error }}) |
 | The same network measurements, with one serving edge rewired | Graph-joined context | {{ connected_cosine }} | Identical encodings (max difference {{ disconnected_error }}) |
 
@@ -118,7 +137,7 @@ Numeric levels behave as intended too: adjacent levels have cosine {{ adjacent_l
 
 **Question.** Does HDC return earlier incidents with the same independently checked triage pattern, and can each result be traced to its source evidence?
 
-**Setup.** For each final-test query, exact corridor and time filters first select the eligible earlier incidents in memory: {{ minimum_candidates }}–{{ maximum_candidates }} per query in the first run (mean {{ mean_candidates }}). Lance and an independently registered GeoDataFusion query agree on that selection. HDC then ranks the candidates by cosine similarity. A result counts as relevant when it has the query's triage pattern, which is not necessarily the same real-world cause.
+**Setup.** For each final-test query, exact corridor and time filters first select the eligible earlier incidents in memory: {{ minimum_candidates }}–{{ maximum_candidates }} per query in the first run (mean {{ mean_candidates }}). Lance and an independently registered GeoDataFusion query agree on that selection. HDC then ranks the candidates by cosine similarity. A result counts as relevant when it has the query's triage pattern, which is not necessarily the same real-world cause. Precision@5 is the share of the top five results that are relevant; reciprocal rank@10 is 1 when the first result is relevant, 0.5 when the first relevant result is second, and so on.
 
 ![Retrieval precision with grouped uncertainty intervals](figures/retrieval.png)
 
