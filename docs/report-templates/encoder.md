@@ -1,6 +1,6 @@
 ## How the encoder is built
 
-The encoder turns an episode into one **{{ dimension }}-dimensional hypervector**. Think of it as an additive description: a measurement contributes according to what it measures, where it sits in the dependency path, and when it occurs. The result retains those distinctions while supporting a single similarity comparison.
+The encoder turns an episode into one **{{ dimension }}-dimensional hypervector**. Think of it as an additive description: a measurement contributes according to what it measures, where it sits in the dependency path, and when it occurs.
 
 ### 1. Resolve the facts before encoding
 
@@ -81,7 +81,7 @@ z=(w_S S)\oplus(w_C C)\oplus(w_H H),
 \qquad (w_S,w_C,w_H)=({{ phone_signal_weight }},{{ context_weight }},{{ handset_weight }}).
 $$
 
-**“Context weight” means $w_C$, the multiplier of the bundled connected-context channel $C$ before normalization.** Context here consists of the five graph-joined network and peer measurements in the table, at each of three times; it does not mean location, subscriber identity or free text. With the active defaults, the complete equation is:
+**“Context weight” means $w_C$, the multiplier of the bundled connected-context channel $C$ before normalization.** With the active defaults, the complete equation is:
 
 $$
 z=\frac{1}{\sqrt{3}}\bigoplus_{p=0}^{2}e_{p,\mathrm{radio}}
@@ -89,11 +89,11 @@ z=\frac{1}{\sqrt{3}}\bigoplus_{p=0}^{2}e_{p,\mathrm{radio}}
  \oplus0.25H.
 $$
 
-Each radio fact therefore has raw coefficient $1/\sqrt{3}\approx0.577$, while each network-context fact has $2/\sqrt{15}\approx0.516$. The channel multiplier is two, but each context fact does not receive twice the coefficient of a radio fact: the channel contains more terms. The experiment configuration and stored term manifests record these coefficients explicitly.
+Each radio fact therefore has raw coefficient $1/\sqrt{3}\approx0.577$, while each network-context fact has $2/\sqrt{15}\approx0.516$. The channel multiplier is two, but each context fact does not receive twice the coefficient of a radio fact: the channel contains more terms.
 
 **Why give connected context more weight?** A shared transport incident can accompany weak, recovering or normal phone radio. Its common evidence lies upstream. Weight {{ context_weight }} was chosen in the earlier validation diagnosis and frozen before this fresh evaluation. It keeps the network evidence from being overwhelmed by the varying radio profile. It is a modelling choice for this study, not a universal HDC constant.
 
-These are weights on raw contributions. Doubling a channel multiplies its direct contribution to a pairwise dot product by four before normalization; cross terms and normalization also affect the final score. It does not reserve a fixed percentage of similarity for that channel.
+Weights act on raw contributions before normalization, so they do not reserve a fixed share of similarity for either channel.
 
 ### 5. Use the same accumulator for retrieval, editing and learning
 
@@ -106,7 +106,7 @@ $$
 
 Retrieval first applies exact spatial/time eligibility, then ranks eligible earlier episodes by similarity. Search storage uses float16; computation returns to float32 and the stored-vector residual is checked separately.
 
-Because the raw bundle is retained, removing the handset means $z'=z\oplus(-w_HH)$, followed by normalization. Subtracting a component from an already normalized vector would be a different operation. The acceptance checks compare this edit with a complete rebuild.
+Because the raw bundle is retained, removing the handset means $z'=z\oplus(-w_HH)$, followed by normalization. The acceptance checks compare this edit with a complete rebuild.
 
 A reviewed incident labelled $y$ updates a class accumulator by addition:
 
@@ -115,7 +115,7 @@ A_y\leftarrow A_y\oplus\hat z,
 \qquad \mathrm{score}_y(q)=\hat z_q^\mathsf{T}\frac{A_y}{\lVert A_y\rVert_2}.
 $$
 
-This is an **additive cosine class-memory classifier**: one accumulator per class, containing the sum of normalized hypervectors from that class's reviewed incidents. Prediction chooses the available class whose normalized accumulator has the highest cosine similarity to the query. The class representative is sometimes called a prototype; it is specifically this accumulated vector, not a separate feature model or neural network. The encoder stays fixed while labelled memory grows. Unseen classes are excluded from prediction; before any reviews, the system reports insufficient labelled memory. Updates retain an audit record and support exact reversal.
+This is an **additive cosine class-memory classifier**: one accumulator per class, containing the sum of normalized hypervectors from that class's reviewed incidents. Prediction chooses the available class whose normalized accumulator has the highest cosine similarity to the query. This accumulated vector is sometimes called a prototype; the encoder stays fixed while it grows. Unseen classes are excluded from prediction; before any reviews, the system reports insufficient labelled memory. Updates retain an audit record and support exact reversal.
 
 For an inspected candidate with weighted terms $t_j$, the retained manifest also permits exact arithmetic attribution:
 
@@ -125,4 +125,4 @@ z_x=\bigoplus_{j=1}^{m} t_j,
 \qquad \mathrm{similarity}(q,x)=a_1+\cdots+a_m.
 $$
 
-The $t_j$ are hypervector contributions, combined by bundling; each $a_j$ is a scalar contribution to the cosine score. Each contribution links back to source observations, telemetry and valid edges. These contributions explain how the numeric score was assembled, including interference between terms. They do not establish the cause of a dropped call: the source records provide provenance, while similarity proposes comparisons.
+The $t_j$ are hypervector contributions, combined by bundling; each $a_j$ is a scalar contribution to the cosine score. Each contribution links back to source observations, telemetry and valid edges. They explain how the score was assembled, including interference between terms, not what caused the dropped call.

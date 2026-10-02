@@ -744,7 +744,15 @@ def learning_comparison(summary, config, class_errors, error_budget):
         f"its error rate on every other pattern is at most {percent(max(class_errors['hdc'][label] for label in others))}. "
         "The per-pattern table is in the details below."
     )
-    return rows, headline, takeaway, pattern
+    facts = {
+        "first": first,
+        "ahead": ahead,
+        "gaps": gaps,
+        "on_par": on_par,
+        "spread": max(spread(b) for b in budgets if b >= on_par) if on_par else None,
+        "hardest": hardest,
+    }
+    return rows, headline, takeaway, pattern, facts
 
 
 def create_report(run_dir):
@@ -812,8 +820,8 @@ def create_report(run_dir):
         + " |"
         for label in LABELS
     )
-    learning_rows, learning_headline, learning_takeaway, hardest_pattern = learning_comparison(
-        summary, config, class_errors, error_budget
+    learning_rows, learning_headline, learning_takeaway, hardest_pattern, learned = (
+        learning_comparison(summary, config, class_errors, error_budget)
     )
     fit_rows = "\n".join(
         "| "
@@ -893,22 +901,6 @@ def create_report(run_dir):
     counts = results[0]["candidate_counts"]
     path_gain = summary["paired_differences"]["hdc_minus_hdc_without_paths"]
     order_gain = summary["paired_differences"]["hdc_minus_hdc_without_order"]
-    best_budget = max(config.budgets)
-    budget_80 = next(
-        (
-            budget
-            for budget in config.budgets
-            if summary["learning"][str(budget)]["hdc"]["mean"] >= 0.8
-        ),
-        None,
-    )
-    low_sample = (
-        f"HDC reaches mean macro F1 ≥0.80 with {budget_80} "
-        + ("review" if budget_80 == 1 else "reviews")
-        + f" per class ({budget_80 * 4} total)."
-        if budget_80
-        else f"HDC does not reach mean macro F1 0.80 within {best_budget} reviews per class."
-    )
     effect_examples = {}
     for name, predicate in [
         ("helps", lambda row: row["net_correct"] > 0),
@@ -938,26 +930,124 @@ def create_report(run_dir):
         or "| — | No top-1 mismatch in this run | — |"
     )
     operator = results[0]["operators"]
+    all_errors = read(paths[0] / "retrieval_errors.json")
+    top_hits_checked = sum(r["evidence_audit"]["top_hits_checked"] for r in results)
+    hardest = learned["hardest"]
+    hardest_misses = sum(row["label"] == hardest for row in all_errors)
+    retrieval = summary["retrieval"]["hdc"]
+    precision, top1 = (
+        percent(retrieval["precision_at_5"]["mean"]),
+        percent(retrieval["top1"]["mean"]),
+    )
+    random_precision = percent(summary["random_precision_at_5"])
+    quantization = statistics.mean(
+        r["float16_quantization"]["precision_at_5_change"] for r in results
+    )
+    retrieval_headline = (
+        f"HDC's first result has the query's pattern for {top1} of queries, and {precision} of its top five do, "
+        f"against {random_precision} expected from random ranking. Storing the search vectors in float16 halves "
+        f"their size with no measurable loss: precision@5 changes by {quantization * 100:.3f} points."
+    )
+    retrieval_miss_summary = (
+        f"The first run has {mismatches} top-1 mismatches out of {results[0]['n_queries']} queries"
+        + (
+            f"; {hardest_misses} involve {PATTERNS[hardest]}, the same pattern HDC finds hardest to classify in Experiment 3."
+            if hardest_misses * 2 > mismatches
+            else "."
+        )
+        + " All are retained:"
+        if mismatches
+        else "The first run has no top-1 mismatches."
+    )
+    original, edited = case["original_top5"], case["without_handset_top5"]
+    handset_edit_overlap = f"After the edit, {len(set(original) & set(edited))} of the original top five results remain in the top five."
+    batches = update_batches(results)
+    largest = max(batches)
+    lr_batch_wins = update_median(results, "logistic_regression", largest) < update_median(
+        results, "hdc", largest
+    )
+    raw_bytes = results[0]["resources"]["hdc_raw_vector_bytes"]
+    input_bytes = results[0]["resources"]["model_input_bytes"]
+    storage_ratio = raw_bytes / input_bytes
+    prediction_ratio = predict["hdc"] / predict["logistic_regression"]
+    single = update_single_ms
+    few = (
+        f"**Learns from very few reviews.** With {learned['first']} review per class, HDC scores "
+        f"{min(learned['gaps']):.1f}–{max(learned['gaps']):.1f} points higher macro F1 than LR and the MLP."
+        if learned["ahead"]
+        else "**Learns from few reviews.** Experiment 3 compares macro F1 at every review budget."
+    )
+    strengths = [
+        f"- {few}",
+        (
+            f"- **Learns from each review instantly, without retraining.** One new review takes {ms(single['hdc'])} ms to absorb, "
+            f"against {ms(single['logistic_regression'])} ms and {ms(single['mlp'])} ms to refit LR and the MLP. Earlier reviews "
+            "need not be kept, and every update can be reversed exactly."
+        ),
+        (
+            f"- **Finds comparable incidents and shows why.** Retrieval reaches {precision} precision@5, against {random_precision} "
+            "for random ranking. Every similarity score breaks down exactly into contributions from individual facts, "
+            "each traceable to its source records."
+        ),
+        (
+            "- **One representation, many uses.** The same hypervector serves retrieval, classification, explanation and "
+            "editing; a fact such as the handset can be removed from a query without re-encoding the rest."
+        ),
+    ]
+    key_strengths = "\n".join(strengths)
+    tradeoffs = []
+    if learned["on_par"]:
+        tradeoffs.append(
+            f"- **On par, not ahead, once reviews accumulate.** From {learned['on_par']} reviews per class, the three "
+            f"methods are within {learned['spread']:.1f} points of one another."
+        )
+    tradeoffs.append(
+        f"- **Slower, but still fast, prediction.** HDC takes {ms(predict['hdc'])} ms, {prediction_ratio:.1f}× LR's "
+        f"{ms(predict['logistic_regression'])} ms, mostly to build the hypervector."
+    )
+    if lr_batch_wins:
+        tradeoffs.append(
+            f"- **Large batches favour a refit.** At {largest} reviews arriving together, one LR refit is faster than "
+            f"{largest} HDC additions."
+        )
+    tradeoffs.append(
+        f"- **More storage.** Each incident needs {raw_bytes:,} bytes as a hypervector, about {storage_ratio:.0f}× the "
+        f"{input_bytes} bytes of its raw measurements."
+    )
+    tradeoffs.append(
+        f"- **Weakest on {PATTERNS[hardest]}.** At {error_budget} reviews per class, HDC misclassifies "
+        f"{percent(class_errors['hdc'][hardest])} of these incidents, against {percent(class_errors['logistic_regression'][hardest])} "
+        f"for LR and {percent(class_errors['mlp'][hardest])} for the MLP"
+        + (
+            f"; these incidents also account for {hardest_misses} of {mismatches} retrieval misses."
+            if hardest_misses
+            else "."
+        )
+    )
+    tradeoffs.append(
+        "- **Simulated data.** Every result describes a controlled generator, not a carrier network."
+    )
+    key_tradeoffs = "\n".join(tradeoffs)
     claim_rows = [
         (
             "Composable representation",
-            "Role swaps, order changes and edge rewiring are detectable; controls without the relevant operator remain invariant.",
-            "Controlled illustrations and ablations support the designed representation, not arbitrary graph reasoning.",
+            "Role swaps, reversed order and a rewired edge all change the encoding; without the relevant operator, the encodings are identical.",
+            "Controlled pairs confirm the design; they do not show general graph reasoning.",
         ),
         (
-            "Inspectable evidence",
-            f"All {sum(r['evidence_audit']['top_hits_checked'] for r in results):,} retrieved top hits resolve to source records and reconstruct their float32 reference scores.",
-            "Provenance is retained alongside vectors; arithmetic contributions include interference and do not establish causes. Float16 search has a separately recorded quantization residual.",
-        ),
-        (
-            "Online learning",
-            f"Frozen encoder, delayed reviews, additive class memories, exact reversal; {low_sample}",
-            "Supervised learning still requires labels. Updates can regress, and the scenarios are simulated.",
+            "Retrieval with explanations",
+            f"{precision} precision@5 against {random_precision} for random ranking. All {top_hits_checked:,} top results trace to source records and reconstruct their scores exactly.",
+            "No non-HDC retrieval baseline. Ablation gains partly reflect how the patterns are defined. Contributions are not causes.",
         ),
         (
             "Learning from few reviews",
-            learning_takeaway.split(" The results support")[0],
-            "Advantage shrinks to parity as reviews accumulate; balanced, simulated patterns only.",
+            learning_takeaway,
+            "The advantage shrinks to parity as reviews accumulate.",
+        ),
+        (
+            "Updates without retraining",
+            f"Fixed encoder; each delayed review is added in place and can be reversed exactly. {percent(online['metrics']['hdc']['accuracy'])} correct in the delayed-feedback replay.",
+            "Still supervised: labels are required, and an individual update can make predictions worse.",
         ),
         (
             "Compute cost",
@@ -967,7 +1057,7 @@ def create_report(run_dir):
         (
             "Storage",
             f"{results[0]['resources']['hdc_raw_vector_bytes']:,} bytes per raw hypervector versus {results[0]['resources']['model_input_bytes']} bytes per LR/MLP input vector.",
-            "This study shows no storage saving from HDC.",
+            "HDC costs more storage here; the float16 search copy halves it without measurable loss.",
         ),
     ]
     claims = "\n".join(
@@ -1032,6 +1122,12 @@ def create_report(run_dir):
             "retrieval_error_rows": error_text,
             "quantization_precision_change": f"{statistics.mean(r['float16_quantization']['precision_at_5_change'] for r in results) * 100:.3f}",
             "learning_rows": learning_rows,
+            "key_strengths": key_strengths,
+            "key_tradeoffs": key_tradeoffs,
+            "retrieval_headline": retrieval_headline,
+            "retrieval_miss_summary": retrieval_miss_summary,
+            "handset_edit_overlap": handset_edit_overlap,
+            "top_hits_checked": f"{top_hits_checked:,}",
             "learning_headline": learning_headline,
             "learning_takeaway": learning_takeaway,
             "hardest_pattern": hardest_pattern,

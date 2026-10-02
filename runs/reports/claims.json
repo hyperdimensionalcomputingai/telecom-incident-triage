@@ -1,11 +1,11 @@
 {
   "code_hash": "ce05796d8b5b630774b79b000c5663316820dfd840a2fed29b25ef5792caf133",
-  "report_generator_hash": "d0ecbaeeef80bbee6e9727189affffabe02a83e128203b7edd660afaed51fdbd",
+  "report_generator_hash": "749b922cc6facaf0228c87b39f48b1bf2ce3f6c296121c55a83e9d9e2c97dd71",
   "report_template_hashes": {
-    "encoder.md": "6123fbe061b4c7ee0225f99aa2c504b087b07d49ccf1789e71b2c238ae1a050a",
+    "encoder.md": "ec2628026d1ade21f5606d6fba8d87cebf7b6016e3f30f39d5c02522e02403ee",
     "geographic-enhancements.md": "7a5e069e49f29e4b2a247691799a51cdedf76542b88d7e5ed91f02745153f248",
-    "learning-updates.md": "c6fbe261ef97a3a7b60063c47c7cc4c53375ca8d44178eb5637bde3c80a0e428",
-    "summary.md": "b986befd4fc891cdd73221caf2997c79a9f41e2313e02f8d06f23d56931fa209"
+    "learning-updates.md": "8fe922e0c9d227fcf00bec1e9fcaa2d0862ea58f15e7584721f3a10ff3822537",
+    "summary.md": "d3777f86466e3f738e62d1c2a77d46a865136bc7c7dd41c694ebfb0f04b5b25d"
   },
   "summary_hash": "0fc1a7727bdb8ab2130078bb29ab5678cbd30e2c3f92e25deb0abc777627e804",
   "figure_hashes": {
@@ -13,30 +13,30 @@
     "figures/learning-updates.png": "3725f4c57dc60482ed77061cdd1fb37559cbac907d0b0b3f5aa4e1bf6fb94efe",
     "figures/learning.png": "fb7267a7d81dccdb583caf285d3acd9a94314a2ec0f25b59b1af561537c0c96b",
     "figures/retrieval.png": "5ac62b27e555c56ada34b71d9231ee35a6e77c2158f9fee823caec34c3e55ef5",
-    "figures/schema.html": "2328636c5ef0fd1172b3b8e76f10399dc945d170f4210b1237da391d66dd3310",
+    "figures/schema.html": "0cc38fc1501aea3658df04dfd9978a6f43cd82b1cd31ef87895d32ee07943649",
     "figures/schema.png": "168c7de35207927b3bcb7e4030d5b6b88b5c3ac4fb25b99f24e341aace58e68a",
-    "figures/schema.svg": "e090e9c15685ea9e50d8205a290a8e1220fd3a4298f23697401161c1bbbfcbca"
+    "figures/schema.svg": "f1532cc433c62ef1a9fdd5cd50a58f798d1b3aeeb35dddf918fe960b8197210c"
   },
   "claims": [
     {
       "claim": "Composable representation",
-      "evidence": "Role swaps, order changes and edge rewiring are detectable; controls without the relevant operator remain invariant.",
-      "boundary": "Controlled illustrations and ablations support the designed representation, not arbitrary graph reasoning."
+      "evidence": "Role swaps, reversed order and a rewired edge all change the encoding; without the relevant operator, the encodings are identical.",
+      "boundary": "Controlled pairs confirm the design; they do not show general graph reasoning."
     },
     {
-      "claim": "Inspectable evidence",
-      "evidence": "All 9,000 retrieved top hits resolve to source records and reconstruct their float32 reference scores.",
-      "boundary": "Provenance is retained alongside vectors; arithmetic contributions include interference and do not establish causes. Float16 search has a separately recorded quantization residual."
-    },
-    {
-      "claim": "Online learning",
-      "evidence": "Frozen encoder, delayed reviews, additive class memories, exact reversal; HDC reaches mean macro F1 \u22650.80 with 1 review per class (4 total).",
-      "boundary": "Supervised learning still requires labels. Updates can regress, and the scenarios are simulated."
+      "claim": "Retrieval with explanations",
+      "evidence": "96.3% precision@5 against 25.0% for random ranking. All 9,000 top results trace to source records and reconstruct their scores exactly.",
+      "boundary": "No non-HDC retrieval baseline. Ablation gains partly reflect how the patterns are defined. Contributions are not causes."
     },
     {
       "claim": "Learning from few reviews",
       "evidence": "HDC learns most efficiently when labels are scarce: with 1 review per class, it scores 7.4\u20138.9 points higher macro F1 than LR and the MLP. From 5 reviews per class, the three are on par.",
-      "boundary": "Advantage shrinks to parity as reviews accumulate; balanced, simulated patterns only."
+      "boundary": "The advantage shrinks to parity as reviews accumulate."
+    },
+    {
+      "claim": "Updates without retraining",
+      "evidence": "Fixed encoder; each delayed review is added in place and can be reversed exactly. 96.7% correct in the delayed-feedback replay.",
+      "boundary": "Still supervised: labels are required, and an individual update can make predictions worse."
     },
     {
       "claim": "Compute cost",
@@ -46,8 +46,8 @@
     {
       "claim": "Storage",
       "evidence": "16,384 bytes per raw hypervector versus 84 bytes per LR/MLP input vector.",
-      "boundary": "This study shows no storage saving from HDC."
+      "boundary": "HDC costs more storage here; the float16 search copy halves it without measurable loss."
     }
   ],
-  "report_hash": "707f9e52bcbf3e477872d0cfa06573655f926a21dd3f91520ff6d28ddb09993e"
+  "report_hash": "67de979cb82d10720910431e7369a79e527d1971580b4cf23ddbde06b6fcc239"
 }

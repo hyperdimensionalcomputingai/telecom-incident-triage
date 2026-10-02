@@ -42,10 +42,13 @@ Edit the templates, then run `uv run src/report.py` for a completed run to rebui
 
 Read the [illustrated results summary](runs/reports/summary.md) for the encoder equations, graph schema, experiments and findings. The latest [aggregate results](runs/summary.json) and [detailed metrics](runs/metrics.json) are committed with their configuration and provenance; datasets, vectors and individual prediction traces are regenerated locally.
 
-- Roles, order and connectivity matter; retrieved comparisons resolve to retained source evidence.
-- HDC retrieval achieves **96.3% precision@5**, with source records supporting each returned comparison.
-- With just one review per class, HDC scores **7–9 points higher macro F1** than LR and the MLP (82.3% versus 74.9% and 73.4%). From five reviews per class, all three are on par, within about 2 points.
-- HDC learns from a single new review in about 0.13 ms, versus about 3.7 ms for an LR refit and 40 ms for an MLP refit. One refit can absorb a whole batch, though: at 40 reviews, LR is faster. All three predict in about 0.1 ms, and HDC uses more storage.
+**Where HDC adds value**
+
+- **Learns from very few reviews.** With one review per class, HDC scores 7–9 points higher macro F1 than LR and the MLP (82.3% versus 74.9% and 73.4%).
+- **Learns from each review instantly, without retraining.** About 0.13 ms per review, versus about 3.7 ms to refit LR and 40 ms to refit the MLP.
+- **Finds comparable incidents and shows why.** 96.3% precision@5 (random: 25%), and every similarity score breaks down into contributions traceable to source records.
+
+**Tradeoffs:** from five reviews per class, all three methods are on par. HDC predicts about 2× slower than LR (still about 0.1 ms), a single LR refit absorbs a batch of 40 reviews faster, and hypervectors need far more storage than raw measurements. See the summary's [key findings](runs/reports/summary.md#key-findings).
 
 These findings concern controlled synthetic patterns, and do not represent the operational carrier performance of any real provider. The run times reported in the results depend on the machine being used, so use them as guidance only.
 
