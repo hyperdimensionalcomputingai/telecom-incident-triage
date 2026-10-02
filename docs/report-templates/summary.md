@@ -242,6 +242,8 @@ The simulator uses simple observed rules and deliberately balanced classes, with
 
 {{ geographic_enhancements }}
 
+{{ future_work }}
+
 ## Reproduce and inspect
 
 Inspect the [source code]({{ source_link }}) for the implementation. Run `uv run src/prepare.py`, `uv run src/run.py`, then `uv run src/report.py` from the repository root. All three scripts use the paths in `src/settings.py`. The manifest records dependency versions, source checksums, configuration, encoder and code hashes, and all completed seed pairs. The committed metrics retain block-level results, per-class errors and repeated timing measurements. Reproducing a run generates the detailed predictions, review logs, retrieval errors, query edits and source witnesses locally.

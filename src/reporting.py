@@ -1,5 +1,6 @@
 """Readable evidence, exportable figures, and measured claim boundaries."""
 
+import collections
 import json
 import math
 import os
@@ -632,6 +633,154 @@ def geographic_enhancement_explanation():
     return render_template("geographic-enhancements.md")
 
 
+# Short everyday names for the patterns, used in the future-work diagnosis.
+PLAIN_NAMES = {
+    "radio_deteriorating": "signal getting weaker",
+    "transient_recovery": "signal recovering",
+    "shared_transport": "shared-equipment fault",
+    "normal": "normal service",
+}
+PLAIN_INTROS = {
+    "radio_deteriorating": "a phone's signal getting steadily weaker",
+    "transient_recovery": "a phone's signal dropping and then recovering",
+    "shared_transport": "faults in network equipment that many phones share (*shared transport impairment* in Experiment 3)",
+    "normal": "normal service",
+}
+
+
+def future_work_explanation(run_dir, config, pair_dir, data_seed, encoder_seed, budget, hardest):
+    """Rebuild one pair's class memory to show where and why its mistakes happen."""
+    import joblib
+    import torch
+    import torch.nn.functional as F
+
+    from data import build_episodes, load_tables
+    from encoding import Encoder, model_input_features, scaled
+    from learning import Prototype, budget_indices
+
+    tables = load_tables(run_dir / "data" / str(data_seed))
+    episodes = build_episodes(tables)
+    reviews = {row["episode_id"]: row for row in tables["reviews"].to_pylist()}
+    labels = torch.tensor([LABELS.index(reviews[e["episode_id"]]["label"]) for e in episodes])
+    encoder = Encoder(config, encoder_seed)
+    raws = torch.stack([encoder.encode(episode) for episode in episodes])
+    memory = [i for i, e in enumerate(episodes) if e["split"] == "memory"]
+    testing = [i for i, e in enumerate(episodes) if e["split"] == "test"]
+    hdc = Prototype(raws.shape[1])
+    for index in budget_indices(memory, labels, budget, episodes):
+        hdc.update(raws[index], int(labels[index]))
+    features = torch.stack([model_input_features(episode) for episode in episodes])
+    lr = joblib.load(pair_dir / "models" / f"logistic_regression-budget-{budget}.joblib")
+    lr_predictions = dict(zip(testing, lr.predict(features[testing].numpy()).tolist()))
+
+    # The review rule's 15 dB change separates weakening, recovering and steady signal.
+    threshold = 15
+
+    def signal(episode):
+        change = episode["observations"][-1]["radio_dbm"] - episode["observations"][0]["radio_dbm"]
+        return (
+            "weakens"
+            if change <= -threshold
+            else "recovers"
+            if change >= threshold
+            else "stays steady"
+        )
+
+    target = LABELS.index(hardest)
+    hard = [i for i in testing if labels[i] == target]
+    wrong = collections.Counter(
+        hdc.predict(raws[i]) for i in hard if hdc.predict(raws[i]) != target
+    )
+    confused = wrong.most_common(1)[0][0]
+    groups = {}
+    for i in hard:
+        row = groups.setdefault(signal(episodes[i]), [0, 0, 0])
+        row[0] += 1
+        row[1] += hdc.predict(raws[i]) != target
+        row[2] += lr_predictions[i] != target
+    order = ("weakens", "stays steady", "recovers")
+    group_rows = "\n".join(
+        f"| {name.capitalize()} | {n} | {percent(h / n)} | {percent(l / n)} |"
+        for name in order
+        if name in groups
+        for n, h, l in [groups[name]]
+    )
+    worst = max(groups, key=lambda name: groups[name][1] / groups[name][0])
+    steadiest = min(groups, key=lambda name: groups[name][1] / groups[name][0])
+
+    # Split each score exactly into channels: unit(z) . memory = sum of channel . memory / |z|.
+    memories = F.normalize(hdc.values, dim=1)
+    names = {
+        "local": "Phone's own signal",
+        "context": "Network facts (links, peers, cell load)",
+        "handset": "Handset model",
+    }
+    split = {name: [0.0, 0.0] for name in names}
+    members = [i for i in hard if signal(episodes[i]) == worst]
+    for i in members:
+        norm = raws[i].norm()
+        for name, vector in encoder.components(episodes[i]).items():
+            split[name][0] += float(vector @ memories[target] / norm) / len(members)
+            split[name][1] += float(vector @ memories[confused] / norm) / len(members)
+    split_rows = "\n".join(
+        f"| {names[name]} | {a:.3f} | {b:.3f} | {a - b:+.3f} |" for name, (a, b) in split.items()
+    )
+    margin = sum(a - b for a, b in split.values())
+
+    level_finding = ""
+    if hardest == "shared_transport":
+        # Compare the mildest faulty link with the worst healthy one, as encoded levels.
+        faulty = [
+            episodes[i]["observations"][1]["link_loss_pct"]
+            for i in range(len(episodes))
+            if labels[i] == target
+        ]
+        healthy = [
+            observation["link_loss_pct"]
+            for i, episode in enumerate(episodes)
+            for position, observation in enumerate(episode["observations"])
+            if labels[i] != target or position != 1
+        ]
+        low, high = max(healthy), min(faulty)
+
+        def level(value):
+            return round((config.levels - 1) * scaled(value, "link_loss_pct"))
+
+        cosine = float(
+            F.cosine_similarity(encoder.levels[level(low)], encoder.levels[level(high)], dim=0)
+        )
+        level_finding = (
+            f"**Why the network evidence is weak.** The deciding facts are a small share of the encoding, and a faulty "
+            f"link does not look very different from a healthy one. The mildest fault in the data ({high:.1f}% packet loss) "
+            f"and the worst healthy link ({low:.1f}%) fall on numeric levels {level(high)} and {level(low)}, whose encodings "
+            f"have cosine similarity {cosine:.2f}: nearby numbers are deliberately encoded alike."
+        )
+    worst_rate, steady_rate = (groups[name][1] / groups[name][0] for name in (worst, steadiest))
+    finding = (
+        f"when the phone's own signal {worst}, HDC mislabels {percent(worst_rate)} of these incidents, against "
+        f'{percent(steady_rate)} when it {steadiest}. Its most common wrong answer is "{PLAIN_NAMES[LABELS[confused]]}".'
+    )
+    return render_template(
+        "future-work.md",
+        {
+            "hard_pattern_intro": PLAIN_INTROS[hardest],
+            "hard_pattern": PLAIN_NAMES[hardest],
+            "hard_pattern_finding": finding,
+            "data_seed": data_seed,
+            "encoder_seed": encoder_seed,
+            "budget": budget,
+            "radio_threshold": threshold,
+            "group_rows": group_rows,
+            "split_count": len(members),
+            "split_group": worst,
+            "confused_pattern": PLAIN_NAMES[LABELS[confused]],
+            "split_rows": split_rows,
+            "net_margin": f"{margin:.3f}",
+            "level_finding": level_finding,
+        },
+    )
+
+
 def learning_comparison(summary, config, class_errors, error_budget):
     """Lead Experiment 3 with what the paired differences support at each budget."""
     names = {"logistic_regression": "LR", "mlp": "the MLP"}
@@ -1019,6 +1168,12 @@ def create_report(run_dir):
             f"- **On par, not ahead, once reviews accumulate.** From {learned['on_par']} reviews per class, the three "
             f"methods are within {learned['spread']:.1f} points of one another."
         )
+    tradeoffs += [
+        "- **The class memory doesn't learn which facts matter.**",
+        "  - It is a running sum of reviewed incidents, so each fact keeps the fixed weight the encoder gave it. LR and the MLP learn a weight for each input from the labels.",
+        "  - A pattern decided by a few facts can be outvoted by facts that vary.",
+        "  - This concerns the class memory used here, not HDC encoding; see [Future work](#future-work-teaching-the-class-memory-which-facts-matter).",
+    ]
     key_tradeoffs = "\n".join(tradeoffs)
     claim_rows = [
         (
@@ -1160,6 +1315,15 @@ def create_report(run_dir):
             "learning_update_explanation": learning_update_explanation(results, config),
             "claims_rows": claims,
             "geographic_enhancements": geographic_enhancement_explanation(),
+            "future_work": future_work_explanation(
+                run_dir,
+                config,
+                paths[0],
+                config.data_seeds[0],
+                config.encoder_seeds[0],
+                error_budget,
+                learned["hardest"],
+            ),
             "source_link": source_link,
             "data_seeds": ", ".join(str(seed) for seed in config.data_seeds),
             "selected_settings_rows": selected_rows,

@@ -46,6 +46,10 @@ The learning and cost experiments compare HDC with regularized logistic regressi
 
 - **More storage.** Each incident needs 16,384 bytes as a hypervector, about 195× the 84 bytes of its raw measurements.
 - **On par, not ahead, once reviews accumulate.** From 5 reviews per class, the three methods are within 2.0 points of one another.
+- **The class memory doesn't learn which facts matter.**
+  - It is a running sum of reviewed incidents, so each fact keeps the fixed weight the encoder gave it. LR and the MLP learn a weight for each input from the labels.
+  - A pattern decided by a few facts can be outvoted by facts that vary.
+  - This concerns the class memory used here, not HDC encoding; see [Future work](#future-work-teaching-the-class-memory-which-facts-matter).
 
 ## The dataset
 
@@ -448,6 +452,47 @@ Potential extensions include:
 
 For example, a future query could **find incidents within 500 metres of a location, apply the time and earlier-memory filters, then rank their hypervectors by similarity in LanceDB**. That would extend candidate selection while reusing the existing encoder and prototype learner. Geography could remain outside the hypervector; adding geographic features to the encoding would be a separate modelling choice.
 
+
+
+## Future work: teaching the class memory which facts matter
+
+**What we saw.** HDC's mistakes concentrate on one pattern: faults in network equipment that many phones share (*shared transport impairment* in Experiment 3). They are most common when other evidence in the incident points elsewhere: when the phone's own signal weakens, HDC mislabels 25.5% of these incidents, against 7.4% when it stays steady. Its most common wrong answer is "signal getting weaker".
+
+**Why it happens.** HDC's class memory is a running sum of each pattern's reviewed incidents. It learns what a *typical* incident of each pattern looks like, not which facts tell the patterns apart: every fact keeps the fixed weight the encoder gave it, and adding examples never changes those weights. When a pattern is decided by a few facts among many that vary, those few can be outvoted. Here, a weakening phone signal outvotes a handful of faulty-link measurements. LR and the MLP instead fit a separate weight to every input from the labels, so the deciding measurement can count for far more. This is a property of the running-sum class memory, not of HDC as a whole: the encoding still carries the deciding facts.
+
+**What to try next.**
+
+- **Mistake-driven updates.** When the memory misclassifies a reviewed incident, add it to the correct pattern and subtract it from the wrongly predicted one. This is a common extension in HDC; it keeps updates to vector arithmetic, but each update now depends on the current memory. Its effect on update cost, order independence and exact reversal needs measuring.
+- **Learned weights.** Choose the weight of each fact or channel from validation data, instead of the fixed values used here.
+- **Finer distinctions in the numbers.** Use more numeric levels, or a narrower range for packet loss, so that a faulty link looks less like a healthy one.
+- **Separate the encoding from the class memory.** Run the same running-sum classifier on the raw 21 measurements, and an error-driven learner on the hypervectors. This would show how much of the gap comes from the class memory and how much from the encoding.
+
+<details>
+<summary>Diagnostic details: where the mistakes happen and how the score splits</summary>
+
+These numbers come from rebuilding the first seed pair's class memory (data seed 1006, encoder seed 2001) at 5 reviews per class, the same setting as the per-pattern table in Experiment 3. They are regenerated with the report.
+
+**Mistakes on shared-equipment fault incidents, by what the phone's own signal does.** The groups use the review rule's 15 dB threshold.
+
+| Phone's own signal | Incidents | HDC wrong | LR wrong |
+|---|---:|---:|---:|
+| Weakens | 47 | 25.5% | 17.0% |
+| Stays steady | 54 | 7.4% | 3.7% |
+| Recovers | 49 | 12.2% | 12.2% |
+
+**How the score splits.** For the 47 shared-equipment fault incidents where the phone's signal weakens, each similarity score splits exactly into a phone-signal part and a network part. The table compares the correct memory with the memory HDC most often picks instead, "signal getting weaker".
+
+| Part of the score | Toward the correct pattern | Toward "signal getting weaker" | Difference |
+|---|---:|---:|---:|
+| Phone's own signal | 0.154 | 0.193 | -0.039 |
+| Network facts (links, peers, cell load) | 0.738 | 0.686 | +0.052 |
+| Handset model | 0.005 | 0.004 | +0.000 |
+
+On average the correct pattern wins by only 0.013, so a modest pull from the phone's signal is enough to flip an incident.
+
+**Why the network evidence is weak.** The deciding facts are a small share of the encoding, and a faulty link does not look very different from a healthy one. The mildest fault in the data (3.2% packet loss) and the worst healthy link (1.8%) fall on numeric levels 10 and 6, whose encodings have cosine similarity 0.87: nearby numbers are deliberately encoded alike.
+
+</details>
 
 
 ## Reproduce and inspect
