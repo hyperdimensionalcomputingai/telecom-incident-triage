@@ -442,8 +442,6 @@ Potential extensions include:
 
 For example, a future query could **find incidents within 500 metres of a location, apply the time and earlier-memory filters, then rank their hypervectors by similarity in LanceDB**. That would extend candidate selection while reusing the existing encoder and prototype learner. Geography could remain outside the hypervector; adding geographic features to the encoding would be a separate modelling choice.
 
-These are potential enhancements, not implemented or evaluated results. The current demo performs polygon intersection and time filtering, without metre-based distances, nearest-infrastructure searches or geographic-radius queries. Nearby infrastructure would also need actual connection records to establish which equipment served a phone; proximity alone would not establish that dependency.
-
 ## Takeaways
 
 In this controlled study, HDC combines role-sensitive, ordered representations with connected network evidence. Retrieval returns comparable earlier incidents with source records that can be inspected, and reviewed examples improve class memory through reversible additions while the encoder stays fixed.
