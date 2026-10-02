@@ -24,8 +24,8 @@ The graph chooses which source measurements enter the representation. The encode
 For a measurement $x$ with physical range $[a_f,b_f]$, first map it to a clipped fraction, then to one of {{ levels }} numeric levels:
 
 $$
-s_f(x)=\operatorname{clip}\!\left(\frac{x-a_f}{b_f-a_f},0,1\right),
-\qquad q_f(x)=\operatorname{round}\!\left((K-1)s_f(x)\right).
+s_f(x)=\mathrm{clip}\!\left(\frac{x-a_f}{b_f-a_f},0,1\right),
+\qquad q_f(x)=\mathrm{round}\!\left((K-1)s_f(x)\right).
 $$
 
 TorchHD supplies a seeded family of correlated level hypervectors $\ell_0,\ldots,\ell_{K-1}$. Adjacent levels overlap more than distant levels. For example, −90 and −92 dBm receive nearby representations, while −90 and −115 receive more distinct ones. The ranges are fixed physical bounds, not statistics fitted to validation or test data. Values outside them are clipped; rounding introduces finite numeric resolution.
@@ -101,7 +101,7 @@ All arithmetic above uses float32 and retains the unthresholded bundle. Only the
 
 $$
 \hat z=\frac{z}{\lVert z\rVert_2},
-\qquad \operatorname{similarity}(q,x)=\hat z_q^\mathsf{T}\hat z_x.
+\qquad \mathrm{similarity}(q,x)=\hat z_q^\mathsf{T}\hat z_x.
 $$
 
 Retrieval first applies exact spatial/time eligibility, then ranks eligible earlier episodes by similarity. Search storage uses float16; computation returns to float32 and the stored-vector residual is checked separately.
@@ -112,7 +112,7 @@ A reviewed incident labelled $y$ updates a class accumulator by addition:
 
 $$
 A_y\leftarrow A_y\oplus\hat z,
-\qquad \operatorname{score}_y(q)=\hat z_q^\mathsf{T}\frac{A_y}{\lVert A_y\rVert_2}.
+\qquad \mathrm{score}_y(q)=\hat z_q^\mathsf{T}\frac{A_y}{\lVert A_y\rVert_2}.
 $$
 
 This is an **additive cosine class-memory classifier**: one accumulator per class, containing the sum of normalized hypervectors from that class's reviewed incidents. Prediction chooses the available class whose normalized accumulator has the highest cosine similarity to the query. The class representative is sometimes called a prototype; it is specifically this accumulated vector, not a separate feature model or neural network. The encoder stays fixed while labelled memory grows. Unseen classes are excluded from prediction; before any reviews, the system reports insufficient labelled memory. Updates retain an audit record and support exact reversal.
@@ -122,7 +122,7 @@ For an inspected candidate with weighted terms $t_j$, the retained manifest also
 $$
 z_x=\bigoplus_{j=1}^{m} t_j,
 \qquad a_j=\frac{\hat z_q^\mathsf{T}t_j}{\lVert z_x\rVert_2},
-\qquad \operatorname{similarity}(q,x)=a_1+\cdots+a_m.
+\qquad \mathrm{similarity}(q,x)=a_1+\cdots+a_m.
 $$
 
 The $t_j$ are hypervector contributions, combined by bundling; each $a_j$ is a scalar contribution to the cosine score. Each contribution links back to source observations, telemetry and valid edges. These contributions explain how the numeric score was assembled, including interference between terms. They do not establish the cause of a dropped call: the source records provide provenance, while similarity proposes comparisons.

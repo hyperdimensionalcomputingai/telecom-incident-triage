@@ -138,9 +138,9 @@ For a concrete measurement, the encoder:
 For a measurement $x$ of property $f$, with chosen bounds $a_f$ and $b_f$:
 
 $$
-s_f(x)=\operatorname{clip}\!\left(\frac{x-a_f}{b_f-a_f},0,1\right),
+s_f(x)=\mathrm{clip}\!\left(\frac{x-a_f}{b_f-a_f},0,1\right),
 \qquad
-q_f(x)=\operatorname{round}\!\left((K-1)s_f(x)\right),
+q_f(x)=\mathrm{round}\!\left((K-1)s_f(x)\right),
 \qquad K=32.
 $$
 
@@ -191,8 +191,8 @@ That is a position on the chosen **dBm scale**. It does **not** mean “74% sign
 **Only then do we choose a numeric bucket and its level hypervector.** There are 32 levels, indexed **0 through 31**. We map our fraction onto those indices:
 
 $$
-q_f(x)=\operatorname{round}(31\times0.740)
-=\operatorname{round}(22.94)=23.
+q_f(x)=\mathrm{round}(31\times0.740)
+=\mathrm{round}(22.94)=23.
 $$
 
 We therefore select $h_{\text{level},23}$, the level-23 hypervector. Our three phone measurements become buckets **23, 17 and 7**.
@@ -444,7 +444,7 @@ Each row describes the role side of a **role-value pair**. Bind it to the select
 For example, our middle backhaul-loss measurement is 0.9478%. Its range is 0–10%, so it selects bucket 3:
 
 $$
-\operatorname{round}\left(31\times\frac{0.9478}{10}\right)=3.
+\mathrm{round}\left(31\times\frac{0.9478}{10}\right)=3.
 $$
 
 Its complete weighted contribution is:
@@ -551,7 +551,7 @@ Normalization happens after the complete bundle. In the code, `Encoder.encode()`
 For two represented episodes, cosine similarity can then be computed from their unit-length hypervectors:
 
 $$
-\operatorname{similarity}(\text{query},\text{candidate})
+\mathrm{similarity}(\text{query},\text{candidate})
 =\widehat h_{\text{query}}^{\mathsf T}\widehat h_{\text{candidate}}.
 $$
 
@@ -691,7 +691,7 @@ That is the learning update. It changes the class memory while the property role
 Encode the new episode using the same frozen encoder, and normalize its complete hypervector. Compare it with each available class prototype:
 
 $$
-\operatorname{score}_y(\text{query})
+\mathrm{score}_y(\text{query})
 =\widehat h_{\text{query}}^{\mathsf T}h_{\text{class prototype},y}.
 $$
 
@@ -699,8 +699,8 @@ Prediction chooses the available class with the highest cosine similarity:
 
 $$
 \widehat y
-=\operatorname*{arg\,max}_{y\in\mathcal Y_{\text{reviewed}}}
-\operatorname{score}_y(\text{query}).
+=\arg\max_{y\in\mathcal Y_{\text{reviewed}}}
+\mathrm{score}_y(\text{query}).
 $$
 
 Here $\mathcal Y_{\text{reviewed}}$ contains only classes with at least one review. The score is a scalar cosine similarity, not a calibrated probability.
