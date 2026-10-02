@@ -38,6 +38,12 @@ UPDATE_NAMES = {
     "logistic_regression": "LR retraining",
     "mlp": "MLP retraining",
 }
+PATTERN_DESCRIPTIONS = {
+    "radio_deteriorating": "the phone's received signal weakens across the episode",
+    "transient_recovery": "the phone's received signal improves by the end of the episode",
+    "shared_transport": "a shared backhaul link and the peer phones on it show packet loss, whatever the commuter's own signal does",
+    "normal": "neither a large signal change nor a shared backhaul impairment occurs",
+}
 
 REPORT_TEMPLATES = ROOT / "docs" / "report-templates"
 PLACEHOLDER = re.compile(r"\{\{\s*([a-z][a-z0-9_]*)\s*\}\}")
@@ -1007,26 +1013,43 @@ def create_report(run_dir):
         ),
     ]
     key_strengths = "\n".join(strengths)
-    tradeoffs = []
+    # Storage first: it is the cost every HDC user should expect.
+    tradeoffs = [
+        (
+            f"- **More storage.** Each incident needs {raw_bytes:,} bytes as a hypervector, about {storage_ratio:.0f}× the "
+            f"{input_bytes} bytes of its raw measurements."
+        )
+    ]
     if learned["on_par"]:
         tradeoffs.append(
             f"- **On par, not ahead, once reviews accumulate.** From {learned['on_par']} reviews per class, the three "
             f"methods are within {learned['spread']:.1f} points of one another."
         )
-    tradeoffs.append(
-        f"- **More storage.** Each incident needs {raw_bytes:,} bytes as a hypervector, about {storage_ratio:.0f}× the "
-        f"{input_bytes} bytes of its raw measurements."
+    others = ("logistic_regression", "mlp")
+    strongest = max(
+        LABELS,
+        key=lambda label: min(class_errors[m][label] for m in others) - class_errors["hdc"][label],
     )
-    tradeoffs.append(
-        f"- **Weakest on {PATTERNS[hardest]}.** At {error_budget} reviews per class, HDC misclassifies "
-        f"{percent(class_errors['hdc'][hardest])} of these incidents, against {percent(class_errors['logistic_regression'][hardest])} "
-        f"for LR and {percent(class_errors['mlp'][hardest])} for the MLP"
-        + (
-            f"; these incidents also account for {hardest_misses} of {mismatches} retrieval misses."
-            if hardest_misses
-            else "."
+    weakness = (
+        f"- **Weakest on {PATTERNS[hardest]}**, where {PATTERN_DESCRIPTIONS[hardest]}. At {error_budget} reviews per class, "
+        f"HDC assigns {percent(class_errors['hdc'][hardest])} of these incidents to a different pattern, against "
+        f"{percent(class_errors['logistic_regression'][hardest])} for LR and {percent(class_errors['mlp'][hardest])} for the MLP."
+    )
+    if hardest_misses:
+        weakness += (
+            f" In retrieval, {hardest_misses} of the {mismatches} queries whose top result had the wrong pattern were "
+            "this kind of incident."
         )
-    )
+    if (
+        strongest != hardest
+        and min(class_errors[m][strongest] for m in others) > class_errors["hdc"][strongest]
+    ):
+        weakness += (
+            f" HDC makes up for it on {PATTERNS[strongest]}, mislabelling {percent(class_errors['hdc'][strongest])} of those "
+            f"incidents against {percent(class_errors['logistic_regression'][strongest])} for LR and "
+            f"{percent(class_errors['mlp'][strongest])} for the MLP, so overall F1 comes out on par."
+        )
+    tradeoffs.append(weakness)
     key_tradeoffs = "\n".join(tradeoffs)
     claim_rows = [
         (
