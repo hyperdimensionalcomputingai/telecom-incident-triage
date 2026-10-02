@@ -18,16 +18,45 @@ We narrow that broader use case to one question:
 
 The study evaluates two tasks: retrieving comparable earlier incidents, and assigning a triage pattern using previously reviewed examples. Each incident includes a short sequence of phone measurements and the network context connected to that phone at those times. Triage happens after the full observation window, so the available evidence can include deterioration or recovery.
 
-**Hyperdimensional computing (HDC)** represents these facts in long numeric arrays called hypervectors. Its operations can attach a value to a role, combine contributions, and preserve order. We study whether an episode built with those operations can support retrieval, inspection of its source evidence, and learning through additions to labelled class memory while the encoder stays fixed.
+We study whether **hyperdimensional computing (HDC)** can represent these connected, time-ordered facts in a way that supports retrieval, inspection of the source evidence, and learning from reviewed incidents without retraining.
 
 The experiments examine four questions:
 
 - **Representation:** Do roles, event order and network connectivity change the meaning of an encoded incident?
 - **Retrieval and evidence:** Can it find comparable earlier incidents and return the source records supporting the comparison?
-- **Learning:** How useful does class memory become as reviewed examples arrive, and when do updates help or hurt?
-- **Resources:** What do encoding, prediction, learning updates, retrieval and storage cost, including the cost per new review?
+- **Learning:** How many reviewed incidents does each method need to classify new incidents well?
+- **Resources:** How long do prediction and learning from new reviews take, and how much storage does each representation need?
 
-The learning comparison evaluates HDC against regularized logistic regression and a small MLP. All three learners receive the same reviewed incidents and connected measurements. Retrieval evaluates HDC itself, with order and connectivity ablations as internal representation checks. These checks are not additional comparison models.
+The learning and cost experiments compare HDC with regularized logistic regression (LR) and a small MLP, all given the same reviewed incidents and connected measurements. Retrieval evaluates HDC on its own, removing order and connectivity as internal checks.
+
+## How HDC works here, in brief
+
+HDC represents each incident as one long list of {{ dimension }} numbers, called a **hypervector**, built with simple arithmetic. Nothing in the encoder is learned from the reviewed incidents: its random hypervectors are fixed by a seed, and its few weights were chosen in advance.
+
+1. **Every kind of fact gets its own random hypervector**, such as "phone signal", "backhaul link" or "packet loss". Random hypervectors this long are almost unrelated to one another, so each one works as a distinct label.
+2. **Measurements get hypervectors too**, chosen so that nearby values, such as −90 and −92 dBm, receive similar ones.
+3. **Binding** multiplies a value's hypervector by its role's. The result means "this value, in this role": a weak signal *at the phone* encodes differently from the same reading *in a peer phone's average*.
+4. **Permutation** shifts a hypervector's coordinates to record when a fact was observed: before, during or after the disruption.
+5. **Bundling** adds all of an incident's facts into one hypervector. The sum still resembles each of its parts, so incidents with similar facts in the same roles end up with similar hypervectors.
+
+That single hypervector then does several jobs:
+
+- **Retrieval:** comparable earlier incidents are found by comparing hypervectors with cosine similarity.
+- **Explanation:** because the hypervector is a sum, each similarity score splits exactly into contributions from individual facts.
+- **Editing:** a fact can be removed from a query by subtracting its contribution.
+- **Learning:** each pattern's **class memory** is the sum of its reviewed incidents' hypervectors. A new incident gets the pattern whose class memory it most resembles, and learning from a new review is one more addition, with no retraining.
+
+The [representation walkthrough](../../docs/representation-walkthrough.md) follows one incident through every step with real numbers; [How the encoder is built](#how-the-encoder-is-built) gives the equations.
+
+## Key findings
+
+**Where HDC adds value**
+
+{{ key_strengths }}
+
+**Tradeoffs and limits**
+
+{{ key_tradeoffs }}
 
 ## The dataset
 
@@ -60,7 +89,7 @@ The unit of analysis is an **episode**: three observations at 0, 20 and 40 secon
 | Pattern | What the observations show |
 |---|---|
 | Deteriorating radio | The phone's received signal becomes weaker across the episode. |
-| Transient recovery | The phone's received signal improves by the end of the episode. |
+| Transient disruption and recovery | The phone's received signal improves by the end of the episode. |
 | Shared transport impairment | The shared backhaul link and peer phones show packet loss; the phone's own signal profile can vary. |
 | Normal service | Neither a large signal change nor the shared backhaul impairment occurs. |
 
@@ -76,39 +105,39 @@ The street snapshot contains {{ corridor_segments }} Bloor Street segments, with
 
 ![A simulated commute, three signal-strength observations, and the connected network facts](figures/incident.png)
 
-Consider a simulated commuter travelling along Bloor Street West. In this walkthrough, the phone's received signal strength changes from {{ first_phone_signal }} dBm before the disruption to {{ last_phone_signal }} dBm afterwards. More negative dBm values indicate weaker received signal strength. At the middle observation, the connected backhaul link reports {{ middle_link_loss }}% packet loss, and peer phones using that dependency report {{ middle_peer_loss }}% mean loss.
+Consider a simulated commuter travelling along Bloor Street West. In this walkthrough, the phone's received signal strength changes from {{ first_phone_signal }} dBm before the disruption to {{ last_phone_signal }} dBm afterwards. At the middle observation, the connected backhaul link reports {{ middle_link_loss }}% packet loss, and peer phones using that dependency report {{ middle_peer_loss }}% mean loss.
 
-These facts make the comparison specific: look for an earlier episode with a similar signal-strength trajectory and connected network conditions. Exact spatial and time filters first identify eligible earlier memory episodes. Similarity then ranks them, and retained observations, telemetry and valid edges let the engineer inspect what the retrieved episode has in common.
+The task is to find earlier episodes with a similar signal trajectory and network conditions, then show the engineer what they have in common.
 
 The query is **{{ query_episode_id }}**, whose independently reconstructed pattern is **{{ query_pattern }}**. Its first retrieved comparison is **{{ candidate_episode_id }}**, labelled **{{ candidate_pattern }}**. The walkthrough uses the first final-test episode with an observed service disruption, selected before inspecting retrieval correctness. It illustrates the workflow; the experiments below evaluate all final-test queries.
 
-A retrieved comparison is evidence for further inspection. The triage labels describe the observed patterns in this simulation; they do not confirm the cause of the commuter's dropped call. The next section shows how the phone and network facts become one composable representation, before we measure retrieval and learning performance.
+A retrieved comparison is a lead for the engineer to inspect, not a confirmed cause of the dropped call.
 
 {{ encoder_explanation }}
 
 ## Experiment 1: what do the operators preserve?
 
-**Question.** Can the representation distinguish the same values attached to different meanings, appearing in different orders, or connected through different edges?
+**Question.** Can the representation tell apart the same measurements attached to different meanings, appearing in a different order, or reached through a different network connection?
 
-**Setup.** Binding attaches a value to a role. Bundling adds contributions. Permutation marks an observation's place in the episode. The phone signal channel has weight {{ phone_signal_weight }}; connected cell/link/peer context has weight {{ context_weight }}. Numeric levels preserve neighbourhoods; the handset contribution has weight {{ handset_weight }}. The dimension is {{ dimension }}.
+**Setup.** HDC needs only three operations: `bind(role, value)` keeps a measurement attached to its meaning, `bundle(facts)` combines contributions, and `permute(observation, position)` marks order. Learning reuses addition: `class_memory += normalize(episode_vector)`. Each test below builds two episodes that differ in exactly one way and compares their {{ dimension }}-dimensional hypervectors. A control repeats the test with the relevant operator removed. Cosine similarity of 1 means the two encodings are identical; lower values mean the representation tells them apart.
 
-Hyperdimensional computing (HDC) represents information in long numeric arrays called hypervectors. Here, each atomic role starts as a seeded array of +1 and −1 values. Distinct roles have little overlap, while nearby numeric measurements deliberately receive correlated arrays. An episode becomes a sum of these encoded contributions rather than an opaque identifier.
+| What differs between the two episodes | Operator under test | Cosine with the operator | Without the operator |
+|---|---|---:|---|
+| A good state and a bad state, swapped between the phone's signal and an upstream network link | Binding | {{ bound_cosine }} | Identical encodings (max difference {{ unbound_error }}) |
+| The same three observations, in reverse order | Permutation | {{ ordered_cosine }} | Identical encodings (max difference {{ unordered_error }}) |
+| The same network measurements, with one serving edge rewired | Graph-joined context | {{ connected_cosine }} | Identical encodings (max difference {{ disconnected_error }}) |
 
-In this implementation, binding multiplies arrays element by element, bundling adds them, and permutation rotates their coordinates by a fixed number of positions. Binding gives radio strength a different meaning from link loss. A position-specific rotation distinguishes the same observations in reverse order. The connected channel follows the time-valid phone → cell → backhaul dependency before encoding its measurements and peer context.
+Numeric levels behave as intended too: adjacent levels have cosine {{ adjacent_level_cosine }}, while distant levels have {{ distant_level_cosine }}, so nearby measurements receive similar encodings.
 
-The operator vocabulary is small: `bind(role, value)` keeps a measurement attached to its meaning; `bundle(facts)` combines contributions; `permute(observation, position)` marks order. Learning reuses addition: `class_memory += normalize(episode_vector)`. The encoder implements these operations with TorchHD; no text embedding model is needed for these tabular records.
+**Interpretation.** Each operator carries exactly the information it is meant to, and without it the distinction disappears entirely. Experiment 2 shows that these distinctions matter for retrieval. The pairs are controlled design checks, not a benchmark.
 
-**Result.** Swapping good/bad states between phone radio and an upstream link gives cosine {{ bound_cosine }}. Omitting binding makes the two accumulators equal within {{ unbound_error }}. Reversing the observations gives cosine {{ ordered_cosine }}; omitting order leaves error {{ unordered_error }}. Rewiring one serving edge gives cosine {{ connected_cosine }}; pooling the same network measurements without their connections leaves error {{ disconnected_error }}. The adjacent numeric-level cosine is {{ adjacent_level_cosine }}, compared with {{ distant_level_cosine }} for distant levels.
+**Editing a query.** Because an episode is a sum of contributions, one fact can be removed by subtraction, with no need to re-encode the others. Removing the handset from the walkthrough query matches a complete re-encoding to within {{ handset_edit_error }}. {{ handset_edit_overlap }} A changed ranking answers the edited question; it is not automatically a better result.
 
-**Interpretation.** These controlled illustrations show exactly what the operators do. The graph pair retains every measured value and changes one edge in a separate counterfactual world. Its two-candidate ranking has a 50% random reference and serves as an illustration, not a practical graph benchmark. Broader retrieval usefulness is measured next.
+## Experiment 2: can it retrieve useful earlier incidents, and explain them?
 
-The handset contribution can be removed from a raw query without re-encoding the other facts. Reconstruction error in the walkthrough is {{ handset_edit_error }}. The original top five are `{{ original_top_five }}`; after removing handset they are `{{ edited_top_five }}`. A changed ranking is an editable query, not automatically a better result.
+**Question.** Does HDC return earlier incidents with the same independently checked triage pattern, and can each result be traced to its source evidence?
 
-## Experiment 2: can it retrieve useful earlier incidents?
-
-**Question.** Does the representation return earlier incidents with the same independently checked triage pattern, and can their source evidence be inspected?
-
-**Setup.** Every query uses an exact corridor/time filter and a memory-only candidate set. All three observations must qualify. Lance and independently registered GeoDataFusion agree on selected observation identities. The first run has {{ minimum_candidates }}–{{ maximum_candidates }} candidates per query (mean {{ mean_candidates }}). Relevance means the same triage pattern, not the same real-world cause. Connectivity and order are removed separately in HDC ablations to check their contribution to retrieval.
+**Setup.** For each final-test query, exact corridor and time filters first select the eligible earlier incidents in memory: {{ minimum_candidates }}–{{ maximum_candidates }} per query in the first run (mean {{ mean_candidates }}). Lance and an independently registered GeoDataFusion query agree on that selection. HDC then ranks the candidates by cosine similarity. A result counts as relevant when it has the query's triage pattern, which is not necessarily the same real-world cause. Precision@5 is the share of the top five results that are relevant; reciprocal rank@10 is 1 when the first result is relevant, 0.5 when the first relevant result is second, and so on.
 
 ![Retrieval precision with grouped uncertainty intervals](figures/retrieval.png)
 
@@ -116,63 +145,99 @@ The handset contribution can be removed from a raw query without re-encoding the
 |---|---:|---:|---:|
 {{ retrieval_rows }}
 
-Random ranking yields expected precision {{ random_precision }}, based on each query's eligible label prevalence. The paired HDC difference when connectivity is omitted is {{ path_gain_mean }} percentage points [{{ path_gain_lower }}, {{ path_gain_upper }}]. When order is omitted, the difference is {{ order_gain_mean }} points [{{ order_gain_lower }}, {{ order_gain_upper }}].
+**Result.** {{ retrieval_headline }}
 
-**Evidence.** Every stored-vector top hit was checked against its source records. Maximum raw reconstruction error across runs is {{ reconstruction_error }}; maximum float32 reference-score reconstruction error is {{ score_reconstruction_error }}. Reference scores are decomposed into additive term contributions under the raw accumulator's normalization. A separately recorded quantization residual connects that reference to the stored float16 vector's cosine. These contributions include cross-term interference; they are not causal importance scores. Source identities and timestamps support each term.
+**What order and connectivity contribute.** Removing the connected network context lowers precision@5 by {{ path_gain_mean }} points [{{ path_gain_lower }}, {{ path_gain_upper }}]; removing observation order lowers it by {{ order_gain_mean }} points [{{ order_gain_lower }}, {{ order_gain_upper }}]. These patterns are defined by how signal changes over time and by shared network dependencies, so large drops are expected. The ablations confirm that the encoder captures that structure, which a representation without order or connections cannot.
 
-**Errors.** The first fixed run has {{ retrieval_mismatches }} top-1 mismatches out of {{ query_count }}. Examples are retained rather than discarded:
+**Every result can be explained.** Each similarity score is a sum of contributions from individual encoded facts, such as the phone's signal at one observation or a link's packet loss. Each contribution links back to its source observations, telemetry and network edges. We checked this for all {{ top_hits_checked }} top results: the contributions reconstruct each float32 score to within {{ score_reconstruction_error }}, and a separately recorded residual accounts for float16 search storage. Contributions describe how a score was assembled, including overlap between facts; they are not causal explanations.
+
+**Errors.** {{ retrieval_miss_summary }}
 
 | Query | Expected pattern | Retrieved pattern |
 |---|---|---|
 {{ retrieval_error_rows }}
 
-**Interpretation.** The HDC ablations reveal the value of retaining order and connected context. This retrieval experiment does not establish an advantage over LR or MLP, which are evaluated as classifiers in Experiment 3. Float16 search storage is independently verified against its quantized vectors; its mean precision difference from float32 is {{ quantization_precision_change }} points. Float32 accumulators remain authoritative for arithmetic and updates.
+**Limit.** We did not run a non-HDC similarity search on the same measurements, so this experiment shows that HDC retrieves well, not that it retrieves better than the alternatives.
 
-## Experiment 3: how does memory grow through reviews?
+## Experiment 3: how quickly does class memory learn from reviews?
 
-**Question.** How useful is class memory with few labelled incidents, and what happens when feedback arrives after a decision?
+**Question.** How many reviewed incidents does each method need before it classifies new incidents well?
 
-**Setup.** Each class starts with no vector. Encoding produces an episode hypervector; a review adds its normalized vector to the appropriate float32 class accumulator. Prediction compares the episode with normalized class memories. The comparison models are regularized multinomial logistic regression and a small one-hidden-layer ReLU MLP. Both receive the same 21 input features: six measurements at each of three ordered observations, plus three handset-category indicators. The connected measurements come from the same valid graph joins as HDC. Validation chooses between the already declared physical range scaling and an additional StandardScaler fitted only to the reviewed memory examples at each budget. Both models use L-BFGS optimization to a declared tolerance; they are not limited to one training pass. LR regularization and MLP width/regularization are selected separately at each budget using the first data seed's validation worlds, averaged across three initialization seeds, then frozen for every final test. Every method receives the same reviewed incidents. Review budgets count training labels; additional labelled validation worlds support model selection.
+**Setup.** HDC starts with an empty memory for each of the four patterns. Each reviewed incident adds its hypervector to its pattern's memory, and the encoder never changes. LR and the MLP are trained on the same reviewed incidents, given as the same connected measurements in 21 numbers. Their settings are tuned for each review budget on separate validation worlds; [Reproduce and inspect](#reproduce-and-inspect) lists the details. All three methods are scored on the same independent final-test worlds using **macro F1**: the F1 score of each pattern, averaged with equal weight, where 100% is perfect classification.
 
 ![Learning from reviewed incidents with no encoder retraining](figures/learning.png)
 
-| Reviews per class | HDC macro F1 | Trained LR macro F1 | Small MLP macro F1 |
-|---:|---:|---:|---:|
+{{ learning_headline }}
+
+| Reviews per class | HDC | LR | MLP | HDC − LR, points | HDC − MLP, points |
+|---:|---:|---:|---:|---:|---:|
 {{ learning_rows }}
 
-**Result.** {{ learning_direction }} {{ low_sample_finding }} The curve can plateau or regress at intermediate budgets; more reviews do not guarantee improvement. Macro F1 gives each pattern equal weight, with 1.0 representing perfect classification. The first delayed-feedback replay's HDC accuracy is {{ delayed_accuracy }}, with prediction coverage {{ delayed_coverage }}. Coverage includes initial decisions for which no review has arrived; these produce “insufficient labelled memory”. This replay uses memory-building episodes, while the learning curves above use independent final-test worlds.
+The first three columns show mean macro F1; the shaded bands in the figure show each method's own uncertainty. The last two columns compare methods directly: each test world scores all three, so we take the difference within each world, then give its mean with a 95% interval. **Bold** marks a difference whose interval excludes zero.
 
-At {{ error_budget }} reviews per class, the paired, world-grouped differences are {{ learning_difference }}. There are {{ classifier_warning_count }} convergence warnings among the {{ classifier_fit_count }} final LR/MLP fits, and {{ selection_warning_count }} among {{ selection_fit_count }} validation-selection fits. Diagnostics and iteration counts are retained for every fit.
+{{ hardest_pattern }}
 
-The aggregate score can hide a difficult pattern. At {{ error_budget }} reviews per class, the following share of final-test examples is assigned to the wrong class, averaged across the seed grid. These are descriptive per-class errors; the grouped uncertainty intervals above apply to macro F1. Detailed confusion matrices are retained for every budget and world.
+**Interpretation.** HDC's advantage is learning from very few examples. A plausible reason: its class memory is a running sum over a fixed encoder, so one example per pattern already gives a usable comparison. LR and the MLP must estimate their weights from those same few examples. Once each pattern has a handful of reviews, the three methods perform about the same.
 
-| Actual pattern | HDC error rate | Trained LR error rate | Small MLP error rate |
+<details>
+<summary>Details: per-pattern errors, delayed feedback and individual updates</summary>
+
+**Errors by pattern.** At {{ error_budget }} reviews per class, this is the share of final-test incidents of each pattern assigned to the wrong pattern, averaged across the seed grid. These are descriptive rates without intervals; confusion matrices for every budget and world are retained.
+
+| Actual pattern | HDC | LR | MLP |
 |---|---:|---:|---:|
 {{ class_error_rows }}
 
-Updates are not guaranteed to help. The first fixed replay contains these examples:
+**Delayed feedback.** In this demonstration, a review becomes available {{ review_delay_s }} seconds after its incident's observation window ends. Replaying the memory-building episodes in time order, with each review added only once available, HDC triaged {{ delayed_accuracy }} of incidents correctly. It made a prediction for {{ delayed_coverage }} of them. The remaining incidents came before any review had arrived; for those it reported “insufficient labelled memory” rather than guess, and they count as incorrect. This replay uses memory-building episodes, not the independent final-test worlds above.
+
+**A single update can help or hurt.** Examples from the first replay, measured on a fixed probe set inside the memory partition, are listed below. They illustrate update effects; they are not held-out estimates.
 
 {{ update_effects }}
 
-These examples use a fixed diagnostic probe within the memory partition, including episodes that are later reviewed. They are neither held-out performance estimates nor a signal for choosing updates. All updates follow the configured review schedule. The full log records review provenance, availability time, encoder hash, update-vector hash and before/after accumulator hashes. Exact reversal restores the previous float32 snapshot rather than relying on rounded subtraction.
+Every update is logged with its review provenance, availability time and before/after memory hashes, and can be reversed exactly by restoring the previous memory snapshot.
 
-**Interpretation.** There is supervised learning, but no encoder retraining or optimization loop for the HDC memory. Adding unlabelled records to a retrieval store is a different operation. The learning curves determine how strongly we can describe sample efficiency on these patterns; they do not establish it across telecom tasks.
+**Fit diagnostics.** There are {{ classifier_warning_count }} convergence warnings among the {{ classifier_fit_count }} final LR/MLP fits, and {{ selection_warning_count }} among {{ selection_fit_count }} validation-selection fits. Diagnostics and iteration counts are retained for every fit.
 
-## Experiment 4: how cheap is the complete operation?
+</details>
 
-**Question.** What does it cost to encode an episode, score it and update memory, and how much storage is used?
+## Experiment 4: what do prediction, learning and storage cost?
 
-**Setup.** One Torch/BLAS CPU thread; batch one; {{ warmup }} warm-up iterations and {{ benchmark_repeats }} measurements for prediction/addition per seed pair. More expensive classifier refits use {{ refit_warmup }} warm-ups and {{ refit_repeats }} measurements. The table reports the median of run medians and the median of run p95 measurements. The runtime is {{ runtime_platform }}, Python {{ runtime_python }}. Joins, geo selection and database writes are separate from these warm compute measurements.
+**Question.** How long does each method take to triage one incident, and to learn from newly reviewed incidents? How much storage does each representation need?
 
-![Measured CPU operation costs, with addition distinguished from the full operation](figures/compute.png)
+**How to read the timings.** Every time in this section is the elapsed wall-clock time of one complete call: nothing is divided by a batch size or averaged across reviews. Each call is repeated on one CPU thread with warm caches; we take its median within each of the {{ pair_count }} seed pairs, then report the median across pairs. The 95th percentile stays within {{ p95_overhead }}% of the median for every reported operation, so medians are representative; all p95 values are retained in `metrics.json`. Graph joins, geographic filtering and database work are excluded. Measurements come from one machine ({{ runtime_platform }}, Python {{ runtime_python }}), so compare them with each other rather than treating them as absolute serving latency.
 
-| Operation | Median of run medians | Median of run p95 |
-|---|---:|---:|
-{{ timing_rows }}
+### Predicting one incident
 
-HDC's raw accumulator uses {{ raw_vector_bytes }} bytes per episode; its search vector uses {{ search_vector_bytes }} bytes in float16. The LR/MLP input vector uses {{ model_input_bytes }} bytes in float32. Four HDC class accumulators use {{ class_memory_bytes }} bytes, before mappings, counters, audit history and exact-undo snapshots. These sizes describe representations, not the complete trained models. This dataset supports no compression claim.
+| Method | What one prediction involves | Time, ms |
+|---|---|---:|
+{{ prediction_rows }}
 
-Measured resource totals in the first fixed run:
+{{ prediction_finding }}
+
+{{ learning_update_explanation }}
+
+### Storage
+
+| Item | HDC | LR | MLP |
+|---|---:|---:|---:|
+| One encoded incident | {{ raw_vector_bytes }} B (float32); {{ search_vector_bytes }} B float16 search copy | {{ model_input_bytes }} B | {{ model_input_bytes }} B |
+| Learned state at {{ max_reviews_per_class }} reviews per class | {{ class_memory_bytes }} B (four class accumulators) | {{ lr_model_bytes }} B | {{ mlp_model_bytes }} B |
+| Earlier reviews kept for the next update | none | {{ review_buffer_bytes }} B | {{ review_buffer_bytes }} B |
+
+HDC needs far more storage per incident than the 21-number LR/MLP input; this study shows no compression benefit. In exchange, HDC's learned state is updated in place, while LR and the MLP must keep earlier reviews for retraining. Serialized LR/MLP sizes include estimator metadata and any fitted scaler; HDC's class-memory size excludes audit history, exact-undo snapshots and the encoder basis.
+
+<details>
+<summary>Supporting measurements: initial fits, pipeline stages and artifact sizes</summary>
+
+**Initial fit from scratch.** Median time to build each learner from its reviewed examples at every budget, once per run, excluding encoding and persistence. Model-selection compute is recorded separately in the frozen settings.
+
+| Reviews per class | HDC memory building, ms | LR fitting, ms | MLP fitting, ms |
+|---|---:|---:|---:|
+{{ fit_rows }}
+
+**Pipeline stages in the first run.** Encoding all episodes takes {{ encode_seconds }} s, persisting vectors and manifests {{ persistence_seconds }} s, and all validation/test geography gates plus independent checks {{ eligibility_seconds }} s. Median LanceDB retrieval is {{ lance_retrieval_ms }} ms; the matched in-memory HDC scoring-and-ranking median is {{ memory_retrieval_ms }} ms. These measure different layers and are not a speed contest.
+
+**Artifact sizes in the first run.** Directory totals include retained Lance versions and metadata. Tensor totals exclude Python objects, source tables, temporary allocations and audit history; peak process memory was not measured.
 
 | Resource | Size |
 |---|---:|
@@ -182,49 +247,27 @@ Measured resource totals in the first fixed run:
 | Lance vector store, raw/search vectors and manifests | {{ vector_store_mib }} MiB |
 | Lance source-record store | {{ source_store_mib }} MiB |
 
-LR and MLP trained estimators, including any fitted scalers, are saved and checked for identical predictions after reloading. Their serialized sizes and initial fit times are recorded separately at every review budget.
+</details>
 
-At {{ max_reviews_per_class }} reviews per class, median serialized estimator size is {{ lr_model_bytes }} bytes for LR and {{ mlp_model_bytes }} bytes for MLP. These include estimator metadata and any fitted scaling, but exclude the retained review buffer. That buffer uses {{ review_buffer_bytes }} bytes for the refit measurement. HDC's class tensor size also excludes audit history and encoder basis tensors.
+**Limits.** Incremental optimizers and warm starts could lower LR/MLP update cost; they were not evaluated, so these results do not show that conventional models must retrain from scratch. Near-real-time suitability also depends on the complete data path, which this study does not time.
 
-Observed median initial fit times across the seed grid, excluding encoding and persistence:
-
-| Reviews per class | HDC memory building, ms | LR fitting, ms | MLP fitting, ms |
-|---|---:|---:|---:|
-{{ fit_rows }}
-
-These initial fits are recorded once per run and budget; the repeated refit benchmark above supplies a separate measurement of incorporating a further review. Model-selection compute is recorded in the frozen settings and is not included in these initial fits.
-
-The directory totals include retained Lance versions and metadata. They describe these artifacts rather than an optimized storage comparison. Tensor totals exclude Python objects, source tables, temporary allocations and audit history; peak process memory was not measured.
-
-The first run encodes all episodes in {{ encode_seconds }} s, persists the vectors and manifests in {{ persistence_seconds }} s, and performs all validation/test geography gates plus independent checks in {{ eligibility_seconds }} s. LanceDB retrieval median is {{ lance_retrieval_ms }} ms; the matched in-memory HDC scoring-and-ranking median is {{ memory_retrieval_ms }} ms. They measure different layers and are not an implementation speed contest.
-
-**Interpretation.** The addition is cheap. For LR and MLP, review incorporation here means encoding the new incident, refitting on {{ refit_training_examples }} retained reviewed examples, then predicting it. HDC encodes, predicts with its existing class memory, and adds the new review. Those are different update strategies. Conventional incremental optimizers and warm starts could reduce refit cost; they are not evaluated here, so this comparison supports no general claim that conventional ML must retrain from scratch. The complete operation and alternative methods deserve equal attention. These are component measurements on one machine, without energy, production serving, spatial-index or ANN benchmarks. Near-real-time suitability requires an application latency budget and its complete data path.
-
-{{ learning_update_explanation }}
-
-## What this supports
+## Conclusions
 
 | Claim | Evidence | Boundary |
 |---|---|---|
 {{ claims_rows }}
 
-The simulator uses simple observed rules and deliberately balanced classes, with complete telemetry. This makes the mechanisms observable and supplies a compact feature table that conventional trained classifiers can use effectively. It does not demonstrate operational diagnosis, realistic class prevalence, continual adaptation under drift, robustness to missing telemetry, or coverage across new incident types. Those would need separate experiments.
+The simulator uses simple observed rules and deliberately balanced classes, with complete telemetry. This makes the mechanisms observable and supplies a compact feature table that conventional trained classifiers can use effectively. It does not demonstrate operational diagnosis, realistic class prevalence, adaptation under drift, robustness to missing telemetry, or coverage of new incident types.
 
 {{ geographic_enhancements }}
 
-## Takeaways
-
-In this controlled study, HDC combines role-sensitive, ordered representations with connected network evidence. Retrieval returns comparable earlier incidents with source records that can be inspected, and reviewed examples improve class memory through reversible additions while the encoder stays fixed.
-
-HDC performs well with few reviewed examples. Its advantage is clearest at the smallest label budgets; LR and the MLP become competitive as more reviews arrive. The results support composable representation and incremental memory building, with usefulness measured against familiar trained classifiers.
-
-The resource comparison depends on the update strategy and batch size. HDC incorporates individual reviews quickly, while LR batch retraining amortizes well and is cheaper per review at the largest measured batch. HDC uses more representation storage than the LR/MLP input vector. These findings apply to the simulated patterns and measured CPU workload; operational telemetry, missing data and drift remain untested.
+{{ future_work }}
 
 ## Reproduce and inspect
 
-Inspect the [source code]({{ source_link }}) for the implementation. Run `uv run src/prepare.py`, `uv run src/run.py`, then `uv run src/report.py` from the repository root. All three scripts use the paths in `src/settings.py`. The manifest records dependency versions, source checksums, configuration, encoder and code hashes, and all completed seed pairs. The committed metrics retain block-level results, per-class errors and repeated timing measurements. Reproducing a run generates the detailed predictions, review logs, retrieval errors, query edits and source witnesses locally. The active learning comparison uses trained LR and a small MLP.
+Inspect the [source code]({{ source_link }}) for the implementation. Run `uv run src/prepare.py`, `uv run src/run.py`, then `uv run src/report.py` from the repository root. All three scripts use the paths in `src/settings.py`. The manifest records dependency versions, source checksums, configuration, encoder and code hashes, and all completed seed pairs. The committed metrics retain block-level results, per-class errors and repeated timing measurements. Reproducing a run generates the detailed predictions, review logs, retrieval errors, query edits and source witnesses locally.
 
-The [LR](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) and [MLP](https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html) implementations come from locked scikit-learn 1.9.1. The encoder weighting was selected on separate validation worlds (data seeds 1001–1005) and frozen before this evaluation. The full study defaults now use fresh data seeds 1006–1010. These are new independent simulated worlds, not external carrier validation. The actual data seeds in this run are {{ data_seeds }}. LR/MLP settings use only this run's first data seed's validation worlds and are frozen before final testing.
+The [LR](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) and [MLP](https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html) implementations come from locked scikit-learn 1.9.1. The encoder weighting was selected on separate validation worlds (data seeds 1001–1005) and frozen before this evaluation. This run uses fresh data seeds {{ data_seeds }}: new independent simulated worlds, not external carrier validation. LR and the MLP receive 21 inputs: six connected measurements at each of three ordered observations, plus three handset-category indicators. Both are optimized with L-BFGS to a declared tolerance, not limited to one training pass. Their settings are selected separately at each review budget, using only this run's first data seed's validation worlds and averaging across three initialization seeds, then frozen before final testing.
 
 The declared search space uses LR C ∈ {0.1, 1, 10}, MLP hidden width ∈ {16, 32}, MLP alpha ∈ {0.001, 0.1}, and fixed physical range scaling or an additional training-fitted StandardScaler. C controls inverse L2 regularization strength; alpha controls MLP regularization. The HDC weighting is fixed throughout this run; no HDC variant search, additional feature engineering or test-based selection is performed. Only the active encoder is evaluated, alongside operator ablations that answer the representation questions. The frozen choices are:
 

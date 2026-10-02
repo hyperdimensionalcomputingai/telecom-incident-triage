@@ -6,7 +6,7 @@ Related figures are available under `runs/reports/figures/`.
 
 ## 1. First, what is happening in the telecom example?
 
-Imagine someone travelling with their phone. The phone connects wirelessly to the mobile network. That connection depends on several things:
+Imagine a commuter travelling with their phone. The phone connects wirelessly to the mobile network. That connection depends on several things:
 
 - **Subscriber:** the customer.
 - **Handset:** another word for the phone. Here, “handset model” means its product category, such as `model_0`.
@@ -59,6 +59,8 @@ Our running episode is `S1006-W18-E00-0`. Its phone is `model_0`. The values bel
 | Peer mean signal strength | Average wireless signal strength for the selected peers | −92.15 dBm | −81.89 dBm | −89.14 dBm |
 | Peer mean packet loss | Average loss reported by those peers | 1.24% | 0.95% | 0.25% |
 
+Peer loss almost equals link loss because, in this simulation, peers on the same link see its loss with small added noise.
+
 Two units need unpacking:
 
 - **dBm** measures signal power on a logarithmic scale. For this example, remember that **−80 dBm is stronger than −110 dBm**. Our phone’s signal is getting weaker.
@@ -73,18 +75,18 @@ The encoder organizes these facts into three components:
 | Component | Contents | Number of contributions |
 |---|---|---:|
 | Phone signal | Our phone’s signal strength at three times | 3 |
-| Connected network context | Cell load, link loss, link delay and two peer averages at three times | 15 |
+| Connected network context | Cell load, link loss, link latency and two peer averages at three times | 15 |
 | Handset model | The phone model, once | 1 |
 
 That gives us **19 contributions to one hypervector**.
 
 “Context” is one component built by bundling 15 measurement hypervectors: five measurements at each of three observation times.
 
-At each time, we collect cell load, backhaul packet loss, backhaul delay, peer average signal strength and peer average packet loss. Each measurement becomes **one bound hypervector term**. We repeat that at 0, 20 and 40 seconds.
+At each time, we collect cell load, backhaul packet loss, backhaul latency, peer average signal strength and peer average packet loss. Each measurement becomes **one bound hypervector term**. We repeat that at 0, 20 and 40 seconds.
 
 We repeat the measurements because the network’s condition can change during the episode. The observation-order permutation tags each term with its place in that sequence.
 
-**We are counting measurements, not network objects.** Even if the same link serves the phone throughout, its loss and delay at three times produce six terms.
+**We are counting measurements, not network objects.** Even if the same link serves the phone throughout, its loss and latency at three times produce six terms.
 
 And each peer **average** contributes one term—we don’t encode every peer separately.
 
@@ -92,12 +94,12 @@ And each peer **average** contributes one term—we don’t encode every peer se
 
 | At each observation time | Phone signal | Context |
 |---|---|---|
-| Measurements | Our phone’s signal strength | Cell load, link loss, link delay, peer average signal strength, peer average loss |
+| Measurements | Our phone’s signal strength | Cell load, link loss, link latency, peer average signal strength, peer average loss |
 | Terms per time | **1** | **5** |
 | Observation times | 3 | 3 |
 | Total terms per episode | **3** | **15** |
 
-**That asymmetry is a deliberate choice in this demo’s dataset and encoder. HDC doesn’t require it.** Phone signal and context classify facts by whose condition they describe. They don’t promise equally sized descriptions. Five is a selected feature set, not a property of connected data or HDC.
+**That asymmetry is a deliberate choice in this demo’s dataset and encoder. HDC doesn’t require it.** The split into phone signal and context groups facts by whose condition they describe: our phone, or the network it uses. It does not require the two groups to have the same number of terms. Five is a selected feature set, not a property of connected data or HDC.
 
 The **handset model** is the component that contributes only **one term for the entire episode**, because the phone model stays constant.
 
@@ -107,7 +109,7 @@ The **handset model** is the component that contributes only **one term for the 
 
 The encoder has two kinds of reusable hypervectors:
 
-1. **Seeded bipolar role and category hypervectors**, containing +1 and −1, for meanings such as “phone,” “signal strength,” “serving relationship” and “phone signal channel.” Their names and encoder seed determine them reproducibly.
+1. **Seeded bipolar role and category hypervectors**, containing +1 and −1, for meanings such as “phone,” “signal strength,” “serving relationship” and “phone signal channel.” A **channel** hypervector marks which of the three components a term belongs to. Their names and encoder seed determine them reproducibly.
 2. **32 correlated numeric level hypervectors**, numbered 0–31. Nearby levels are similar, so nearby measurements can remain similar.
 
 There is one shared numeric level family. Role-value binding distinguishes, for example, a signal-strength level from a packet-loss level.
@@ -130,7 +132,7 @@ The encoder uses **bucketing**: organize numerical values into bins over a fixed
 
 For a concrete measurement, the encoder:
 
-1. Maps it into its field’s fixed range.
+1. Computes its fractional position within its field’s fixed range.
 2. Clips that fraction to 0–1.
 3. Multiplies by 31 and rounds to select a bucket numbered 0–31.
 4. Selects that bucket’s level hypervector.
@@ -138,9 +140,9 @@ For a concrete measurement, the encoder:
 For a measurement $x$ of property $f$, with chosen bounds $a_f$ and $b_f$:
 
 $$
-s_f(x)=\operatorname{clip}\!\left(\frac{x-a_f}{b_f-a_f},0,1\right),
+s_f(x)=\mathrm{clip}\!\left(\frac{x-a_f}{b_f-a_f},0,1\right),
 \qquad
-q_f(x)=\operatorname{round}\!\left((K-1)s_f(x)\right),
+q_f(x)=\mathrm{round}\!\left((K-1)s_f(x)\right),
 \qquad K=32.
 $$
 
@@ -191,8 +193,8 @@ That is a position on the chosen **dBm scale**. It does **not** mean “74% sign
 **Only then do we choose a numeric bucket and its level hypervector.** There are 32 levels, indexed **0 through 31**. We map our fraction onto those indices:
 
 $$
-q_f(x)=\operatorname{round}(31\times0.740)
-=\operatorname{round}(22.94)=23.
+q_f(x)=\mathrm{round}(31\times0.740)
+=\mathrm{round}(22.94)=23.
 $$
 
 We therefore select $h_{\text{level},23}$, the level-23 hypervector. Our three phone measurements become buckets **23, 17 and 7**.
@@ -208,11 +210,11 @@ The sequence is:
 | Phone and peer signal strength | −125 to −65 dBm | A shared working range covering generated phone signals of roughly −116 to −75 dBm and peer signals of roughly −94 to −74 dBm, with headroom |
 | Cell load | 0–100% | The full percentage scale; generated loads cover only part of it |
 | Link and peer packet loss | 0–10% | Focuses the buckets on the simulated low-loss regime rather than the entire possible 0–100% interval |
-| Link delay | 0–120 ms | A nonnegative working range covering generated delays of 8–100 ms, with headroom |
+| Link latency | 0–120 ms | A nonnegative working range covering generated latencies of 8–100 ms, with headroom |
 
 These are modelling choices. The fixed bounds are not statistics fitted to the final dataset, and they do not calibrate connection quality.
 
-For signal strength, the 60 dB interval and 32 level centres give a spacing of $60/31\approx1.94$ dB. Wider bounds reduce resolution; narrower bounds increase clipping. Clipping makes all values beyond an endpoint equivalent, and rounding can make nearby measurements equivalent.
+For signal strength, the 60 dB-wide range (−125 to −65 dBm) and 32 level centres give a spacing of $60/31\approx1.94$ dB. Wider bounds reduce resolution; narrower bounds increase clipping. Clipping makes all values beyond an endpoint equivalent, and rounding can make nearby measurements equivalent.
 
 The same level family serves every numeric property. Binding each value to its property role distinguishes signal strength from packet loss, even if their scaled fractions coincide.
 
@@ -320,7 +322,7 @@ Here is where the second use of permutation appears.
 
 Before attaching observation order, the encoder rotates individual role hypervectors according to their position along a dependency path.
 
-**Yes—a path through the connected graph.** In this example:
+**A dependency path is a route through the connected graph.** In this example:
 
 **Phone → serving cell → backhaul link**
 
@@ -353,7 +355,7 @@ The peer extension describes other phones sharing the link. The source dataset s
 
 ### Why tag structural positions?
 
-**It makes the dependency path explicitly ordered, because binding by itself is commutative.** But “necessary” is too strong for this particular demo—we should distinguish the general reason from what the code actually needs.
+**It makes the dependency path explicitly ordered, because binding by itself is commutative.** Whether this demo actually needs the tags is a separate question, answered at the end of this section.
 
 Suppose we describe a relationship between a source and a destination by simply binding:
 
@@ -435,7 +437,7 @@ The property role gets the position of the object it describes:
 |---|---|
 | Cell load | $h_{\text{cell path}}\otimes\rho^2(h_{\text{load property}})$ |
 | Link packet loss | $h_{\text{link path}}\otimes\rho^4(h_{\text{link loss property}})$ |
-| Link delay | $h_{\text{link path}}\otimes\rho^4(h_{\text{link delay property}})$ |
+| Link latency | $h_{\text{link path}}\otimes\rho^4(h_{\text{link latency property}})$ |
 | Peer mean signal strength | $h_{\text{peer path}}\otimes\rho^6(h_{\text{peer radio property}})$ |
 | Peer mean packet loss | $h_{\text{peer path}}\otimes\rho^6(h_{\text{peer loss property}})$ |
 
@@ -444,7 +446,7 @@ Each row describes the role side of a **role-value pair**. Bind it to the select
 For example, our middle backhaul-loss measurement is 0.9478%. Its range is 0–10%, so it selects bucket 3:
 
 $$
-\operatorname{round}\left(31\times\frac{0.9478}{10}\right)=3.
+\mathrm{round}\left(31\times\frac{0.9478}{10}\right)=3.
 $$
 
 Its complete weighted contribution is:
@@ -515,7 +517,7 @@ h_{\text{handset}}
 =0.25\,
 h_{\text{handset channel}}
 \otimes h_{\text{handset property}}
-\otimes h_{\text{model\_0}}.
+\otimes h_{\text{model}\_0}.
 $$
 
 Here the role-value pair is the handset-model property role bound to the `model_0` value hypervector. The channel marker distinguishes this contribution from the numeric measurements.
@@ -551,7 +553,7 @@ Normalization happens after the complete bundle. In the code, `Encoder.encode()`
 For two represented episodes, cosine similarity can then be computed from their unit-length hypervectors:
 
 $$
-\operatorname{similarity}(\text{query},\text{candidate})
+\mathrm{similarity}(\text{query},\text{candidate})
 =\widehat h_{\text{query}}^{\mathsf T}\widehat h_{\text{candidate}}.
 $$
 
@@ -575,7 +577,7 @@ The complete construction is therefore:
 
 **Select connected facts → bucket values → bind role-value pairs and connected meanings → tag observation order → weight → bundle → normalize.**
 
-## Representation recap
+### Representation recap
 
 - **Three phone signal terms**, **fifteen context terms** and one handset term form three component hypervectors, then one episode hypervector. Term counts are not counts of network objects.
 - Every hypervector uses $h$ with a descriptive suffix. Binding uses $\otimes$, bundling uses $\oplus$ and permutation uses $\rho$.
@@ -691,7 +693,7 @@ That is the learning update. It changes the class memory while the property role
 Encode the new episode using the same frozen encoder, and normalize its complete hypervector. Compare it with each available class prototype:
 
 $$
-\operatorname{score}_y(\text{query})
+\mathrm{score}_y(\text{query})
 =\widehat h_{\text{query}}^{\mathsf T}h_{\text{class prototype},y}.
 $$
 
@@ -699,8 +701,8 @@ Prediction chooses the available class with the highest cosine similarity:
 
 $$
 \widehat y
-=\operatorname*{arg\,max}_{y\in\mathcal Y_{\text{reviewed}}}
-\operatorname{score}_y(\text{query}).
+=\arg\max_{y\in\mathcal Y_{\text{reviewed}}}
+\mathrm{score}_y(\text{query}).
 $$
 
 Here $\mathcal Y_{\text{reviewed}}$ contains only classes with at least one review. The score is a scalar cosine similarity, not a calibrated probability.
@@ -747,9 +749,9 @@ The implementation anchors for this final section are [the prototype learner and
 
 ## 17. Potential enhancements: more geographic capabilities
 
-**This demo only scratches the surface of GeoArrow and GeoDataFusion.** GeoArrow carries observation points with coordinate-system metadata. Lance applies the geographic and time filters, and GeoDataFusion independently checks that they select the same observations. LanceDB then ranks eligible episode hypervectors by cosine distance. These are distinct operations: geographic selection determines which incidents qualify; hypervector similarity compares their represented telecom patterns.
+**This demo only scratches the surface of GeoArrow and GeoDataFusion.** GeoArrow carries observation points with coordinate-system metadata. Lance applies the geographic and time filters, and GeoDataFusion independently checks that they select the same observations. LanceDB then ranks eligible episode hypervectors by cosine similarity, which it computes as a cosine distance. These are distinct operations: geographic selection determines which incidents qualify; hypervector similarity compares their represented telecom patterns.
 
-**Lance's type system is Arrow-native.** It uses Apache Arrow types and in-memory arrays, with support for extension-type metadata. This shared foundation lets us build on compatible developments across the larger Arrow ecosystem, including GeoArrow geometry types and GeoDataFusion spatial queries. The demo already checks that GeoArrow geometry and coordinate-system metadata survive the Lance round trip. Additional operations still need integration and validation in the relevant query engine; shared types do not automatically make every operation available inside Lance. [Lance data types](https://lance.org/guide/data_types/), [Lance schema and extension types](https://lance.org/format/table/schema/)
+**Lance's type system is Arrow-native.** It uses Apache Arrow types and in-memory arrays, with support for extension-type metadata. This shared foundation lets us build on compatible developments across the larger Arrow ecosystem, including GeoArrow geometry types and GeoDataFusion spatial queries. The demo already checks that GeoArrow geometry and coordinate-system metadata survive the Lance round trip. Additional operations still need integration and validation in the relevant query engine; shared types do not automatically make every operation available inside Lance. See [Lance data types](https://lance.org/guide/data_types/) and [Lance schema and extension types](https://lance.org/format/table/schema/).
 
 Potential extensions include:
 
@@ -757,4 +759,4 @@ Potential extensions include:
 - **Spatial joins with GeoDataFusion.** Match observations to service-area polygons using containment or intersection, then count or summarize incidents by area. These queries would extend its current role as an independent filter check. [GeoDataFusion spatial relationships](https://github.com/datafusion-contrib/geodatafusion#spatial-relationships)
 - **Distance-based candidate selection.** Use geometry distance to select observations near a road or infrastructure location, or to support a geographic-radius filter. GeoDataFusion supports `ST_Distance`; a metre-based query would first require geometries in an appropriate coordinate system whose units are metres. Our current longitude/latitude geometry calculations use angular units. [GeoDataFusion measurement functions](https://github.com/datafusion-contrib/geodatafusion#measurement-functions)
 
-For example, a future query could **find incidents within 500 metres of a location, apply the time and earlier-memory filters, then rank their hypervectors by similarity in LanceDB**. That would extend candidate selection while reusing the existing encoder and prototype learner. Geography could remain outside the hypervector; adding geographic features to the encoding would be a separate modelling choice.
+For example, a future query could **find incidents within 500 metres of a location, apply the time filter and keep only earlier incidents in memory, then rank their hypervectors by similarity in LanceDB**. That would extend candidate selection while reusing the existing encoder and prototype learner. Geography could remain outside the hypervector; adding geographic features to the encoding would be a separate modelling choice.

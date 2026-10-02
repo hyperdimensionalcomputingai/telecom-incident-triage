@@ -9,7 +9,7 @@ The experiments examine four questions:
 - **Representation:** Do roles, event order and network connectivity change the meaning of an encoded incident?
 - **Retrieval and evidence:** Can it find comparable earlier incidents and return the source records supporting the comparison?
 - **Learning:** How useful does class memory become as reviewed examples arrive, and when do updates help or hurt?
-- **Resources:** What do encoding, prediction, learning updates, retrieval and storage cost, including the cost per new review?
+- **Resources:** How long do prediction and learning from new reviews take, and how much storage does each representation need?
 
 The Python files live directly in [src/](src/).
 
@@ -42,10 +42,13 @@ Edit the templates, then run `uv run src/report.py` for a completed run to rebui
 
 Read the [illustrated results summary](runs/reports/summary.md) for the encoder equations, graph schema, experiments and findings. The latest [aggregate results](runs/summary.json) and [detailed metrics](runs/metrics.json) are committed with their configuration and provenance; datasets, vectors and individual prediction traces are regenerated locally.
 
-- Roles, order and connectivity matter; retrieved comparisons resolve to retained source evidence.
-- HDC retrieval achieves **96.3% precision@5**, with source records supporting each returned comparison.
-- At five reviews per class, HDC, LR and MLP achieve **96.5%, 94.8% and 96.3% macro F1**; the paired intervals do not establish an HDC advantage at this budget.
-- HDC memory updates are immediate additions. Batch retraining amortizes well for LR; these measurements show no universal compute advantage or HDC storage saving.
+**Where HDC adds value**
+
+- **Learns from very few reviews.** With one review per class, HDC scores 7–9 points higher macro F1 than LR and the MLP (82.3% versus 74.9% and 73.4%).
+- **Learning from a new review costs almost nothing, and the cost does not grow.** About 0.13 ms per review, versus about 3.7 ms to retrain LR and 40 ms to retrain the MLP on every update; retraining time also grows with the training set.
+- **Finds comparable incidents and shows why.** 96.3% precision@5 (random: 25%), and every similarity score breaks down into contributions traceable to source records.
+
+**Tradeoffs:** hypervectors need far more storage than raw measurements, and from five reviews per class all three methods are on par. See the summary's [key findings](runs/reports/summary.md#key-findings).
 
 These findings concern controlled synthetic patterns, and do not represent the operational carrier performance of any real provider. The run times reported in the results depend on the machine being used, so use them as guidance only.
 

@@ -1,42 +1,25 @@
-### Next evaluation: per-sample incremental learning versus batch retraining
+### Learning from newly reviewed incidents
 
-**Question.** Starting from the same reviewed history, how much compute and latency does each method need to incorporate newly reviewed incidents? This requested follow-up is now a completed experiment.
+**Setup.** Every method starts from the same {{ initial_reviews }} reviewed incidents ({{ max_reviews_per_class }} per class). A batch of {{ batch_sizes }} later reviews then arrives, using the same review IDs for every method. Each method encodes the new incidents, learns from their labels, and predicts them with the updated memory or model. The timer covers all three steps.
 
-**Setup.** Each measurement starts with {{ initial_reviews }} reviewed incidents ({{ max_reviews_per_class }} per class), using the same review IDs across methods. Batches contain {{ batch_sizes }} chronologically later memory-partition reviews. For each batch, every method encodes the new incidents, incorporates their labels, then predicts that batch with the updated memory or model. Final-test and validation reviews do not participate.
+The methods learn differently. HDC adds each new hypervector to its class memory and never revisits earlier reviews. LR and the MLP have no incremental update in this setup, so they are retrained once on every retained review: {{ refit_sizes }} examples, with the frozen settings. Each of the {{ refit_repeats }} measured repetitions (after {{ refit_warmup }} warm-ups) starts from the same state.{{ batch_coverage }}
 
-HDC normalizes each new hypervector and adds it to the labelled class accumulator; it does not revisit earlier incidents or optimize an encoder. LR and the MLP reuse the retained earlier feature vectors and perform **one full L-BFGS refit per arriving batch**, on the initial reviews plus that batch, with the already frozen regularization and model settings. Twenty new reviews therefore mean one refit on {{ reviews_after_twenty }} reviews, rather than twenty separate refits; forty mean one refit on {{ reviews_after_forty }}.
+![Total time to learn from a batch of newly reviewed incidents](figures/learning-updates.png)
 
-Each repetition resets to the same starting state. Initial fitting and HDC state restoration occur outside the timer. All methods use one Torch/BLAS CPU thread, {{ refit_warmup }} warm-up repetitions and {{ refit_repeats }} measured repetitions per batch and seed pair, with a warm encoder cache. The measurements include feature/vector encoding, learning, and prediction; joins, geographic eligibility, audit persistence and database work remain separate. {{ batch_coverage }}
+Total time to encode, learn from and predict the whole batch:
 
-For $B$ new reviews and $N$ previously reviewed incidents, the measured operations are:
-
-$$
-T_{\mathrm{HDC}}(B)=T_{\mathrm{encode}}(B)+T_{\mathrm{normalize+add}}(B)+T_{\mathrm{predict}}(B),
-$$
-
-$$
-T_{\mathrm{LR/MLP}}(N,B)=T_{\mathrm{encode}}(B)+T_{\mathrm{refit}}(N+B)+T_{\mathrm{predict}}(B),
-\qquad t_{\mathrm{per\ new\ review}}=\frac{T(N,B)}{B}.
-$$
-
-The per-review number for LR/MLP is **amortized batch cost**. It is not the time to update immediately when each sample arrives; collecting a batch introduces a waiting time that this compute benchmark does not measure. For HDC, the same additions can be applied one review at a time without waiting for a batch. The delayed-feedback experiment demonstrates that separate behaviour.
-
-**Result.** Total wall latency and amortized cost per new review, reported as the median of seed-pair medians. The p95 column is the median of seed-pair p95 measurements; it is descriptive timing variation, not an independent-world confidence interval. Process CPU time measures CPU work during the complete operation alongside elapsed wall time.
-
-![Complete batch latency and amortized cost per newly reviewed incident](figures/learning-updates.png)
-
-| New reviews | Learning method | Reviews after update | Total wall, ms | Wall p95, ms | Wall per new review, ms | CPU per new review, ms |
-|---:|---|---:|---:|---:|---:|---:|
+| New reviews | HDC addition, ms | LR retraining, ms | MLP retraining, ms |
+|---:|---:|---:|---:|
 {{ learning_update_rows }}
 
-The corresponding stage costs per new review are:
+Where that time goes when a single review arrives:
 
-| New reviews | Learning method | Encoding, ms | Addition or refit, ms | Prediction, ms |
-|---:|---|---:|---:|---:|
+| Method | Encode, ms | Learn, ms | Predict, ms | Total, ms |
+|---|---:|---:|---:|---:|
 {{ learning_update_stage_rows }}
 
 {{ learning_update_finding }}
 
-Stage medians need not sum exactly to the median complete-operation latency. Raw repeated measurements and fit diagnostics are retained under `resources.learning_updates` in every pair's `results.json`. Timed HDC updates must exactly match a complete reconstruction from the initial and newly reviewed hypervectors; those checks occur outside the timer. There are {{ refit_warning_count }} convergence-warning refits among the measured batch repetitions; diagnostics are retained rather than silently discarded.
+A batch total divided by its size gives a throughput figure, but no review experiences that time: with retraining, every review in the batch waits until the whole retraining finishes, plus however long the batch took to collect. We therefore report batch totals only.
 
-**Interpretation.** This compares additive HDC class-memory updates with these implementations' full batch retraining strategy, including the cost of encoding new incidents. It does not benchmark incremental SGD, warm starts, cached encoder-free updates, energy or a production pipeline. HDC's update work depends on the incoming hypervectors and fixed class memory, while a batch refit consumes the growing retained review set. Because the initial history is fixed at {{ initial_reviews }} reviews, the experiment measures the requested batch costs; it does not establish a scaling law over arbitrarily large training histories.
+Stage medians need not sum exactly to the total. HDC updates are checked against a complete reconstruction, outside the timer. {{ refit_warning_count }} measured retraining runs raised convergence warnings; diagnostics and raw timings are in each pair's `results.json`. With the starting history fixed at {{ initial_reviews }} reviews, these results do not show how retraining cost scales with much larger histories.

@@ -72,7 +72,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 6.460291013354436,
+          "fit_ms": 7.472041994333267,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -85,7 +85,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 0.9713750041555613,
+          "fit_ms": 0.9971669933293015,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -98,7 +98,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 0.8194159890990704,
+          "fit_ms": 1.011290994938463,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -133,7 +133,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.4287499943748116,
+          "fit_ms": 1.7085830040741712,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -146,7 +146,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.3615829811897129,
+          "fit_ms": 1.418125000782311,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -159,7 +159,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.4696670114062726,
+          "fit_ms": 1.3684169971384108,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -194,7 +194,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 0.9137919987551868,
+          "fit_ms": 0.8419170044362545,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -207,7 +207,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 0.8302920032292604,
+          "fit_ms": 0.8315410232171416,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -220,7 +220,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 0.8162909944076091,
+          "fit_ms": 0.8277080196421593,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -255,7 +255,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.2904590112157166,
+          "fit_ms": 1.2301249953452498,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -268,7 +268,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.1587920016609132,
+          "fit_ms": 1.2007500045001507,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -281,7 +281,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.18862499948591,
+          "fit_ms": 1.38266701833345,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -316,7 +316,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.2755840143654495,
+          "fit_ms": 1.2789579923264682,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -329,7 +329,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.2854580127168447,
+          "fit_ms": 1.273333007702604,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -342,7 +342,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.4297079760581255,
+          "fit_ms": 1.2992080010008067,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -377,7 +377,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.3281250139698386,
+          "fit_ms": 1.3423330092336982,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -390,7 +390,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.3038749748375267,
+          "fit_ms": 1.3276249810587615,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -403,7 +403,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.248750020749867,
+          "fit_ms": 1.5229999844450504,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -439,7 +439,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 8.347416005562991,
+          "fit_ms": 8.241750008892268,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -451,7 +451,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 5.178166989935562,
+          "fit_ms": 5.062083015218377,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -463,7 +463,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 11.163749994011596,
+          "fit_ms": 10.650250012986362,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -498,7 +498,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 5.056750000221655,
+          "fit_ms": 4.998666991014034,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -510,7 +510,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 4.718583018984646,
+          "fit_ms": 4.188958992017433,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -522,7 +522,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 4.774041997734457,
+          "fit_ms": 4.438874981133267,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -557,7 +557,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 3.762417007237673,
+          "fit_ms": 3.500582999549806,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -569,7 +569,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 9.19137499295175,
+          "fit_ms": 7.9984999902080745,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -581,7 +581,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 3.971041995100677,
+          "fit_ms": 3.5029590071644634,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -616,7 +616,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 5.6545409897807986,
+          "fit_ms": 4.9237080093007535,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -628,7 +628,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 5.834040988702327,
+          "fit_ms": 5.279624980175868,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -640,7 +640,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 4.831665981328115,
+          "fit_ms": 4.577582993078977,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -675,7 +675,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 9.41083300858736,
+          "fit_ms": 7.969832979142666,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -687,7 +687,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 14.472041017143056,
+          "fit_ms": 11.855333024868742,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -699,7 +699,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 7.840415986720473,
+          "fit_ms": 6.544417003169656,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -734,7 +734,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 6.278167013078928,
+          "fit_ms": 5.753459001425654,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -746,7 +746,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 6.504999997559935,
+          "fit_ms": 5.501874984474853,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -758,7 +758,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 5.978917004540563,
+          "fit_ms": 5.265834013698623,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -793,7 +793,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 15.221915993606672,
+          "fit_ms": 13.783999980660155,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -805,7 +805,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 18.049250007607043,
+          "fit_ms": 15.414374996908009,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -817,7 +817,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 5.933000007644296,
+          "fit_ms": 5.261208978481591,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -852,7 +852,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 6.488624989287928,
+          "fit_ms": 5.737957981182262,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -864,7 +864,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 8.687957975780591,
+          "fit_ms": 7.889458007412031,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -876,7 +876,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 9.424874995602295,
+          "fit_ms": 8.562833972973749,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -910,7 +910,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 2.1312499884516,
+          "fit_ms": 4.350916016846895,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -923,7 +923,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.3782079913653433,
+          "fit_ms": 1.5891250222921371,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -936,7 +936,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.5795000072102994,
+          "fit_ms": 1.3900000194553286,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -975,7 +975,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 2.0421250083018094,
+          "fit_ms": 1.941833004821092,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -988,7 +988,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 2.2951249848119915,
+          "fit_ms": 1.8957499996758997,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -1001,7 +1001,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 2.070208021905273,
+          "fit_ms": 1.626583019969985,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -1040,7 +1040,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.4877919747959822,
+          "fit_ms": 1.1190829973202199,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -1053,7 +1053,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.1252920085098594,
+          "fit_ms": 1.0932919976767153,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -1066,7 +1066,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.1682499898597598,
+          "fit_ms": 1.0895000013988465,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -1105,7 +1105,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 2.2842499893158674,
+          "fit_ms": 2.4309169966727495,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -1118,7 +1118,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 2.2549589921254665,
+          "fit_ms": 2.066999993985519,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -1131,7 +1131,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 2.220166992628947,
+          "fit_ms": 2.0320409967098385,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -1170,7 +1170,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.6851250256877393,
+          "fit_ms": 1.6899160109460354,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -1183,7 +1183,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.6359169967472553,
+          "fit_ms": 1.689708005869761,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -1196,7 +1196,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.7442080134060234,
+          "fit_ms": 1.7943750135600567,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -1235,7 +1235,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.5966659993864596,
+          "fit_ms": 1.4898749941494316,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -1248,7 +1248,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.6941659850999713,
+          "fit_ms": 1.4392920129466802,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -1261,7 +1261,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.633917010622099,
+          "fit_ms": 1.4439999940805137,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -1301,7 +1301,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 14.938874985091388,
+          "fit_ms": 14.58812499186024,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -1313,7 +1313,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 17.67849997850135,
+          "fit_ms": 16.797082993434742,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -1325,7 +1325,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 10.480500000994653,
+          "fit_ms": 10.322292015189305,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -1364,7 +1364,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 5.600208998657763,
+          "fit_ms": 5.670292011927813,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -1376,7 +1376,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 4.87354100914672,
+          "fit_ms": 4.8176670097745955,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -1388,7 +1388,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 3.710333025082946,
+          "fit_ms": 3.8518329965882003,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -1427,7 +1427,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 9.359874995425344,
+          "fit_ms": 9.24358400516212,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -1439,7 +1439,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 10.259500006213784,
+          "fit_ms": 10.18733301316388,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -1451,7 +1451,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 5.796083016321063,
+          "fit_ms": 5.825166997965425,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -1490,7 +1490,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 12.66141698579304,
+          "fit_ms": 12.41541700437665,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -1502,7 +1502,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 7.530874980147928,
+          "fit_ms": 7.448041986208409,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -1514,7 +1514,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 10.969958995701745,
+          "fit_ms": 10.342416993808001,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -1553,7 +1553,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 14.306041994132102,
+          "fit_ms": 14.20904099359177,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -1565,7 +1565,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 14.79712498257868,
+          "fit_ms": 14.776208001421764,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -1577,7 +1577,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 19.638291996670887,
+          "fit_ms": 19.452624983387068,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -1616,7 +1616,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 5.094583990285173,
+          "fit_ms": 5.016124981921166,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -1628,7 +1628,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 8.932374999858439,
+          "fit_ms": 8.771708002313972,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -1640,7 +1640,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 8.084458007942885,
+          "fit_ms": 8.123042003717273,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -1679,7 +1679,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 10.382165986811742,
+          "fit_ms": 10.36866701906547,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -1691,7 +1691,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 16.342291986802593,
+          "fit_ms": 16.27208397258073,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -1703,7 +1703,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 15.158250025706366,
+          "fit_ms": 14.966084010666236,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -1742,7 +1742,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 12.360125023405999,
+          "fit_ms": 12.265541998203844,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -1754,7 +1754,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 16.313959000399336,
+          "fit_ms": 16.3522909861058,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -1768,7 +1768,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 15.260416985256597,
+          "fit_ms": 15.107707993593067,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -1806,7 +1806,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.802250015316531,
+          "fit_ms": 1.7519170069135725,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -1819,7 +1819,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.8255409959238023,
+          "fit_ms": 1.7914999916683882,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -1832,7 +1832,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.8653329752851278,
+          "fit_ms": 1.6956670151557773,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -1883,7 +1883,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.0314579994883388,
+          "fit_ms": 1.0444170038681477,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -1896,7 +1896,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.1485829891171306,
+          "fit_ms": 1.047208992531523,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -1909,7 +1909,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.459833001717925,
+          "fit_ms": 1.043541997205466,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -1960,7 +1960,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.9271250057499856,
+          "fit_ms": 1.0354580008424819,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -1973,7 +1973,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 2.200416987761855,
+          "fit_ms": 0.9919159929268062,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -1986,7 +1986,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.8903750169556588,
+          "fit_ms": 0.9830420021899045,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -2037,7 +2037,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.9116250041406602,
+          "fit_ms": 1.2033749953843653,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -2050,7 +2050,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.757374993758276,
+          "fit_ms": 1.2862500152550638,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -2063,7 +2063,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.4372500008903444,
+          "fit_ms": 1.1790840071626008,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -2114,7 +2114,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 2.3800000199116766,
+          "fit_ms": 1.9266670278739184,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -2127,7 +2127,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 2.5212079926859587,
+          "fit_ms": 1.9681249978020787,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -2140,7 +2140,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 3.263333986978978,
+          "fit_ms": 1.9972919835709035,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -2191,7 +2191,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.647208002395928,
+          "fit_ms": 1.2936250132042915,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -2204,7 +2204,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.4915420033503324,
+          "fit_ms": 1.4035830099601299,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -2217,7 +2217,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.5687090053688735,
+          "fit_ms": 1.2908329954370856,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -2269,7 +2269,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 16.578165988903493,
+          "fit_ms": 15.515750012127683,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -2281,7 +2281,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 13.187249976908788,
+          "fit_ms": 12.728833011351526,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -2293,7 +2293,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 31.300958013162017,
+          "fit_ms": 29.861707997042686,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -2344,7 +2344,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 8.38129100156948,
+          "fit_ms": 8.066582988249138,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -2356,7 +2356,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 8.73549998505041,
+          "fit_ms": 8.07587499730289,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -2368,7 +2368,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 5.656707973685116,
+          "fit_ms": 5.191125004785135,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -2419,7 +2419,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 20.476958015933633,
+          "fit_ms": 19.969125016359612,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -2433,7 +2433,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 9.989874990424141,
+          "fit_ms": 9.333499998319894,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -2445,7 +2445,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 13.22270801756531,
+          "fit_ms": 12.96379099949263,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -2496,7 +2496,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 17.428542021661997,
+          "fit_ms": 17.281125008594245,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -2508,7 +2508,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 14.619916008086875,
+          "fit_ms": 14.036125008715317,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -2520,7 +2520,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 19.435333990259096,
+          "fit_ms": 18.719167012022808,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -2571,7 +2571,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 31.792291993042454,
+          "fit_ms": 30.706874997122213,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -2583,7 +2583,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 34.68258399516344,
+          "fit_ms": 33.869666018290445,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -2595,7 +2595,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 34.903708001365885,
+          "fit_ms": 33.965000009629875,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -2646,7 +2646,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 9.209416020894423,
+          "fit_ms": 8.999249985208735,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -2658,7 +2658,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 10.773834015708417,
+          "fit_ms": 10.347333998652175,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -2670,7 +2670,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 9.813917014980689,
+          "fit_ms": 9.658958006184548,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -2721,7 +2721,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 39.83641698141582,
+          "fit_ms": 38.432625005953014,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -2733,7 +2733,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 38.64091698778793,
+          "fit_ms": 31.786833016667515,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -2745,7 +2745,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 51.795124978525564,
+          "fit_ms": 50.28795902035199,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -2796,7 +2796,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 22.095416992669925,
+          "fit_ms": 21.581250010058284,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -2808,7 +2808,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 36.26033398904838,
+          "fit_ms": 35.497000004397705,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -2820,7 +2820,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 50.43887501233257,
+          "fit_ms": 44.86266599269584,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -2870,7 +2870,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.3111250009387732,
+          "fit_ms": 0.9717920038383454,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -2883,7 +2883,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.3675420195795596,
+          "fit_ms": 0.881417014170438,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -2896,7 +2896,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.0447079839650542,
+          "fit_ms": 0.8725409861654043,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -2967,7 +2967,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.4768750115763396,
+          "fit_ms": 1.1224170157220215,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -2980,7 +2980,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.7513329803477973,
+          "fit_ms": 1.311374973738566,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -2993,7 +2993,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.3748339843004942,
+          "fit_ms": 1.36133300838992,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -3064,7 +3064,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.6623749979771674,
+          "fit_ms": 1.4466250140685588,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -3077,7 +3077,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.6495409945491701,
+          "fit_ms": 1.3677919923793525,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -3090,7 +3090,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.5993750130292028,
+          "fit_ms": 1.4917499793227762,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -3161,7 +3161,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.4697080187033862,
+          "fit_ms": 1.2885420001111925,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -3174,7 +3174,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.7347910034004599,
+          "fit_ms": 1.2806249724235386,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -3187,7 +3187,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.8467500049155205,
+          "fit_ms": 1.449249975848943,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -3258,7 +3258,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 3.1584170064888895,
+          "fit_ms": 2.7025830058846623,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -3271,7 +3271,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 2.8689579921774566,
+          "fit_ms": 2.641625003889203,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -3284,7 +3284,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 3.2864160020835698,
+          "fit_ms": 2.6920420059468597,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -3355,7 +3355,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 2.6884170074481517,
+          "fit_ms": 2.03108400455676,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -3368,7 +3368,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 2.4975420092232525,
+          "fit_ms": 2.11912501254119,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -3381,7 +3381,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 2.4404999858234078,
+          "fit_ms": 2.0957090018782765,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -3453,7 +3453,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 13.708040991332382,
+          "fit_ms": 11.886042018886656,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -3465,7 +3465,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 16.7990829795599,
+          "fit_ms": 15.103415993507951,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -3477,7 +3477,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 13.67504199151881,
+          "fit_ms": 11.739208013750613,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -3548,7 +3548,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 7.315416005440056,
+          "fit_ms": 6.704416999127716,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -3560,7 +3560,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 6.816709006670862,
+          "fit_ms": 6.453124980907887,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -3572,7 +3572,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 9.12991599761881,
+          "fit_ms": 8.678709011292085,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -3643,7 +3643,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 22.71087499684654,
+          "fit_ms": 21.314082987373695,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -3655,7 +3655,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 17.362166981911287,
+          "fit_ms": 16.33958300226368,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -3667,7 +3667,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 14.417083992157131,
+          "fit_ms": 13.61670801998116,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -3738,7 +3738,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 36.87224999885075,
+          "fit_ms": 35.80854201572947,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -3750,7 +3750,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 49.354624992702156,
+          "fit_ms": 63.2153750048019,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -3762,7 +3762,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 37.720833002822474,
+          "fit_ms": 37.271374982083216,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -3833,7 +3833,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 24.600792006822303,
+          "fit_ms": 23.484458011807874,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -3845,7 +3845,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 18.947500007925555,
+          "fit_ms": 18.634250009199604,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -3857,7 +3857,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 21.652249997714534,
+          "fit_ms": 21.416582982055843,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -3928,7 +3928,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 13.768042001174763,
+          "fit_ms": 13.450958009343594,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -3940,7 +3940,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 14.424166991375387,
+          "fit_ms": 12.513041991041973,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -3952,7 +3952,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 18.80116600659676,
+          "fit_ms": 18.031292012892663,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -4023,7 +4023,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 61.93941697711125,
+          "fit_ms": 61.19725000462495,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -4035,7 +4035,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 19.541374989785254,
+          "fit_ms": 19.40362498862669,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -4047,7 +4047,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 28.973250009585172,
+          "fit_ms": 28.851334005594254,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -4118,7 +4118,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 81.81883400538936,
+          "fit_ms": 83.05637500598095,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -4130,7 +4130,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 56.686833006097004,
+          "fit_ms": 58.79725000704639,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -4142,7 +4142,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 94.80391599936411,
+          "fit_ms": 95.3268329903949,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -4212,7 +4212,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.308042003074661,
+          "fit_ms": 1.3491249992512167,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -4225,7 +4225,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.1453749903012067,
+          "fit_ms": 1.1881249956786633,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -4238,7 +4238,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.1204170004930347,
+          "fit_ms": 1.1659589945338666,
           "parameters": {
             "C": 0.1,
             "scaling": "fixed_range"
@@ -4349,7 +4349,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.578833005623892,
+          "fit_ms": 1.8037080008070916,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -4362,7 +4362,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.5749160083942115,
+          "fit_ms": 1.5876670076977462,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -4375,7 +4375,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.4974170189816505,
+          "fit_ms": 1.656000007642433,
           "parameters": {
             "C": 0.1,
             "scaling": "standard"
@@ -4486,7 +4486,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.7669579829089344,
+          "fit_ms": 1.8025000172201544,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -4499,7 +4499,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.8472909869160503,
+          "fit_ms": 1.7832920129876584,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -4512,7 +4512,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.813791983295232,
+          "fit_ms": 1.7647499917075038,
           "parameters": {
             "C": 1.0,
             "scaling": "fixed_range"
@@ -4623,7 +4623,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.4843749813735485,
+          "fit_ms": 1.633582985959947,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -4636,7 +4636,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.3344170001801103,
+          "fit_ms": 1.4969169860705733,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -4649,7 +4649,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.4802090008743107,
+          "fit_ms": 1.3625409919768572,
           "parameters": {
             "C": 1.0,
             "scaling": "standard"
@@ -4760,7 +4760,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 2.975833020173013,
+          "fit_ms": 3.016250004293397,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -4773,7 +4773,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 3.1337910040747374,
+          "fit_ms": 3.0033329967409372,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -4786,7 +4786,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 2.872499986551702,
+          "fit_ms": 3.108375007286668,
           "parameters": {
             "C": 10.0,
             "scaling": "fixed_range"
@@ -4897,7 +4897,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 1.7560420092195272,
+          "fit_ms": 1.7943750135600567,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -4910,7 +4910,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.8373750208411366,
+          "fit_ms": 1.767375011695549,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -4923,7 +4923,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 1.7892910109367222,
+          "fit_ms": 1.7704170022625476,
           "parameters": {
             "C": 10.0,
             "scaling": "standard"
@@ -5035,7 +5035,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 17.976874980377033,
+          "fit_ms": 18.062791001284495,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -5047,7 +5047,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 12.103999993996695,
+          "fit_ms": 12.161999999079853,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -5059,7 +5059,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 25.593166996259242,
+          "fit_ms": 25.753166002687067,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -5170,7 +5170,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 5.359415983548388,
+          "fit_ms": 5.370625003706664,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -5182,7 +5182,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 5.6690000055823475,
+          "fit_ms": 5.570000008447096,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -5194,7 +5194,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 7.032624998828396,
+          "fit_ms": 6.988167006056756,
           "parameters": {
             "width": 16,
             "alpha": 0.001,
@@ -5305,7 +5305,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 24.60350000183098,
+          "fit_ms": 24.770792020717636,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -5317,7 +5317,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 30.924958002287894,
+          "fit_ms": 30.871750001097098,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -5329,7 +5329,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 33.44091700273566,
+          "fit_ms": 33.148417016491294,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -5440,7 +5440,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 17.68616700428538,
+          "fit_ms": 17.631417023949325,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -5452,7 +5452,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 22.4148329871241,
+          "fit_ms": 22.52800000132993,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -5464,7 +5464,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 29.60700000403449,
+          "fit_ms": 29.583166993688792,
           "parameters": {
             "width": 16,
             "alpha": 0.1,
@@ -5575,7 +5575,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 18.408333999104798,
+          "fit_ms": 18.514584022341296,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -5587,7 +5587,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 46.40587497851811,
+          "fit_ms": 46.305625000968575,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -5599,7 +5599,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 24.613542016595602,
+          "fit_ms": 24.87299998756498,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -5710,7 +5710,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 13.85916699655354,
+          "fit_ms": 13.964708021376282,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -5722,7 +5722,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 9.054499998455867,
+          "fit_ms": 9.048917010659352,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -5734,7 +5734,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 9.764249989530072,
+          "fit_ms": 9.78470899281092,
           "parameters": {
             "width": 32,
             "alpha": 0.001,
@@ -5845,7 +5845,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 43.38179202750325,
+          "fit_ms": 43.53225001250394,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -5857,7 +5857,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 47.69954099901952,
+          "fit_ms": 47.72620802395977,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -5869,7 +5869,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 37.81491701374762,
+          "fit_ms": 37.929416983388364,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -5980,7 +5980,7 @@
       ],
       "fit_diagnostics": [
         {
-          "fit_ms": 41.94041699520312,
+          "fit_ms": 41.8522079999093,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -5992,7 +5992,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 41.42883300664835,
+          "fit_ms": 41.466333001153544,
           "parameters": {
             "width": 32,
             "alpha": 0.1,
@@ -6004,7 +6004,7 @@
           "other_warnings": []
         },
         {
-          "fit_ms": 35.94629198778421,
+          "fit_ms": 36.06662500533275,
           "parameters": {
             "width": 32,
             "alpha": 0.1,

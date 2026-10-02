@@ -1,6 +1,8 @@
 """Readable evidence, exportable figures, and measured claim boundaries."""
 
+import collections
 import json
+import math
 import os
 import re
 import statistics
@@ -31,6 +33,13 @@ PATTERNS = {
 }
 
 
+UPDATE_METHODS = ("hdc", "logistic_regression", "mlp")
+UPDATE_NAMES = {
+    "hdc": "HDC addition",
+    "logistic_regression": "LR retraining",
+    "mlp": "MLP retraining",
+}
+
 REPORT_TEMPLATES = ROOT / "docs" / "report-templates"
 PLACEHOLDER = re.compile(r"\{\{\s*([a-z][a-z0-9_]*)\s*\}\}")
 
@@ -55,6 +64,41 @@ def percent(value):
 
 def interval_text(value):
     return f"{percent(value['mean'])} [{percent(value['lower'])}, {percent(value['upper'])}]"
+
+
+def timing_median(results, key, metric="median_ms"):
+    """Median across seed pairs of one per-call benchmark."""
+    return statistics.median(result["resources"]["timings"][key][metric] for result in results)
+
+
+def update_rows(results, method, batch):
+    return [
+        row
+        for result in results
+        for row in result["resources"]["learning_updates"]["rows"]
+        if row["method"] == method and row["batch_size"] == batch
+    ]
+
+
+def update_median(results, method, batch, stage="complete_wall_ms", metric="median_ms"):
+    """Median across seed pairs of the raw (not per-review) batch timing."""
+    return statistics.median(
+        row["timings"][stage][metric] for row in update_rows(results, method, batch)
+    )
+
+
+def update_batches(results):
+    return sorted(
+        {
+            row["batch_size"]
+            for result in results
+            for row in result["resources"]["learning_updates"]["rows"]
+        }
+    )
+
+
+def ms(value):
+    return f"{value:.3f}" if value < 10 else f"{value:.1f}"
 
 
 def figure_style():
@@ -363,89 +407,42 @@ def make_figures(root, summary, results, case, config, geography_root):
     axis.legend(frameon=False, loc="lower right")
     save_figure(figure, root, "learning", plt)
 
-    methods = (
-        "hdc_encode_predict",
-        "logistic_regression_encode_predict",
-        "mlp_encode_predict",
-        "hdc_encode_score_update",
-        "logistic_regression_review_refit",
-        "mlp_review_refit",
-    )
-    names = (
-        "HDC encode + predict",
-        "LR encode + predict",
-        "MLP encode + predict",
-        "HDC encode + predict + add review",
-        "LR incorporate review by batch refit",
-        "MLP incorporate review by batch refit",
-    )
-    medians = [
-        statistics.median(result["resources"]["timings"][method]["median_ms"] for result in results)
-        for method in methods
-    ]
-    p95 = [
-        statistics.median(result["resources"]["timings"][method]["p95_ms"] for result in results)
-        for method in methods
-    ]
-    figure, axis = plt.subplots(figsize=(10, 5.6), layout="constrained")
-    axis.barh(range(6), medians, color=["#287b78", "#a06935", "#7461a2"] * 2, height=0.6)
-    axis.scatter(
-        p95, range(6), color="#263647", marker="|", s=170, label="Median of run p95 measurements"
-    )
-    axis.set_yticks(range(6), names)
-    axis.invert_yaxis()
-    axis.set_xscale("log")
-    axis.set_xlabel("Elapsed time in milliseconds, logarithmic scale; database work excluded")
-    axis.set_title("Prediction and incorporation of one further review", loc="left")
-    axis.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.21))
-    save_figure(figure, root, "compute", plt)
-
-    batches = sorted(
-        {
-            row["batch_size"]
-            for result in results
-            for row in result["resources"]["learning_updates"]["rows"]
-        }
-    )
-    figure, axes = plt.subplots(1, 2, figsize=(11.2, 4.8), layout="constrained")
-    update_names = {
-        "hdc": "HDC additive memory",
-        "logistic_regression": "LR batch refit",
-        "mlp": "MLP batch refit",
-    }
-    for method in ("hdc", "logistic_regression", "mlp"):
-        totals = [
-            statistics.median(
-                row["timings"]["complete_wall_ms"]["median_ms"]
-                for result in results
-                for row in result["resources"]["learning_updates"]["rows"]
-                if row["method"] == method and row["batch_size"] == batch
-            )
-            for batch in batches
-        ]
-        for axis, values in zip(
-            axes, (totals, [total / batch for total, batch in zip(totals, batches)])
-        ):
-            axis.plot(
-                batches,
-                values,
-                "-o",
-                linewidth=2.4,
+    # Raw batch totals only; dividing by batch size would mix throughput with latency.
+    batches = update_batches(results)
+    figure, axis = plt.subplots(figsize=(9, 5), layout="constrained")
+    for method in UPDATE_METHODS:
+        totals = [update_median(results, method, batch) for batch in batches]
+        axis.plot(
+            batches,
+            totals,
+            "-o",
+            linewidth=2.4,
+            color=COLOURS[method],
+            label=UPDATE_NAMES[method],
+        )
+        for batch, total in zip(batches, totals):
+            axis.annotate(
+                f"{total:.2f} ms" if total < 10 else f"{total:.1f} ms",
+                (batch, total),
+                textcoords="offset points",
+                # HDC rises steeply, so label below its points to keep them off the line,
+                # except where it ends above LR retraining.
+                xytext=(8, -14) if method == "hdc" and batch != max(batches) else (8, 4),
+                fontsize=9,
                 color=COLOURS[method],
-                label=update_names[method],
             )
-            axis.set_xticks(batches)
-            axis.set_xlabel("Newly reviewed incidents in the arriving batch")
-            axis.set_yscale("log")
-    axes[0].set_ylabel("Complete batch wall latency, ms (log scale)")
-    axes[1].set_ylabel("Amortized wall latency per new review, ms (log scale)")
-    axes[0].set_title("Encode, incorporate reviews, then predict", loc="left")
-    axes[1].set_title("Batch refit cost shared across new reviews", loc="left")
-    axes[0].legend(frameon=False, fontsize=9)
+    axis.set_xticks(batches)
+    axis.set_xlim(min(batches) - 3, max(batches) + 8)
+    axis.set_yscale("log")
+    axis.set_ylim(bottom=min(update_median(results, "hdc", batch) for batch in batches) / 1.6)
+    axis.set_xlabel("Newly reviewed incidents arriving together")
+    axis.set_ylabel("Total time to encode, learn and predict, ms (log scale)")
     initial = results[0]["resources"]["learning_updates"]["rows"][0]["initial_training_examples"]
-    figure.suptitle(
-        f"Same {initial} starting reviews; fixed encoder and frozen LR/MLP settings", fontsize=13
+    axis.set_title(
+        f"Learning from new reviews, starting from the same {initial} reviewed incidents",
+        loc="left",
     )
+    axis.legend(frameon=False, loc="lower right")
     save_figure(figure, root, "learning-updates", plt)
 
     from geography import load_geography
@@ -523,96 +520,96 @@ def make_figures(root, summary, results, case, config, geography_root):
 
 
 def learning_update_explanation(results, config):
-    batches = sorted(
-        {
-            row["batch_size"]
-            for result in results
-            for row in result["resources"]["learning_updates"]["rows"]
-        }
-    )
-    rows, stages = [], []
-    for batch in batches:
-        for method in ("hdc", "logistic_regression", "mlp"):
-            trials = [
-                row
-                for result in results
-                for row in result["resources"]["learning_updates"]["rows"]
-                if row["batch_size"] == batch and row["method"] == method
-            ]
-
-            def median(group, key, metric="median_ms", trials=trials):
-                return statistics.median(row[group][key][metric] for row in trials)
-
-            name = {
-                "hdc": "HDC additive class memory",
-                "logistic_regression": "LR full batch refit",
-                "mlp": "MLP full batch refit",
-            }[method]
-            rows.append(
-                f"| {batch} | {name} | {trials[0]['total_reviewed_examples']} | "
-                f"{median('timings', 'complete_wall_ms'):.3f} | {median('timings', 'complete_wall_ms', 'p95_ms'):.3f} | "
-                f"{median('per_new_sample', 'complete_wall_ms'):.4f} | "
-                f"{median('per_new_sample', 'complete_cpu_ms'):.4f} |"
-            )
-            stages.append(
-                f"| {batch} | {name} | "
-                + " | ".join(
-                    f"{median('per_new_sample', key):.4f}"
-                    for key in ("encoding_ms", "learning_ms", "prediction_ms")
-                )
-                + " |"
-            )
-    initial = results[0]["resources"]["learning_updates"]["rows"][0]["initial_training_examples"]
-    largest_batch = max(batches)
-    costs = {
-        method: statistics.median(
-            row["per_new_sample"]["complete_wall_ms"]["median_ms"]
-            for result in results
-            for row in result["resources"]["learning_updates"]["rows"]
-            if row["method"] == method and row["batch_size"] == largest_batch
-        )
-        for method in ("hdc", "logistic_regression", "mlp")
+    batches = update_batches(results)
+    totals = {
+        method: {batch: update_median(results, method, batch) for batch in batches}
+        for method in UPDATE_METHODS
     }
-    comparison = (
-        "LR is cheaper per new review than HDC at this batch size."
-        if costs["logistic_regression"] < costs["hdc"]
-        else "HDC is cheaper per new review than LR at this batch size."
+    rows = "\n".join(
+        f"| {batch} | " + " | ".join(ms(totals[method][batch]) for method in UPDATE_METHODS) + " |"
+        for batch in batches
     )
+    single, largest = min(batches), max(batches)
+    stages = {
+        method: {
+            key: update_median(results, method, single, key)
+            for key in ("encoding_ms", "learning_ms", "prediction_ms")
+        }
+        for method in UPDATE_METHODS
+    }
+    stage_rows = "\n".join(
+        f"| {UPDATE_NAMES[method]} | "
+        + " | ".join(
+            ms(stages[method][key]) for key in ("encoding_ms", "learning_ms", "prediction_ms")
+        )
+        + f" | {ms(totals[method][single])} |"
+        for method in UPDATE_METHODS
+    )
+
+    def share(method, key):
+        # Floor so that, for example, 99.6% is not reported as the whole time.
+        return math.floor(100 * stages[method][key] / sum(stages[method].values()))
+
+    hdc, lr, mlp = (totals[method] for method in UPDATE_METHODS)
+    review = "review" if single == 1 else "reviews"
     finding = (
-        f"At {largest_batch} new reviews, complete amortized wall cost is "
-        f"{costs['hdc']:.4f} ms per review for HDC, {costs['logistic_regression']:.4f} ms for LR, "
-        f"and {costs['mlp']:.4f} ms for the MLP. {comparison} "
-        "The batch size changes the practical cost comparison; a one-review refit cost should not be extrapolated by multiplying it by the number of arriving reviews."
+        f"**Result.** For {single} new {review}, HDC finishes in {ms(hdc[single])} ms: "
+        f"about {lr[single] / hdc[single]:.0f}× faster than retraining LR ({ms(lr[single])} ms) and "
+        f"{mlp[single] / hdc[single]:.0f}× faster than retraining the MLP ({ms(mlp[single])} ms). "
+        f"Encoding is {share('hdc', 'encoding_ms'):}% of HDC's time, while retraining is "
+        f"{share('logistic_regression', 'learning_ms'):}% of LR's and {share('mlp', 'learning_ms'):}% of the MLP's."
     )
+    if largest > single:
+        slope = (hdc[largest] - hdc[single]) / (largest - single)
+        faster = [
+            UPDATE_NAMES[method].split()[0]
+            for method in ("logistic_regression", "mlp")
+            if totals[method][largest] < hdc[largest]
+        ]
+        crossover = (
+            f"At {largest} reviews, retraining {' and '.join(faster)} once is faster than {largest} HDC additions "
+            f"({ms(hdc[largest])} ms)."
+            if faster
+            else f"At {largest} reviews, HDC ({ms(hdc[largest])} ms) is still faster than retraining either model."
+        )
+        finding += (
+            f"\n\nBatch size changes the comparison. HDC's total grows with every review it adds, "
+            f"by about {slope:.2f} ms each. Retraining processes all retained reviews whatever the batch size, "
+            f"so its time depends little on how many reviews arrived: LR takes {ms(lr[single])} ms for {single} and "
+            f"{ms(lr[largest])} ms for {largest}; the MLP takes {ms(mlp[single])} and {ms(mlp[largest])} ms. {crossover}"
+        )
     warning_count = sum(
         bool(info["convergence_warnings"])
         for result in results
         for row in result["resources"]["learning_updates"]["rows"]
         for info in row["fit_diagnostics"]
     )
-    table = "\n".join(rows)
-    breakdown = "\n".join(stages)
+    initial = results[0]["resources"]["learning_updates"]["rows"][0]["initial_training_examples"]
     skipped = results[0]["resources"]["learning_updates"]["skipped_batches"]
     skipped_text = (
-        "The small run omits batches without enough later memory reviews: "
+        " The small run omits batches without enough later memory reviews: "
         + ", ".join(str(row["batch_size"]) for row in skipped)
         + "."
         if skipped
-        else "Every requested batch size was measured."
+        else ""
     )
+    sizes = [str(batch) for batch in batches]
     return render_template(
         "learning-updates.md",
         {
             "initial_reviews": initial,
             "max_reviews_per_class": max(config.budgets),
-            "batch_sizes": ", ".join(str(batch) for batch in batches),
-            "reviews_after_twenty": initial + 20,
-            "reviews_after_forty": initial + 40,
+            "batch_sizes": ", ".join(sizes[:-1]) + " or " + sizes[-1]
+            if len(sizes) > 1
+            else sizes[0],
+            "refit_sizes": ", ".join(str(initial + b) for b in batches[:-1])
+            + (" or " if len(batches) > 1 else "")
+            + str(initial + batches[-1]),
             "refit_warmup": config.refit_warmup,
             "refit_repeats": config.refit_repeats,
             "batch_coverage": skipped_text,
-            "learning_update_rows": table,
-            "learning_update_stage_rows": breakdown,
+            "learning_update_rows": rows,
+            "learning_update_stage_rows": stage_rows,
             "learning_update_finding": finding,
             "refit_warning_count": warning_count,
         },
@@ -634,6 +631,308 @@ def encoder_explanation(config):
 
 def geographic_enhancement_explanation():
     return render_template("geographic-enhancements.md")
+
+
+# Short everyday names for the patterns, used in the future-work diagnosis.
+PLAIN_NAMES = {
+    "radio_deteriorating": "signal getting weaker",
+    "transient_recovery": "signal recovering",
+    "shared_transport": "shared-equipment fault",
+    "normal": "normal service",
+}
+PLAIN_INTROS = {
+    "radio_deteriorating": "a phone's signal getting steadily weaker",
+    "transient_recovery": "a phone's signal dropping and then recovering",
+    "shared_transport": "faults in network equipment that many phones share (*shared transport impairment* in Experiment 3)",
+    "normal": "normal service",
+}
+
+
+def future_work_explanation(run_dir, config, pair_dir, data_seed, encoder_seed, budget, hardest):
+    """Rebuild one pair's class memory to show where and why its mistakes happen."""
+    import joblib
+    import torch
+    import torch.nn.functional as F
+
+    from data import build_episodes, load_tables
+    from encoding import Encoder, model_input_features, scaled
+    from learning import Prototype, budget_indices
+
+    tables = load_tables(run_dir / "data" / str(data_seed))
+    episodes = build_episodes(tables)
+    reviews = {row["episode_id"]: row for row in tables["reviews"].to_pylist()}
+    labels = torch.tensor([LABELS.index(reviews[e["episode_id"]]["label"]) for e in episodes])
+    encoder = Encoder(config, encoder_seed)
+    raws = torch.stack([encoder.encode(episode) for episode in episodes])
+    memory = [i for i, e in enumerate(episodes) if e["split"] == "memory"]
+    testing = [i for i, e in enumerate(episodes) if e["split"] == "test"]
+    hdc = Prototype(raws.shape[1])
+    for index in budget_indices(memory, labels, budget, episodes):
+        hdc.update(raws[index], int(labels[index]))
+    features = torch.stack([model_input_features(episode) for episode in episodes])
+    lr = joblib.load(pair_dir / "models" / f"logistic_regression-budget-{budget}.joblib")
+    lr_predictions = dict(zip(testing, lr.predict(features[testing].numpy()).tolist()))
+
+    # The review rule's 15 dB change separates weakening, recovering and steady signal.
+    threshold = 15
+
+    def signal(episode):
+        change = episode["observations"][-1]["radio_dbm"] - episode["observations"][0]["radio_dbm"]
+        return (
+            "weakens"
+            if change <= -threshold
+            else "recovers"
+            if change >= threshold
+            else "stays steady"
+        )
+
+    target = LABELS.index(hardest)
+    hard = [i for i in testing if labels[i] == target]
+    wrong = collections.Counter(
+        hdc.predict(raws[i]) for i in hard if hdc.predict(raws[i]) != target
+    )
+    confused = wrong.most_common(1)[0][0]
+    groups = {}
+    for i in hard:
+        row = groups.setdefault(signal(episodes[i]), [0, 0, 0])
+        row[0] += 1
+        row[1] += hdc.predict(raws[i]) != target
+        row[2] += lr_predictions[i] != target
+    order = ("weakens", "stays steady", "recovers")
+    group_rows = "\n".join(
+        f"| {name.capitalize()} | {n} | {percent(h / n)} | {percent(l / n)} |"
+        for name in order
+        if name in groups
+        for n, h, l in [groups[name]]
+    )
+    worst = max(groups, key=lambda name: groups[name][1] / groups[name][0])
+    steadiest = min(groups, key=lambda name: groups[name][1] / groups[name][0])
+
+    # Split each score exactly into channels: unit(z) . memory = sum of channel . memory / |z|.
+    memories = F.normalize(hdc.values, dim=1)
+    names = {
+        "local": "Phone's own signal",
+        "context": "Network facts (links, peers, cell load)",
+        "handset": "Handset model",
+    }
+    split = {name: [0.0, 0.0] for name in names}
+    members = [i for i in hard if signal(episodes[i]) == worst]
+    for i in members:
+        norm = raws[i].norm()
+        for name, vector in encoder.components(episodes[i]).items():
+            split[name][0] += float(vector @ memories[target] / norm) / len(members)
+            split[name][1] += float(vector @ memories[confused] / norm) / len(members)
+    split_rows = "\n".join(
+        f"| {names[name]} | {a:.3f} | {b:.3f} | {a - b:+.3f} |" for name, (a, b) in split.items()
+    )
+    margin = sum(a - b for a, b in split.values())
+
+    level_finding = ""
+    if hardest == "shared_transport":
+        # Compare the mildest faulty link with the worst healthy one, as encoded levels.
+        faulty = [
+            episodes[i]["observations"][1]["link_loss_pct"]
+            for i in range(len(episodes))
+            if labels[i] == target
+        ]
+        healthy = [
+            observation["link_loss_pct"]
+            for i, episode in enumerate(episodes)
+            for position, observation in enumerate(episode["observations"])
+            if labels[i] != target or position != 1
+        ]
+        low, high = max(healthy), min(faulty)
+
+        def level(value):
+            return round((config.levels - 1) * scaled(value, "link_loss_pct"))
+
+        cosine = float(
+            F.cosine_similarity(encoder.levels[level(low)], encoder.levels[level(high)], dim=0)
+        )
+        level_finding = (
+            f"**Why the network evidence is weak.** The deciding facts are a small share of the encoding, and a faulty "
+            f"link does not look very different from a healthy one. The mildest fault in the data ({high:.1f}% packet loss) "
+            f"and the worst healthy link ({low:.1f}%) fall on numeric levels {level(high)} and {level(low)}, whose encodings "
+            f"have cosine similarity {cosine:.2f}: nearby numbers are deliberately encoded alike."
+        )
+    worst_rate, steady_rate = (groups[name][1] / groups[name][0] for name in (worst, steadiest))
+    finding = (
+        f"when the phone's own signal {worst}, HDC mislabels {percent(worst_rate)} of these incidents, against "
+        f'{percent(steady_rate)} when it {steadiest}. Its most common wrong answer is "{PLAIN_NAMES[LABELS[confused]]}".'
+    )
+    # Name the part of the score that pulls toward the wrong pattern, and the part that resists.
+    parts = {
+        "local": "the phone's own signal",
+        "context": "the network facts",
+        "handset": "the handset model",
+    }
+    puller = min(split, key=lambda name: split[name][0] - split[name][1])
+    resister = max(split, key=lambda name: split[name][0] - split[name][1])
+    opening = (
+        f"Here, a phone signal that {worst} pulls the incident toward"
+        if puller == "local"
+        else f"Here, when the phone's signal {worst}, {parts[puller]} pulls the incident toward"
+    )
+    why_example = (
+        f'{opening} "{PLAIN_NAMES[LABELS[confused]]}", against {parts[resister]} that point to the correct pattern. '
+        f"On average {parts[resister]} still win, but narrowly, so the pull wins in {percent(worst_rate)} of these incidents."
+    )
+    lr_rate = groups[worst][2] / groups[worst][0]
+    lr_comparison = (
+        f"LR also gets {percent(lr_rate)} of those incidents wrong, so part of the difficulty lies in the incidents themselves."
+        if lr_rate >= worst_rate / 2
+        else f"LR gets only {percent(lr_rate)} of those incidents wrong, so the gap comes mainly from the class memory."
+    )
+    level_idea = (
+        "Use more numeric levels, or a narrower range for packet loss, so that a faulty link looks less like a healthy one."
+        if hardest == "shared_transport"
+        else "Use more numeric levels, so that measurements that are close but mean different things look less alike."
+    )
+    return render_template(
+        "future-work.md",
+        {
+            "hard_pattern_intro": PLAIN_INTROS[hardest],
+            "hard_pattern": PLAIN_NAMES[hardest],
+            "hard_pattern_finding": finding,
+            "data_seed": data_seed,
+            "encoder_seed": encoder_seed,
+            "budget": budget,
+            "radio_threshold": threshold,
+            "group_rows": group_rows,
+            "split_count": len(members),
+            "split_group": worst,
+            "confused_pattern": PLAIN_NAMES[LABELS[confused]],
+            "split_rows": split_rows,
+            "net_margin": f"{margin:.3f}",
+            "level_finding": level_finding,
+            "why_example": why_example,
+            "lr_comparison": lr_comparison,
+            "level_idea": level_idea,
+        },
+    )
+
+
+def learning_comparison(summary, config, class_errors, error_budget):
+    """Lead Experiment 3 with what the paired differences support at each budget."""
+    names = {"logistic_regression": "LR", "mlp": "the MLP"}
+    budgets = sorted(config.budgets)
+
+    def difference(budget, method):
+        return summary["learning_differences"][str(budget)]["hdc_minus_" + method]
+
+    def clear(value):
+        # Decide on the displayed one-decimal bounds, so a bold "[0.0, ...]" never appears.
+        return round(value["lower"] * 100, 1) > 0 or round(value["upper"] * 100, 1) < 0
+
+    def cell(value):
+        text = (
+            f"{value['mean'] * 100:+.1f} [{value['lower'] * 100:.1f}, {value['upper'] * 100:.1f}]"
+        )
+        return f"**{text}**" if clear(value) else text
+
+    rows = "\n".join(
+        f"| {budget} | "
+        + " | ".join(
+            percent(summary["learning"][str(budget)][method]["mean"])
+            for method in ("hdc", "logistic_regression", "mlp")
+        )
+        + " | "
+        + " | ".join(cell(difference(budget, method)) for method in names)
+        + " |"
+        for budget in budgets
+    )
+
+    first = budgets[0]
+    first_diffs = {method: difference(first, method) for method in names}
+    reviews = "review" if first == 1 else "reviews"
+    hdc_first = percent(summary["learning"][str(first)]["hdc"]["mean"])
+    ahead = all(clear(value) and value["mean"] > 0 for value in first_diffs.values())
+    gaps = [first_diffs[method]["mean"] * 100 for method in names]
+    if ahead:
+        opening = (
+            f"**Result.** With {first} {reviews} per class ({first * 4} in total), HDC reaches {hdc_first} macro F1: "
+            f"{gaps[0]:.1f} points above LR and {gaps[1]:.1f} above the MLP, and both intervals exclude zero."
+        )
+    else:
+        opening = (
+            f"**Result.** With {first} {reviews} per class ({first * 4} in total), HDC reaches {hdc_first} macro F1, against "
+            + " and ".join(
+                f"{percent(summary['learning'][str(first)][method]['mean'])} for {name}"
+                for method, name in names.items()
+            )
+            + "."
+        )
+
+    # On par: from this budget onward, the three mean scores stay within 2.5 points.
+    def spread(budget):
+        scores = [
+            summary["learning"][str(budget)][method]["mean"] * 100
+            for method in ("hdc", "logistic_regression", "mlp")
+        ]
+        return max(scores) - min(scores)
+
+    on_par = next(
+        (
+            budget
+            for budget in budgets
+            if all(spread(later) <= 2.5 for later in budgets if later >= budget)
+        ),
+        None,
+    )
+    sentences = [opening]
+    if on_par is not None and on_par > first:
+        sentences.append(
+            f"From {on_par} reviews per class onward, all three are within "
+            f"{max(spread(budget) for budget in budgets if budget >= on_par):.1f} points of one another."
+        )
+        small = []
+        for budget in budgets:
+            if budget < on_par:
+                continue
+            for method, name in names.items():
+                value = difference(budget, method)
+                if clear(value):
+                    leader, other = ("HDC", name) if value["mean"] > 0 else (name, "HDC")
+                    small.append(
+                        f"{leader} ahead of {other} by {abs(value['mean']) * 100:.1f} points at {budget}"
+                    )
+        if small:
+            sentences.append(
+                "Within that range, a few small differences are distinguishable from zero: "
+                + "; ".join(small)
+                + " reviews per class."
+            )
+    headline = " ".join(sentences)
+
+    if ahead and on_par is not None and on_par > first:
+        takeaway = (
+            f"HDC learns most efficiently when labels are scarce: with {first} {reviews} per class, it scores "
+            f"{min(gaps):.1f}–{max(gaps):.1f} points higher macro F1 than LR and the MLP. From {on_par} reviews per class, "
+            "the three are on par."
+        )
+    else:
+        takeaway = (
+            "Experiment 3 compares HDC's macro F1 with LR and the MLP at every review budget."
+        )
+
+    hardest = max(LABELS, key=lambda label: class_errors["hdc"][label])
+    others = [label for label in LABELS if label != hardest]
+    pattern = (
+        f"Averages can hide a harder pattern. At {error_budget} reviews per class, HDC assigns "
+        f"{percent(class_errors['hdc'][hardest])} of {PATTERNS[hardest]} incidents to the wrong pattern, against "
+        f"{percent(class_errors['logistic_regression'][hardest])} for LR and {percent(class_errors['mlp'][hardest])} for the MLP; "
+        f"its error rate on every other pattern is at most {percent(max(class_errors['hdc'][label] for label in others))}. "
+        "The per-pattern table is in the details below."
+    )
+    facts = {
+        "first": first,
+        "ahead": ahead,
+        "gaps": gaps,
+        "on_par": on_par,
+        "spread": max(spread(b) for b in budgets if b >= on_par) if on_par else None,
+        "hardest": hardest,
+    }
+    return rows, headline, takeaway, pattern, facts
 
 
 def create_report(run_dir):
@@ -681,36 +980,28 @@ def create_report(run_dir):
             "hdc_lance_float16",
         )
     )
-    learning_rows = "\n".join(
-        "| "
-        + str(budget)
-        + " | "
-        + " | ".join(
-            interval_text(summary["learning"][str(budget)][method])
-            for method in ("hdc", "logistic_regression", "mlp")
-        )
-        + " |"
-        for budget in config.budgets
-    )
     error_budget = 5 if 5 in config.budgets else min(config.budgets)
-    class_error_rows = "\n".join(
-        "| "
-        + PATTERNS[label].capitalize()
-        + " | "
-        + " | ".join(
-            percent(
-                1
-                - statistics.mean(
-                    row["metrics"]["per_class"][label]["recall"]
-                    for result in results
-                    for row in result["learning"]
-                    if row["budget_per_class"] == error_budget and row["method"] == method
-                )
+    class_errors = {
+        method: {
+            label: 1
+            - statistics.mean(
+                row["metrics"]["per_class"][label]["recall"]
+                for result in results
+                for row in result["learning"]
+                if row["budget_per_class"] == error_budget and row["method"] == method
             )
-            for method in ("hdc", "logistic_regression", "mlp")
-        )
+            for label in LABELS
+        }
+        for method in ("hdc", "logistic_regression", "mlp")
+    }
+    class_error_rows = "\n".join(
+        f"| {PATTERNS[label].capitalize()} | "
+        + " | ".join(percent(class_errors[method][label]) for method in class_errors)
         + " |"
         for label in LABELS
+    )
+    learning_rows, learning_headline, learning_takeaway, hardest_pattern, learned = (
+        learning_comparison(summary, config, class_errors, error_budget)
     )
     fit_rows = "\n".join(
         "| "
@@ -747,50 +1038,49 @@ def create_report(run_dir):
         for budget in config.budgets
     )
     trial_warning_count = sum(bool(info["convergence_warnings"]) for info in trial_fits)
-    learning_difference = summary["learning_differences"][str(error_budget)]
-    difference_text = "; ".join(
-        f"HDC minus {name}: {learning_difference['hdc_minus_' + method]['mean'] * 100:.1f} percentage points [{learning_difference['hdc_minus_' + method]['lower'] * 100:.1f}, {learning_difference['hdc_minus_' + method]['upper'] * 100:.1f}]"
-        for method, name in [("logistic_regression", "LR"), ("mlp", "MLP")]
+    predict = {
+        method: timing_median(results, method + "_encode_predict") for method in UPDATE_METHODS
+    }
+    hdc_encode, hdc_score = (
+        timing_median(results, "hdc_encode"),
+        timing_median(results, "hdc_score"),
     )
-    timing_rows = "\n".join(
-        f"| {name} | {statistics.median(result['resources']['timings'][key]['median_ms'] for result in results):.4f} ms | {statistics.median(result['resources']['timings'][key]['p95_ms'] for result in results):.4f} ms |"
-        for key, name in [
-            ("hdc_add_only", "HDC addition only"),
-            ("hdc_encode", "HDC encoding"),
-            ("hdc_score", "HDC scoring"),
-            ("hdc_encode_predict", "HDC encode–predict"),
-            ("logistic_regression_encode_predict", "LR encode–predict"),
-            ("mlp_encode_predict", "MLP encode–predict"),
-            ("hdc_encode_score_update", "HDC encode–score–update"),
-            ("logistic_regression_review_refit", "LR encode–refit–predict"),
-            ("mlp_review_refit", "MLP encode–refit–predict"),
+    dimension = f"{config.dimension:,}"
+    inputs = results[0]["resources"]["model_input_bytes"] // 4
+    prediction_rows = "\n".join(
+        [
+            f"| HDC | Build the {dimension}-number hypervector ({ms(hdc_encode)} ms), then compare it with four class memories ({ms(hdc_score)} ms) | {ms(predict['hdc'])} |",
+            f"| LR | Assemble {inputs} scaled measurements, then apply the trained linear model | {ms(predict['logistic_regression'])} |",
+            f"| MLP | Assemble the same {inputs} inputs, then apply the trained one-hidden-layer network | {ms(predict['mlp'])} |",
         ]
     )
+    prediction_finding = (
+        f"HDC prediction takes {predict['hdc'] / predict['logistic_regression']:.1f}× as long as LR's. "
+        f"That is expected: {100 * hdc_encode / predict['hdc']:.0f}% of HDC's time goes into building the hypervector, "
+        f"binding, permuting and bundling every measured fact into {dimension} numbers. LR and the MLP read the same "
+        f"joined measurements as {inputs} numbers, so preparing their input is little more than copying values. "
+        f"All three predict in at most {ms(max(predict.values()))} ms, so prediction cost does not separate the methods."
+    )
+    reported = [
+        (
+            result["resources"]["timings"][method + "_encode_predict"][metric]
+            for metric in ("median_ms", "p95_ms")
+        )
+        for result in results
+        for method in UPDATE_METHODS
+    ] + [
+        (row["timings"]["complete_wall_ms"][metric] for metric in ("median_ms", "p95_ms"))
+        for result in results
+        for row in result["resources"]["learning_updates"]["rows"]
+    ]
+    p95_overhead = max(100 * (p95 / median - 1) for median, p95 in reported)
+    update_single = min(update_batches(results))
+    update_single_ms = {
+        method: update_median(results, method, update_single) for method in UPDATE_METHODS
+    }
     counts = results[0]["candidate_counts"]
     path_gain = summary["paired_differences"]["hdc_minus_hdc_without_paths"]
     order_gain = summary["paired_differences"]["hdc_minus_hdc_without_order"]
-    best_budget = max(config.budgets)
-    last_f1 = summary["learning"][str(best_budget)]["hdc"]["mean"]
-    learning_direction = (
-        "More reviews improve the aggregate result over the one-example starting point."
-        if last_f1 > summary["learning"][str(min(config.budgets))]["hdc"]["mean"]
-        else "More reviews do not improve the aggregate result over the one-example starting point."
-    )
-    budget_80 = next(
-        (
-            budget
-            for budget in config.budgets
-            if summary["learning"][str(budget)]["hdc"]["mean"] >= 0.8
-        ),
-        None,
-    )
-    low_sample = (
-        f"HDC reaches mean macro F1 ≥0.80 with {budget_80} "
-        + ("review" if budget_80 == 1 else "reviews")
-        + f" per class ({budget_80 * 4} total)."
-        if budget_80
-        else f"HDC does not reach mean macro F1 0.80 within {best_budget} reviews per class."
-    )
     effect_examples = {}
     for name, predicate in [
         ("helps", lambda row: row["net_correct"] > 0),
@@ -820,31 +1110,134 @@ def create_report(run_dir):
         or "| — | No top-1 mismatch in this run | — |"
     )
     operator = results[0]["operators"]
+    all_errors = read(paths[0] / "retrieval_errors.json")
+    top_hits_checked = sum(r["evidence_audit"]["top_hits_checked"] for r in results)
+    hardest = learned["hardest"]
+    hardest_misses = sum(row["label"] == hardest for row in all_errors)
+    retrieval = summary["retrieval"]["hdc"]
+    precision, top1 = (
+        percent(retrieval["precision_at_5"]["mean"]),
+        percent(retrieval["top1"]["mean"]),
+    )
+    random_precision = percent(summary["random_precision_at_5"])
+    quantization = statistics.mean(
+        r["float16_quantization"]["precision_at_5_change"] for r in results
+    )
+    retrieval_headline = (
+        f"HDC's first result has the query's pattern for {top1} of queries, and {precision} of its top five do, "
+        f"against {random_precision} expected from random ranking. Storing the search vectors in float16 halves "
+        f"their size with no measurable loss: precision@5 changes by {quantization * 100:.3f} points."
+    )
+    retrieval_miss_summary = (
+        f"The first run has {mismatches} top-1 mismatches out of {results[0]['n_queries']} queries"
+        + (
+            f"; {hardest_misses} involve {PATTERNS[hardest]}, the same pattern HDC finds hardest to classify in Experiment 3."
+            if hardest_misses * 2 > mismatches
+            else "."
+        )
+        + " All are retained:"
+        if mismatches
+        else "The first run has no top-1 mismatches."
+    )
+    original, edited = case["original_top5"], case["without_handset_top5"]
+    handset_edit_overlap = f"After the edit, {len(set(original) & set(edited))} of the original top five results remain in the top five."
+    raw_bytes = results[0]["resources"]["hdc_raw_vector_bytes"]
+    input_bytes = results[0]["resources"]["model_input_bytes"]
+    storage_ratio = raw_bytes / input_bytes
+    single = update_single_ms
+    fits = {
+        method: [
+            statistics.median(
+                next(
+                    row
+                    for row in result["learning"]
+                    if row["budget_per_class"] == budget and row["method"] == method
+                )["fit"]["fit_ms"]
+                for result in results
+            )
+            for budget in sorted(config.budgets)
+        ]
+        for method in ("logistic_regression", "mlp")
+    }
+    few = (
+        f"**Learns from very few reviews.** With just {learned['first']} reviewed "
+        + ("incident" if learned["first"] == 1 else "incidents")
+        + f" per pattern, HDC's classification score (macro F1) is {min(learned['gaps']):.1f}–{max(learned['gaps']):.1f} "
+        "points higher than LR's and the MLP's."
+        if learned["ahead"]
+        else "**Learns from few reviews.** Experiment 3 compares macro F1 at every review budget."
+    )
+    strengths = [
+        f"- {few}",
+        "\n".join(
+            [
+                "- **Learning from a new review costs almost nothing, and the cost does not grow.**",
+                f"  - **HDC:** {ms(single['hdc'])} ms to add a reviewed incident to memory: one vector addition, however many reviews came before.",
+                f"  - **LR and the MLP:** {ms(single['logistic_regression'])} ms and {ms(single['mlp'])} ms to retrain on all retained reviews, every update.",
+                f"  - **Retraining slows as reviews accumulate:** in our initial fits, from {fits['logistic_regression'][0]:.2f} to {fits['logistic_regression'][-1]:.2f} ms for LR and from {fits['mlp'][0]:.0f} to {fits['mlp'][-1]:.0f} ms for the MLP, between {min(config.budgets) * 4} and {max(config.budgets) * 4} reviews.",
+                "  - **No retained history:** HDC needs no earlier reviews kept, and every update can be undone exactly.",
+            ]
+        ),
+        (
+            f"- **Finds comparable incidents and shows why.** On average, {precision} of its top five results have the query's pattern "
+            f"(precision@5), against {random_precision} for random ranking. Every similarity score breaks down exactly into contributions from individual facts, "
+            "each traceable to its source records."
+        ),
+        (
+            "- **One representation, many uses.** The same hypervector serves retrieval, classification, explanation and "
+            "editing; a fact such as the handset can be removed from a query without re-encoding the rest."
+        ),
+    ]
+    key_strengths = "\n".join(strengths)
+    # Storage first: it is the cost every HDC user should expect.
+    tradeoffs = [
+        (
+            f"- **More storage.** Each incident needs {raw_bytes:,} bytes as a hypervector, about {storage_ratio:.0f}× the "
+            f"{input_bytes} bytes of its raw measurements."
+        )
+    ]
+    if learned["on_par"]:
+        tradeoffs.append(
+            f"- **On par, not ahead, once reviews accumulate.** From {learned['on_par']} reviews per class, the three "
+            f"methods are within {learned['spread']:.1f} points of one another."
+        )
+    tradeoffs += [
+        "- **The class memory doesn't learn which facts matter.**",
+        "  - It is a running sum of reviewed incidents, so each fact keeps the fixed weight the encoder gave it. LR and the MLP learn a weight for each input from the labels.",
+        "  - A pattern decided by a few facts can be outvoted by facts that vary.",
+        "  - This concerns the class memory used here, not HDC encoding; see [Future work](#future-work-teaching-the-class-memory-which-facts-matter).",
+    ]
+    key_tradeoffs = "\n".join(tradeoffs)
     claim_rows = [
         (
             "Composable representation",
-            "Role swaps, order changes and edge rewiring are detectable; controls without the relevant operator remain invariant.",
-            "Controlled illustrations and ablations support the designed representation, not arbitrary graph reasoning.",
+            "Role swaps, reversed order and a rewired edge all change the encoding; without the relevant operator, the encodings are identical.",
+            "Controlled pairs confirm the design; they do not show general graph reasoning.",
         ),
         (
-            "Inspectable evidence",
-            f"All {sum(r['evidence_audit']['top_hits_checked'] for r in results):,} retrieved top hits resolve to source records and reconstruct their float32 reference scores.",
-            "Provenance is retained alongside vectors; arithmetic contributions include interference and do not establish causes. Float16 search has a separately recorded quantization residual.",
+            "Retrieval with explanations",
+            f"{precision} precision@5 against {random_precision} for random ranking. All {top_hits_checked:,} top results trace to source records and reconstruct their scores exactly.",
+            "No non-HDC retrieval baseline. Ablation gains partly reflect how the patterns are defined. Contributions are not causes.",
         ),
         (
-            "Online learning",
-            f"Frozen encoder, delayed reviews, additive class memories, exact reversal; {low_sample}",
-            "Supervised learning still requires labels. Updates can regress, and the scenarios are simulated.",
+            "Learning from few reviews",
+            learning_takeaway,
+            "The advantage shrinks to parity as reviews accumulate.",
+        ),
+        (
+            "Updates without retraining",
+            f"Fixed encoder; each delayed review is added in place and can be reversed exactly. {percent(online['metrics']['hdc']['accuracy'])} correct in the delayed-feedback replay.",
+            "Still supervised: labels are required, and an individual update can make predictions worse.",
         ),
         (
             "Compute cost",
-            "Addition, prediction and review incorporation are measured separately on CPU against trained LR and MLP.",
-            "Fast addition alone is not serving latency, energy efficiency, or an advantage over the measured controls.",
+            f"HDC learns from one new review in {ms(update_single_ms['hdc'])} ms, versus {ms(update_single_ms['logistic_regression'])} ms (LR) and {ms(update_single_ms['mlp'])} ms (MLP) for full retraining. All three predict in at most {ms(max(predict.values()))} ms.",
+            "One retraining run can absorb a whole batch, so large batches narrow or reverse the gap for LR. Incremental LR/MLP optimizers, energy and production serving were not measured.",
         ),
         (
             "Storage",
             f"{results[0]['resources']['hdc_raw_vector_bytes']:,} bytes per raw hypervector versus {results[0]['resources']['model_input_bytes']} bytes per LR/MLP input vector.",
-            "This study shows no storage saving from HDC.",
+            "HDC costs more storage here; the float16 search copy halves it without measurable loss.",
         ),
     ]
     claims = "\n".join(
@@ -867,8 +1260,12 @@ def create_report(run_dir):
             "geography_attribution": geography["attribution"],
             "geography_dataset_url": geography["dataset_url"],
             "geography_licence_url": geography["licence_url"],
-            "first_phone_signal": f"{case['query']['observations'][0]['radio_dbm']:.1f}",
-            "last_phone_signal": f"{case['query']['observations'][2]['radio_dbm']:.1f}",
+            "first_phone_signal": f"{case['query']['observations'][0]['radio_dbm']:.1f}".replace(
+                "-", "−"
+            ),
+            "last_phone_signal": f"{case['query']['observations'][2]['radio_dbm']:.1f}".replace(
+                "-", "−"
+            ),
             "middle_link_loss": f"{case['query']['observations'][1]['link_loss_pct']:.1f}",
             "middle_peer_loss": f"{case['query']['observations'][1]['peer_loss_pct']:.1f}",
             "query_episode_id": case["query"]["episode_id"],
@@ -909,25 +1306,30 @@ def create_report(run_dir):
             "retrieval_error_rows": error_text,
             "quantization_precision_change": f"{statistics.mean(r['float16_quantization']['precision_at_5_change'] for r in results) * 100:.3f}",
             "learning_rows": learning_rows,
-            "learning_direction": learning_direction,
-            "low_sample_finding": low_sample,
+            "key_strengths": key_strengths,
+            "key_tradeoffs": key_tradeoffs,
+            "retrieval_headline": retrieval_headline,
+            "retrieval_miss_summary": retrieval_miss_summary,
+            "handset_edit_overlap": handset_edit_overlap,
+            "top_hits_checked": f"{top_hits_checked:,}",
+            "learning_headline": learning_headline,
+            "learning_takeaway": learning_takeaway,
+            "hardest_pattern": hardest_pattern,
             "delayed_accuracy": percent(online["metrics"]["hdc"]["accuracy"]),
             "delayed_coverage": percent(online["metrics"]["hdc"]["coverage"]),
             "error_budget": error_budget,
-            "learning_difference": difference_text,
             "classifier_warning_count": warning_count,
             "classifier_fit_count": len(results) * len(config.budgets) * 2,
             "selection_warning_count": trial_warning_count,
             "selection_fit_count": len(trial_fits),
             "class_error_rows": class_error_rows,
             "update_effects": effect_text,
-            "warmup": config.warmup,
-            "benchmark_repeats": config.benchmark_repeats,
-            "refit_warmup": config.refit_warmup,
-            "refit_repeats": config.refit_repeats,
+            "pair_count": len(results),
+            "p95_overhead": f"{p95_overhead:.0f}",
             "runtime_platform": manifest["runtime"]["platform"],
             "runtime_python": manifest["runtime"]["python"],
-            "timing_rows": timing_rows,
+            "prediction_rows": prediction_rows,
+            "prediction_finding": prediction_finding,
             "raw_vector_bytes": f"{results[0]['resources']['hdc_raw_vector_bytes']:,}",
             "search_vector_bytes": f"{results[0]['resources']['hdc_search_vector_bytes']:,}",
             "model_input_bytes": results[0]["resources"]["model_input_bytes"],
@@ -947,10 +1349,18 @@ def create_report(run_dir):
             "eligibility_seconds": f"{results[0]['resources']['exact_gate_s']:.3f}",
             "lance_retrieval_ms": f"{results[0]['resources']['retrieval_latency']['hdc_lance_float16']['median_ms']:.3f}",
             "memory_retrieval_ms": f"{results[0]['resources']['retrieval_latency']['hdc']['median_ms']:.3f}",
-            "refit_training_examples": results[0]["resources"]["review_refit_training_examples"],
             "learning_update_explanation": learning_update_explanation(results, config),
             "claims_rows": claims,
             "geographic_enhancements": geographic_enhancement_explanation(),
+            "future_work": future_work_explanation(
+                run_dir,
+                config,
+                paths[0],
+                config.data_seeds[0],
+                config.encoder_seeds[0],
+                error_budget,
+                learned["hardest"],
+            ),
             "source_link": source_link,
             "data_seeds": ", ".join(str(seed) for seed in config.data_seeds),
             "selected_settings_rows": selected_rows,
