@@ -205,7 +205,7 @@ Every update is logged with its review provenance, availability time and before/
 | Learned state at {{ max_reviews_per_class }} reviews per class | {{ class_memory_bytes }} B (four class accumulators) | {{ lr_model_bytes }} B | {{ mlp_model_bytes }} B |
 | Earlier reviews kept for the next update | none | {{ review_buffer_bytes }} B | {{ review_buffer_bytes }} B |
 
-HDC needs far more storage per incident than the 21-number LR/MLP input; this study shows no compression benefit. In exchange, HDC's learned state is updated in place, while LR and the MLP must keep earlier reviews to refit. Serialized LR/MLP sizes include estimator metadata and any fitted scaler; HDC's class-memory size excludes audit history, exact-undo snapshots and the encoder basis.
+HDC needs far more storage per incident than the 21-number LR/MLP input; this study shows no compression benefit. In exchange, HDC's learned state is updated in place, while LR and the MLP must keep earlier reviews for retraining. Serialized LR/MLP sizes include estimator metadata and any fitted scaler; HDC's class-memory size excludes audit history, exact-undo snapshots and the encoder basis.
 
 <details>
 <summary>Supporting measurements: initial fits, pipeline stages and artifact sizes</summary>

@@ -35,8 +35,8 @@ PATTERNS = {
 UPDATE_METHODS = ("hdc", "logistic_regression", "mlp")
 UPDATE_NAMES = {
     "hdc": "HDC addition",
-    "logistic_regression": "LR refit",
-    "mlp": "MLP refit",
+    "logistic_regression": "LR retraining",
+    "mlp": "MLP retraining",
 }
 
 REPORT_TEMPLATES = ROOT / "docs" / "report-templates"
@@ -425,7 +425,7 @@ def make_figures(root, summary, results, case, config, geography_root):
                 (batch, total),
                 textcoords="offset points",
                 # HDC rises steeply, so label below its points to keep them off the line,
-                # except where it ends above the LR refit.
+                # except where it ends above LR retraining.
                 xytext=(8, -14) if method == "hdc" and batch != max(batches) else (8, 4),
                 fontsize=9,
                 color=COLOURS[method],
@@ -553,9 +553,9 @@ def learning_update_explanation(results, config):
     review = "review" if single == 1 else "reviews"
     finding = (
         f"**Result.** For {single} new {review}, HDC finishes in {ms(hdc[single])} ms: "
-        f"about {lr[single] / hdc[single]:.0f}× faster than an LR refit ({ms(lr[single])} ms) and "
-        f"{mlp[single] / hdc[single]:.0f}× faster than an MLP refit ({ms(mlp[single])} ms). "
-        f"Encoding is {share('hdc', 'encoding_ms'):}% of HDC's time, while refitting is "
+        f"about {lr[single] / hdc[single]:.0f}× faster than retraining LR ({ms(lr[single])} ms) and "
+        f"{mlp[single] / hdc[single]:.0f}× faster than retraining the MLP ({ms(mlp[single])} ms). "
+        f"Encoding is {share('hdc', 'encoding_ms'):}% of HDC's time, while retraining is "
         f"{share('logistic_regression', 'learning_ms'):}% of LR's and {share('mlp', 'learning_ms'):}% of the MLP's."
     )
     if largest > single:
@@ -566,14 +566,14 @@ def learning_update_explanation(results, config):
             if totals[method][largest] < hdc[largest]
         ]
         crossover = (
-            f"At {largest} reviews, one {' and one '.join(faster)} refit is faster than {largest} HDC additions "
+            f"At {largest} reviews, retraining {' and '.join(faster)} once is faster than {largest} HDC additions "
             f"({ms(hdc[largest])} ms)."
             if faster
-            else f"At {largest} reviews, HDC ({ms(hdc[largest])} ms) is still faster than both refits."
+            else f"At {largest} reviews, HDC ({ms(hdc[largest])} ms) is still faster than retraining either model."
         )
         finding += (
             f"\n\nBatch size changes the comparison. HDC's total grows with every review it adds, "
-            f"by about {slope:.2f} ms each. A refit processes all retained reviews whatever the batch size, "
+            f"by about {slope:.2f} ms each. Retraining processes all retained reviews whatever the batch size, "
             f"so its time depends little on how many reviews arrived: LR takes {ms(lr[single])} ms for {single} and "
             f"{ms(lr[largest])} ms for {largest}; the MLP takes {ms(mlp[single])} and {ms(mlp[largest])} ms. {crossover}"
         )
@@ -961,16 +961,24 @@ def create_report(run_dir):
     )
     original, edited = case["original_top5"], case["without_handset_top5"]
     handset_edit_overlap = f"After the edit, {len(set(original) & set(edited))} of the original top five results remain in the top five."
-    batches = update_batches(results)
-    largest = max(batches)
-    lr_batch_wins = update_median(results, "logistic_regression", largest) < update_median(
-        results, "hdc", largest
-    )
     raw_bytes = results[0]["resources"]["hdc_raw_vector_bytes"]
     input_bytes = results[0]["resources"]["model_input_bytes"]
     storage_ratio = raw_bytes / input_bytes
-    prediction_ratio = predict["hdc"] / predict["logistic_regression"]
     single = update_single_ms
+    fits = {
+        method: [
+            statistics.median(
+                next(
+                    row
+                    for row in result["learning"]
+                    if row["budget_per_class"] == budget and row["method"] == method
+                )["fit"]["fit_ms"]
+                for result in results
+            )
+            for budget in sorted(config.budgets)
+        ]
+        for method in ("logistic_regression", "mlp")
+    }
     few = (
         f"**Learns from very few reviews.** With {learned['first']} review per class, HDC scores "
         f"{min(learned['gaps']):.1f}–{max(learned['gaps']):.1f} points higher macro F1 than LR and the MLP."
@@ -980,9 +988,13 @@ def create_report(run_dir):
     strengths = [
         f"- {few}",
         (
-            f"- **Learns from each review instantly, without retraining.** One new review takes {ms(single['hdc'])} ms to absorb, "
-            f"against {ms(single['logistic_regression'])} ms and {ms(single['mlp'])} ms to refit LR and the MLP. Earlier reviews "
-            "need not be kept, and every update can be reversed exactly."
+            f"- **Learning from a new review costs almost nothing, and the cost does not grow.** HDC adds a reviewed "
+            f"incident to memory in {ms(single['hdc'])} ms: one vector addition, however many reviews came before. "
+            f"Retraining LR or the MLP on all retained reviews takes {ms(single['logistic_regression'])} ms or "
+            f"{ms(single['mlp'])} ms per update, and training time grows with the training set: in our initial fits, "
+            f"from {fits['logistic_regression'][0]:.2f} to {fits['logistic_regression'][-1]:.2f} ms for LR and from "
+            f"{fits['mlp'][0]:.0f} to {fits['mlp'][-1]:.0f} ms for the MLP, between {min(config.budgets) * 4} and "
+            f"{max(config.budgets) * 4} reviews. HDC also needs no earlier reviews kept, and every update can be undone exactly."
         ),
         (
             f"- **Finds comparable incidents and shows why.** Retrieval reaches {precision} precision@5, against {random_precision} "
@@ -1002,15 +1014,6 @@ def create_report(run_dir):
             f"methods are within {learned['spread']:.1f} points of one another."
         )
     tradeoffs.append(
-        f"- **Slower, but still fast, prediction.** HDC takes {ms(predict['hdc'])} ms, {prediction_ratio:.1f}× LR's "
-        f"{ms(predict['logistic_regression'])} ms, mostly to build the hypervector."
-    )
-    if lr_batch_wins:
-        tradeoffs.append(
-            f"- **Large batches favour a refit.** At {largest} reviews arriving together, one LR refit is faster than "
-            f"{largest} HDC additions."
-        )
-    tradeoffs.append(
         f"- **More storage.** Each incident needs {raw_bytes:,} bytes as a hypervector, about {storage_ratio:.0f}× the "
         f"{input_bytes} bytes of its raw measurements."
     )
@@ -1023,9 +1026,6 @@ def create_report(run_dir):
             if hardest_misses
             else "."
         )
-    )
-    tradeoffs.append(
-        "- **Simulated data.** Every result describes a controlled generator, not a carrier network."
     )
     key_tradeoffs = "\n".join(tradeoffs)
     claim_rows = [
@@ -1051,8 +1051,8 @@ def create_report(run_dir):
         ),
         (
             "Compute cost",
-            f"HDC learns from one new review in {ms(update_single_ms['hdc'])} ms, versus {ms(update_single_ms['logistic_regression'])} ms (LR) and {ms(update_single_ms['mlp'])} ms (MLP) for a full refit. All three predict in at most {ms(max(predict.values()))} ms.",
-            "One refit can absorb a whole batch, so large batches narrow or reverse the gap. Incremental LR/MLP optimizers, energy and production serving were not measured.",
+            f"HDC learns from one new review in {ms(update_single_ms['hdc'])} ms, versus {ms(update_single_ms['logistic_regression'])} ms (LR) and {ms(update_single_ms['mlp'])} ms (MLP) for full retraining. All three predict in at most {ms(max(predict.values()))} ms.",
+            "One retraining run can absorb a whole batch, so large batches narrow or reverse the gap for LR. Incremental LR/MLP optimizers, energy and production serving were not measured.",
         ),
         (
             "Storage",

@@ -1,21 +1,21 @@
 {
   "code_hash": "ce05796d8b5b630774b79b000c5663316820dfd840a2fed29b25ef5792caf133",
-  "report_generator_hash": "749b922cc6facaf0228c87b39f48b1bf2ce3f6c296121c55a83e9d9e2c97dd71",
+  "report_generator_hash": "550efeeb4e60c6d7dc179c4f19beaa4960f8d5b34da4a9842cee025781f0741a",
   "report_template_hashes": {
     "encoder.md": "ec2628026d1ade21f5606d6fba8d87cebf7b6016e3f30f39d5c02522e02403ee",
     "geographic-enhancements.md": "7a5e069e49f29e4b2a247691799a51cdedf76542b88d7e5ed91f02745153f248",
-    "learning-updates.md": "8fe922e0c9d227fcf00bec1e9fcaa2d0862ea58f15e7584721f3a10ff3822537",
-    "summary.md": "d3777f86466e3f738e62d1c2a77d46a865136bc7c7dd41c694ebfb0f04b5b25d"
+    "learning-updates.md": "a0f1cbba66b19a8c5c4220d2be12fcca3a58bd3adea79015400dc05e576f8734",
+    "summary.md": "63c4bce0094ffd3b304e6669edf286b865fd4ac54e5ea6175fd5c258d0e4e809"
   },
   "summary_hash": "0fc1a7727bdb8ab2130078bb29ab5678cbd30e2c3f92e25deb0abc777627e804",
   "figure_hashes": {
     "figures/incident.png": "e2e0612131f7cee2f34ec5e4efdf06a89244d5f8565e05a342bdff4283d49c27",
-    "figures/learning-updates.png": "3725f4c57dc60482ed77061cdd1fb37559cbac907d0b0b3f5aa4e1bf6fb94efe",
+    "figures/learning-updates.png": "7627c3e07e6a8d941740783bab96d7b91fc8433a80b485eb57d1fe2bf8b0a160",
     "figures/learning.png": "fb7267a7d81dccdb583caf285d3acd9a94314a2ec0f25b59b1af561537c0c96b",
     "figures/retrieval.png": "5ac62b27e555c56ada34b71d9231ee35a6e77c2158f9fee823caec34c3e55ef5",
-    "figures/schema.html": "0cc38fc1501aea3658df04dfd9978a6f43cd82b1cd31ef87895d32ee07943649",
+    "figures/schema.html": "d2f553ee6fd2535855d768f1a7eba248456e9bb16ac4fb9523ef8ed6502cf18b",
     "figures/schema.png": "168c7de35207927b3bcb7e4030d5b6b88b5c3ac4fb25b99f24e341aace58e68a",
-    "figures/schema.svg": "f1532cc433c62ef1a9fdd5cd50a58f798d1b3aeeb35dddf918fe960b8197210c"
+    "figures/schema.svg": "f470ab770afe25bb335b54bce878884cd9e2489b06e1e7d07a804bea6ea6b18f"
   },
   "claims": [
     {
@@ -40,8 +40,8 @@
     },
     {
       "claim": "Compute cost",
-      "evidence": "HDC learns from one new review in 0.130 ms, versus 3.726 ms (LR) and 39.7 ms (MLP) for a full refit. All three predict in at most 0.104 ms.",
-      "boundary": "One refit can absorb a whole batch, so large batches narrow or reverse the gap. Incremental LR/MLP optimizers, energy and production serving were not measured."
+      "evidence": "HDC learns from one new review in 0.130 ms, versus 3.726 ms (LR) and 39.7 ms (MLP) for full retraining. All three predict in at most 0.104 ms.",
+      "boundary": "One retraining run can absorb a whole batch, so large batches narrow or reverse the gap for LR. Incremental LR/MLP optimizers, energy and production serving were not measured."
     },
     {
       "claim": "Storage",
@@ -49,5 +49,5 @@
       "boundary": "HDC costs more storage here; the float16 search copy halves it without measurable loss."
     }
   ],
-  "report_hash": "67de979cb82d10720910431e7369a79e527d1971580b4cf23ddbde06b6fcc239"
+  "report_hash": "772c95b2723d0a3661250c4abaa5ba909f34e28b95c6a4326321378ff03f80e3"
 }

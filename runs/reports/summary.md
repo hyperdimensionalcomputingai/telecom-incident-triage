@@ -34,18 +34,15 @@ The learning and cost experiments compare HDC with regularized logistic regressi
 **Where HDC adds value**
 
 - **Learns from very few reviews.** With 1 review per class, HDC scores 7.4–8.9 points higher macro F1 than LR and the MLP.
-- **Learns from each review instantly, without retraining.** One new review takes 0.130 ms to absorb, against 3.726 ms and 39.7 ms to refit LR and the MLP. Earlier reviews need not be kept, and every update can be reversed exactly.
+- **Learning from a new review costs almost nothing, and the cost does not grow.** HDC adds a reviewed incident to memory in 0.130 ms: one vector addition, however many reviews came before. Retraining LR or the MLP on all retained reviews takes 3.726 ms or 39.7 ms per update, and training time grows with the training set: in our initial fits, from 1.92 to 3.55 ms for LR and from 10 to 37 ms for the MLP, between 4 and 80 reviews. HDC also needs no earlier reviews kept, and every update can be undone exactly.
 - **Finds comparable incidents and shows why.** Retrieval reaches 96.3% precision@5, against 25.0% for random ranking. Every similarity score breaks down exactly into contributions from individual facts, each traceable to its source records.
 - **One representation, many uses.** The same hypervector serves retrieval, classification, explanation and editing; a fact such as the handset can be removed from a query without re-encoding the rest.
 
 **Tradeoffs and limits**
 
 - **On par, not ahead, once reviews accumulate.** From 5 reviews per class, the three methods are within 2.0 points of one another.
-- **Slower, but still fast, prediction.** HDC takes 0.104 ms, 2.2× LR's 0.047 ms, mostly to build the hypervector.
-- **Large batches favour a refit.** At 40 reviews arriving together, one LR refit is faster than 40 HDC additions.
 - **More storage.** Each incident needs 16,384 bytes as a hypervector, about 195× the 84 bytes of its raw measurements.
 - **Weakest on shared transport impairment.** At 5 reviews per class, HDC misclassifies 11.8% of these incidents, against 6.9% for LR and 7.6% for the MLP; these incidents also account for 4 of 5 retrieval misses.
-- **Simulated data.** Every result describes a controlled generator, not a carrier network.
 
 ## The dataset
 
@@ -353,13 +350,13 @@ HDC prediction takes 2.2× as long as LR's. That is expected: 81% of HDC's time 
 
 **Setup.** Every method starts from the same 80 reviewed incidents (20 per class). A batch of 1, 20 or 40 later reviews then arrives, using the same review IDs for every method. Each method encodes the new incidents, learns from their labels, and predicts them with the updated memory or model. The timer covers all three steps.
 
-The methods learn differently. HDC adds each new hypervector to its class memory and never revisits earlier reviews. LR and the MLP have no incremental update in this setup, so they refit once on every retained review: 81, 100 or 120 examples, with the frozen settings. Each of the 7 measured repetitions (after 2 warm-ups) starts from the same state.
+The methods learn differently. HDC adds each new hypervector to its class memory and never revisits earlier reviews. LR and the MLP have no incremental update in this setup, so they are retrained once on every retained review: 81, 100 or 120 examples, with the frozen settings. Each of the 7 measured repetitions (after 2 warm-ups) starts from the same state.
 
 ![Total time to learn from a batch of newly reviewed incidents](figures/learning-updates.png)
 
 Total time to encode, learn from and predict the whole batch:
 
-| New reviews | HDC addition, ms | LR refit, ms | MLP refit, ms |
+| New reviews | HDC addition, ms | LR retraining, ms | MLP retraining, ms |
 |---:|---:|---:|---:|
 | 1 | 0.130 | 3.726 | 39.7 |
 | 20 | 2.414 | 3.589 | 38.6 |
@@ -370,16 +367,16 @@ Where that time goes when a single review arrives:
 | Method | Encode, ms | Learn, ms | Predict, ms | Total, ms |
 |---|---:|---:|---:|---:|
 | HDC addition | 0.091 | 0.019 | 0.020 | 0.130 |
-| LR refit | 0.009 | 3.654 | 0.064 | 3.726 |
-| MLP refit | 0.016 | 39.4 | 0.119 | 39.7 |
+| LR retraining | 0.009 | 3.654 | 0.064 | 3.726 |
+| MLP retraining | 0.016 | 39.4 | 0.119 | 39.7 |
 
-**Result.** For 1 new review, HDC finishes in 0.130 ms: about 29× faster than an LR refit (3.726 ms) and 306× faster than an MLP refit (39.7 ms). Encoding is 69% of HDC's time, while refitting is 98% of LR's and 99% of the MLP's.
+**Result.** For 1 new review, HDC finishes in 0.130 ms: about 29× faster than retraining LR (3.726 ms) and 306× faster than retraining the MLP (39.7 ms). Encoding is 69% of HDC's time, while retraining is 98% of LR's and 99% of the MLP's.
 
-Batch size changes the comparison. HDC's total grows with every review it adds, by about 0.12 ms each. A refit processes all retained reviews whatever the batch size, so its time depends little on how many reviews arrived: LR takes 3.726 ms for 1 and 3.694 ms for 40; the MLP takes 39.7 and 47.7 ms. At 40 reviews, one LR refit is faster than 40 HDC additions (4.822 ms).
+Batch size changes the comparison. HDC's total grows with every review it adds, by about 0.12 ms each. Retraining processes all retained reviews whatever the batch size, so its time depends little on how many reviews arrived: LR takes 3.726 ms for 1 and 3.694 ms for 40; the MLP takes 39.7 and 47.7 ms. At 40 reviews, retraining LR once is faster than 40 HDC additions (4.822 ms).
 
-A batch total divided by its size gives a throughput figure, but no review experiences that time: with a refit, every review in the batch waits until the whole refit finishes, plus however long the batch took to collect. We therefore report batch totals only.
+A batch total divided by its size gives a throughput figure, but no review experiences that time: with retraining, every review in the batch waits until the whole retraining finishes, plus however long the batch took to collect. We therefore report batch totals only.
 
-Stage medians need not sum exactly to the total. HDC updates are checked against a complete reconstruction, outside the timer. 7 measured refits raised convergence warnings; diagnostics and raw timings are in each pair's `results.json`. With the starting history fixed at 80 reviews, these results do not show how refit cost scales with much larger histories.
+Stage medians need not sum exactly to the total. HDC updates are checked against a complete reconstruction, outside the timer. 7 measured retraining runs raised convergence warnings; diagnostics and raw timings are in each pair's `results.json`. With the starting history fixed at 80 reviews, these results do not show how retraining cost scales with much larger histories.
 
 
 ### Storage
@@ -390,7 +387,7 @@ Stage medians need not sum exactly to the total. HDC updates are checked against
 | Learned state at 20 reviews per class | 65,536 B (four class accumulators) | 1,328 B | 17,401 B |
 | Earlier reviews kept for the next update | none | 7,452 B | 7,452 B |
 
-HDC needs far more storage per incident than the 21-number LR/MLP input; this study shows no compression benefit. In exchange, HDC's learned state is updated in place, while LR and the MLP must keep earlier reviews to refit. Serialized LR/MLP sizes include estimator metadata and any fitted scaler; HDC's class-memory size excludes audit history, exact-undo snapshots and the encoder basis.
+HDC needs far more storage per incident than the 21-number LR/MLP input; this study shows no compression benefit. In exchange, HDC's learned state is updated in place, while LR and the MLP must keep earlier reviews for retraining. Serialized LR/MLP sizes include estimator metadata and any fitted scaler; HDC's class-memory size excludes audit history, exact-undo snapshots and the encoder basis.
 
 <details>
 <summary>Supporting measurements: initial fits, pipeline stages and artifact sizes</summary>
@@ -429,7 +426,7 @@ HDC needs far more storage per incident than the 21-number LR/MLP input; this st
 | Retrieval with explanations | 96.3% precision@5 against 25.0% for random ranking. All 9,000 top results trace to source records and reconstruct their scores exactly. | No non-HDC retrieval baseline. Ablation gains partly reflect how the patterns are defined. Contributions are not causes. |
 | Learning from few reviews | HDC learns most efficiently when labels are scarce: with 1 review per class, it scores 7.4–8.9 points higher macro F1 than LR and the MLP. From 5 reviews per class, the three are on par. | The advantage shrinks to parity as reviews accumulate. |
 | Updates without retraining | Fixed encoder; each delayed review is added in place and can be reversed exactly. 96.7% correct in the delayed-feedback replay. | Still supervised: labels are required, and an individual update can make predictions worse. |
-| Compute cost | HDC learns from one new review in 0.130 ms, versus 3.726 ms (LR) and 39.7 ms (MLP) for a full refit. All three predict in at most 0.104 ms. | One refit can absorb a whole batch, so large batches narrow or reverse the gap. Incremental LR/MLP optimizers, energy and production serving were not measured. |
+| Compute cost | HDC learns from one new review in 0.130 ms, versus 3.726 ms (LR) and 39.7 ms (MLP) for full retraining. All three predict in at most 0.104 ms. | One retraining run can absorb a whole batch, so large batches narrow or reverse the gap for LR. Incremental LR/MLP optimizers, energy and production serving were not measured. |
 | Storage | 16,384 bytes per raw hypervector versus 84 bytes per LR/MLP input vector. | HDC costs more storage here; the float16 search copy halves it without measurable loss. |
 
 The simulator uses simple observed rules and deliberately balanced classes, with complete telemetry. This makes the mechanisms observable and supplies a compact feature table that conventional trained classifiers can use effectively. It does not demonstrate operational diagnosis, realistic class prevalence, adaptation under drift, robustness to missing telemetry, or coverage of new incident types.

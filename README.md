@@ -45,10 +45,10 @@ Read the [illustrated results summary](runs/reports/summary.md) for the encoder 
 **Where HDC adds value**
 
 - **Learns from very few reviews.** With one review per class, HDC scores 7–9 points higher macro F1 than LR and the MLP (82.3% versus 74.9% and 73.4%).
-- **Learns from each review instantly, without retraining.** About 0.13 ms per review, versus about 3.7 ms to refit LR and 40 ms to refit the MLP.
+- **Learning from a new review costs almost nothing, and the cost does not grow.** About 0.13 ms per review, versus about 3.7 ms to retrain LR and 40 ms to retrain the MLP on every update; retraining time also grows with the training set.
 - **Finds comparable incidents and shows why.** 96.3% precision@5 (random: 25%), and every similarity score breaks down into contributions traceable to source records.
 
-**Tradeoffs:** from five reviews per class, all three methods are on par. HDC predicts about 2× slower than LR (still about 0.1 ms), a single LR refit absorbs a batch of 40 reviews faster, and hypervectors need far more storage than raw measurements. See the summary's [key findings](runs/reports/summary.md#key-findings).
+**Tradeoffs:** from five reviews per class, all three methods are on par; hypervectors need far more storage than raw measurements; and HDC is weakest on shared transport impairment. See the summary's [key findings](runs/reports/summary.md#key-findings).
 
 These findings concern controlled synthetic patterns, and do not represent the operational carrier performance of any real provider. The run times reported in the results depend on the machine being used, so use them as guidance only.
 
