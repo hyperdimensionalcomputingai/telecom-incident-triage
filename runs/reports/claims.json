@@ -1,9 +1,9 @@
 {
   "code_hash": "ce05796d8b5b630774b79b000c5663316820dfd840a2fed29b25ef5792caf133",
-  "report_generator_hash": "4846e48bfb1d06433c4dd2e73ee684870e9468ac1b5775a40a6f5d19efc0129b",
+  "report_generator_hash": "2cdd2cd6dc25dcd06178cd70d5553910ecb7ef9f2b2ea67c9424b18e69e74c9e",
   "report_template_hashes": {
     "encoder.md": "ec2628026d1ade21f5606d6fba8d87cebf7b6016e3f30f39d5c02522e02403ee",
-    "future-work.md": "6ec5a157a09b331ac1eecb1b1b78aec2331eea7dd15ee5cf582f408678e70236",
+    "future-work.md": "3e92e1f412124a3a14356e018c1fb926e81367319de49264d59c8c0958aca12f",
     "geographic-enhancements.md": "7a5e069e49f29e4b2a247691799a51cdedf76542b88d7e5ed91f02745153f248",
     "learning-updates.md": "a0f1cbba66b19a8c5c4220d2be12fcca3a58bd3adea79015400dc05e576f8734",
     "summary.md": "65312bc9db25db63bd4a6673c185a68205e4916b7269744534a5738fa13774d1"
@@ -14,9 +14,9 @@
     "figures/learning-updates.png": "7627c3e07e6a8d941740783bab96d7b91fc8433a80b485eb57d1fe2bf8b0a160",
     "figures/learning.png": "fb7267a7d81dccdb583caf285d3acd9a94314a2ec0f25b59b1af561537c0c96b",
     "figures/retrieval.png": "5ac62b27e555c56ada34b71d9231ee35a6e77c2158f9fee823caec34c3e55ef5",
-    "figures/schema.html": "2651598d0aefe0de6d6f15cac8b9a4b37cec1d48328f83a2369f6f88cb401507",
+    "figures/schema.html": "ed07156126a6a186dfb6eec953dfbd87597651b6553a54e2d7b93c1558f91007",
     "figures/schema.png": "168c7de35207927b3bcb7e4030d5b6b88b5c3ac4fb25b99f24e341aace58e68a",
-    "figures/schema.svg": "f30b794064bbe1e1357534d6cf45c10fea65c45d5a3fdff5b4141c6f2e253ac5"
+    "figures/schema.svg": "04190131f93b5bf5adf8abbe9e7424fe0867a6c1a923567eb7199aeb87ec2a31"
   },
   "claims": [
     {
@@ -50,5 +50,5 @@
       "boundary": "HDC costs more storage here; the float16 search copy halves it without measurable loss."
     }
   ],
-  "report_hash": "943170984de9bbbdfffd7fc57821908cb925e02e5cec8050ef336dafebdbe253"
+  "report_hash": "17b3d6ab7772da79c8a7de51d2da701eaa4c19109c65fc2011ee2fe441f25860"
 }

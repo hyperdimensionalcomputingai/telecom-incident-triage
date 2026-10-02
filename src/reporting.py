@@ -760,6 +760,34 @@ def future_work_explanation(run_dir, config, pair_dir, data_seed, encoder_seed, 
         f"when the phone's own signal {worst}, HDC mislabels {percent(worst_rate)} of these incidents, against "
         f'{percent(steady_rate)} when it {steadiest}. Its most common wrong answer is "{PLAIN_NAMES[LABELS[confused]]}".'
     )
+    # Name the part of the score that pulls toward the wrong pattern, and the part that resists.
+    parts = {
+        "local": "the phone's own signal",
+        "context": "the network facts",
+        "handset": "the handset model",
+    }
+    puller = min(split, key=lambda name: split[name][0] - split[name][1])
+    resister = max(split, key=lambda name: split[name][0] - split[name][1])
+    opening = (
+        f"Here, a phone signal that {worst} pulls the incident toward"
+        if puller == "local"
+        else f"Here, when the phone's signal {worst}, {parts[puller]} pulls the incident toward"
+    )
+    why_example = (
+        f'{opening} "{PLAIN_NAMES[LABELS[confused]]}", against {parts[resister]} that point to the correct pattern. '
+        f"On average {parts[resister]} still win, but narrowly, so the pull wins in {percent(worst_rate)} of these incidents."
+    )
+    lr_rate = groups[worst][2] / groups[worst][0]
+    lr_comparison = (
+        f"LR also gets {percent(lr_rate)} of those incidents wrong, so part of the difficulty lies in the incidents themselves."
+        if lr_rate >= worst_rate / 2
+        else f"LR gets only {percent(lr_rate)} of those incidents wrong, so the gap comes mainly from the class memory."
+    )
+    level_idea = (
+        "Use more numeric levels, or a narrower range for packet loss, so that a faulty link looks less like a healthy one."
+        if hardest == "shared_transport"
+        else "Use more numeric levels, so that measurements that are close but mean different things look less alike."
+    )
     return render_template(
         "future-work.md",
         {
@@ -777,6 +805,9 @@ def future_work_explanation(run_dir, config, pair_dir, data_seed, encoder_seed, 
             "split_rows": split_rows,
             "net_margin": f"{margin:.3f}",
             "level_finding": level_finding,
+            "why_example": why_example,
+            "lr_comparison": lr_comparison,
+            "level_idea": level_idea,
         },
     )
 

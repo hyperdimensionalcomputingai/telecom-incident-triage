@@ -1,14 +1,14 @@
 ## Future work: teaching the class memory which facts matter
 
-**What we saw.** HDC's mistakes concentrate on one pattern: {{ hard_pattern_intro }}. They are most common when other evidence in the incident points elsewhere: {{ hard_pattern_finding }}
+**What we saw.** HDC's mistakes concentrate on one pattern: {{ hard_pattern_intro }}. They are most common when other evidence in the incident points elsewhere: {{ hard_pattern_finding }} {{ lr_comparison }}
 
-**Why it happens.** HDC's class memory is a running sum of each pattern's reviewed incidents. It learns what a *typical* incident of each pattern looks like, not which facts tell the patterns apart: every fact keeps the fixed weight the encoder gave it, and adding examples never changes those weights. When a pattern is decided by a few facts among many that vary, those few can be outvoted. Here, a weakening phone signal outvotes a handful of faulty-link measurements. LR and the MLP instead fit a separate weight to every input from the labels, so the deciding measurement can count for far more. This is a property of the running-sum class memory, not of HDC as a whole: the encoding still carries the deciding facts.
+**Why it happens.** HDC's class memory is a running sum of each pattern's reviewed incidents. It learns what a *typical* incident of each pattern looks like, not which facts tell the patterns apart: every fact keeps the fixed weight the encoder gave it, and adding examples never changes those weights. When a pattern is decided by a few facts among many that vary, those few can be outvoted. {{ why_example }} LR and the MLP instead fit a separate weight to every input from the labels, so the deciding measurement can count for far more. This is a property of the running-sum class memory, not of HDC as a whole: the encoding still carries the deciding facts.
 
 **What to try next.**
 
 - **Mistake-driven updates.** When the memory misclassifies a reviewed incident, add it to the correct pattern and subtract it from the wrongly predicted one. This is a common extension in HDC; it keeps updates to vector arithmetic, but each update now depends on the current memory. Its effect on update cost, order independence and exact reversal needs measuring.
 - **Learned weights.** Choose the weight of each fact or channel from validation data, instead of the fixed values used here.
-- **Finer distinctions in the numbers.** Use more numeric levels, or a narrower range for packet loss, so that a faulty link looks less like a healthy one.
+- **Finer distinctions in the numbers.** {{ level_idea }}
 - **Separate the encoding from the class memory.** Run the same running-sum classifier on the raw 21 measurements, and an error-driven learner on the hypervectors. This would show how much of the gap comes from the class memory and how much from the encoding.
 
 <details>
