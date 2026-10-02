@@ -1,7 +1,7 @@
 {
   "stage": "complete",
   "config_hash": "26eb233ee19ef1d17729d13919d7daeac19b89250a50c985adf71e4722345fe4",
-  "prepare_code_hash": "69586e53635e52cd7abb82996746927f519b04af6820afea9e925aeca029d258",
+  "prepare_code_hash": "ce05796d8b5b630774b79b000c5663316820dfd840a2fed29b25ef5792caf133",
   "datasets": {
     "1006": {
       "subscribers": "9c6e8cc9c9eb9e3908983e7f5e62ab0632d4bba0a8a53c86fa4126135a112316",
@@ -70,25 +70,25 @@
     }
   },
   "dataset_manifest_hashes": {
-    "1006": "a9d95e9115b0367ed5039c903433db48f961cb062d7c3ccfffb94a78cbd888fe",
-    "1007": "f03fdc78217bee62b96b02574f83b27f39d71ffdcaf7f8c33f0c33a11558b90d",
-    "1008": "0e76c74220b5adb8e84c35c2e4bf6eda9d2f761434e498db546fa3270a3a0664",
-    "1009": "96c1e55ad16654f3002475f52f84fd2a2d8a751fd15e67934cf08d6720fc5f45",
-    "1010": "3422a90563d09ce81397feb82fa7f684c6f5167bf5a979d6aeff914d6ee1c1d1"
+    "1006": "eca9e3f85f2fed38c044c22905fac1b0f86f95825c342fbb5889b18f7624214e",
+    "1007": "834ff10341f51a42ea7e714fcc0d2609e0378f22e01f9ac33997beefd16703ae",
+    "1008": "59a42f2b609331814543c38ae36d601b7006d845b106532476262f4fae970200",
+    "1009": "72ad8c5e488658d48f9e527f45c041dc285a3644161820ef2c96ee552baefb1c",
+    "1010": "8f2f8e319eee5576ac29633512101c924a6e3318b220dfdc64d3d2a4b8276403"
   },
   "prepare_timings_s": {
-    "1006": 0.24960591702256352,
-    "1007": 0.23415479200775735,
-    "1008": 0.25068270799238235,
-    "1009": 0.21376225000130944,
-    "1010": 0.21520704199792817
+    "1006": 0.2586711249896325,
+    "1007": 0.22108316697995178,
+    "1008": 0.2193114580004476,
+    "1009": 0.2215478330035694,
+    "1010": 0.22439491699333303
   },
   "geography_hashes": {
     "bloor-corridor.geojson": "9f74a10d8731d8192d60ea6b96477a6eb07ca7f72076a146c4bcdc2735260373",
-    "bloor-source-response.json": "6545a779e21f07981caef7374db74d398a6fc5d0228582f3d7f934630a86bf15",
-    "manifest.json": "f4daacf8b8d5926548657a3852bc0ee12638cc000f8f81007252b7c0a563c3dc"
+    "bloor-source-response.json": "ce2ae9a2b3ac2d7b96e81f0922443081e118509d835a340ea44113f23aa2cede",
+    "manifest.json": "1cdd376e0dfaedea6daf516066095402fe62ce4946967222ce2a279cdc6fc111"
   },
-  "run_code_hash": "69586e53635e52cd7abb82996746927f519b04af6820afea9e925aeca029d258",
+  "run_code_hash": "ce05796d8b5b630774b79b000c5663316820dfd840a2fed29b25ef5792caf133",
   "completed_pairs": [
     [
       1006,
@@ -152,8 +152,8 @@
     ]
   ],
   "runtime": {
-    "python": "3.12.13",
-    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "python": "3.13.14",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
     "torch_threads": 1,
     "threadpools": [
       {
@@ -161,15 +161,15 @@
         "internal_api": "openmp",
         "num_threads": 1,
         "prefix": "libomp",
-        "filepath": "/Users/prrao/code/telus-demo/.venv/lib/python3.12/site-packages/torch/lib/libomp.dylib",
+        "filepath": "/Users/prrao/code/telus-demo/.venv/lib/python3.13/site-packages/torch/lib/libomp.dylib",
         "version": null
       },
       {
         "user_api": "openmp",
         "internal_api": "openmp",
-        "num_threads": 1,
+        "num_threads": 10,
         "prefix": "libomp",
-        "filepath": "/Users/prrao/code/telus-demo/.venv/lib/python3.12/site-packages/sklearn/.dylibs/libomp.dylib",
+        "filepath": "/Users/prrao/code/telus-demo/.venv/lib/python3.13/site-packages/sklearn/.dylibs/libomp.dylib",
         "version": null
       }
     ],
@@ -193,25 +193,26 @@
   },
   "summary_hash": "0fc1a7727bdb8ab2130078bb29ab5678cbd30e2c3f92e25deb0abc777627e804",
   "result_hashes": {
-    "1006/2001": "0a1f34ea0120eaf19181ff4ca5b75b55cd65edfc818e38ac9670f2cb6c3c7ab2",
-    "1006/2002": "c6d46121b2670fe1f44e3212abcb40ba6eddfee61ab406551c9b775dafebadfd",
-    "1006/2003": "833e0db5dc663ebd2e4e0950718289aa7cb13c46b033cd2ccd434d9888014050",
-    "1007/2001": "3f01f58283efef9d12409e5788c2ce2b8d39805712fe83f0a4f4d878df7aaeb3",
-    "1007/2002": "29e50022756cb62ed94783b966741027f1477139b4e57f28b385de154c6ae436",
-    "1007/2003": "b26793c771a4ee72d8ec431acef8164dc30f8e35272a99139eedef0d5cfe86c7",
-    "1008/2001": "175655b71ef2f9ce6e84b25fbf55ab48cbc6942dc454967ab007778931acef2a",
-    "1008/2002": "42eeb5f69fc43002ca6210705130dc630f8ee58f3279819e93870ccd3f5fe781",
-    "1008/2003": "7525a69de544c01885cd5c740b8990de371648dc8674a6711bf38415641adf4a",
-    "1009/2001": "032995f03156fbd64ed1530853426d5aee9e904eaaf7716fbf7efee5e8bd9668",
-    "1009/2002": "44af627bfce401ac87381d7c30d2eeca4c3f244655c586928de7bf251c25a5a9",
-    "1009/2003": "ebea33d5b3b0d2fd55f66fa8ab1833d46ba1e786ef82f888862a2e6421777c75",
-    "1010/2001": "43bdb6eb22399df5b8deeb3e22a6b07e766466e8cf3c6582f50dd95c80a909ab",
-    "1010/2002": "ed6fcc13545a8e84543895c71083a95df30bcb08fe79bee515f65d70bf403930",
-    "1010/2003": "b5edac892968d2f296a20e401762ee95baa926e4ef706a81f34c7c1f16d87f9a"
+    "1006/2001": "d28382a98a7913144461369672a958752c1621e13c52020160597babc4335376",
+    "1006/2002": "3f33f9200616bc68c4d23315b059fc3037affa8ad1f0cba47fbc96da7c192a07",
+    "1006/2003": "5f9208ca39467386c4886ee70bb37b7a1e25cab4510a7b9f7c3b98619f1d7fdb",
+    "1007/2001": "1f060544bcc140cc61be57403055fd2c46fbaf9d95491dde9080e2010c5a4b4a",
+    "1007/2002": "c7797de8f9b251f6a9dd8b5a5b478c5732f2fe1cb2ff28fd9a6cbf257bbd3eec",
+    "1007/2003": "5b4c5a884112c4f9a984e7c6830725af359d828aa4c5e6cbbb77697a78c67b64",
+    "1008/2001": "8c5aadb416d6e80d9e6c13966a1a36d33c4adba0bc4ec3acbec0786e3a10ff2e",
+    "1008/2002": "0c2d9cafe5782da367bf8448f6f5208c11a81703b5a8005380453314745027e1",
+    "1008/2003": "69b1c39d71148d0f7ab4305f8b00f32b2081395b22d9a1f2c6fd5f18b28df3f8",
+    "1009/2001": "3c72cca51156390cd6717a4f654fabef14805a938355ee702d96c87225750505",
+    "1009/2002": "d5d8f56f54047a9fb7741cbd27f0f51f9d030889cfae656dbdfe5f8954e26fe8",
+    "1009/2003": "f9c2832d7d8ef52fd2e94c7382f933c0ec948f2272c26b230aef2ade31107c85",
+    "1010/2001": "276e2d8bac500b52cbaa99c8c280ac8eb4f1d5364c5392b4da29a7aa591221a7",
+    "1010/2002": "25a8bf6fa830e0f605c881af4696eb4c20634a22dd5174aeec27f99cac98a659",
+    "1010/2003": "1e948e3c6415fa13c751e446b0130f32135f7aa700cfd75e4ae2f31d20898e33"
   },
   "artifact_hashes": {
-    "frozen_settings.json": "04c44f84269c893e58b826bb9505066e4ddf0779db82ecb0ad82012e1ab411a6",
-    "pairs/data-1006_encoder-2001/results.json": "0a1f34ea0120eaf19181ff4ca5b75b55cd65edfc818e38ac9670f2cb6c3c7ab2",
+    "frozen_settings.json": "0ee4d7c317efdf2712a6b6acd1d0e7f19e8965eab788c9b732426c6fbac29ba0",
+    "metrics.json": "c3515db0885d0449804c59c237ccb87128ef47cbdb5d0d6e7f09cbc7518c0929",
+    "pairs/data-1006_encoder-2001/results.json": "d28382a98a7913144461369672a958752c1621e13c52020160597babc4335376",
     "pairs/data-1006_encoder-2001/case.json": "12a0b24fd1b6763d3efe2d04b045291d895e8a752073ba433a467c75a879dd05",
     "pairs/data-1006_encoder-2001/online.json": "d2fb037bec18dd53453c6f095d4bd9d2ca34f1dace5a5bd8076a0ada9ea6502d",
     "pairs/data-1006_encoder-2001/retrieval_errors.json": "e8a0c6ec4c05dcfa43216ce9797b8695079643732e66523109283b0a490fb02e",
@@ -225,7 +226,7 @@
     "pairs/data-1006_encoder-2001/models/mlp-budget-2.joblib": "bd1e5867738d5bbeea15a2abc0d68283c45dbffd510a25d816fbb34f3b67b278",
     "pairs/data-1006_encoder-2001/models/mlp-budget-20.joblib": "5dc10a2c5a918c8208b078d9a9498f4e29c2f74fbd6422b53fd96b9062925152",
     "pairs/data-1006_encoder-2001/models/mlp-budget-5.joblib": "c01ad5a234990614991ba034ab33b2286386807d720883d9b633d8805e9c955c",
-    "pairs/data-1006_encoder-2002/results.json": "c6d46121b2670fe1f44e3212abcb40ba6eddfee61ab406551c9b775dafebadfd",
+    "pairs/data-1006_encoder-2002/results.json": "3f33f9200616bc68c4d23315b059fc3037affa8ad1f0cba47fbc96da7c192a07",
     "pairs/data-1006_encoder-2002/case.json": "b1da7e8e03811f5c7db94f12f8ef2b1de396813424826091778591fd2b078414",
     "pairs/data-1006_encoder-2002/online.json": "6d6efeeab04e4c4e0ba1f262c945f4480f8fd060b4708b6f89872354a5829b50",
     "pairs/data-1006_encoder-2002/retrieval_errors.json": "958f51f236742e66c2846b9bc358aacdf20cc6cc10cea8c169bb085cc4966b6f",
@@ -239,7 +240,7 @@
     "pairs/data-1006_encoder-2002/models/mlp-budget-2.joblib": "8693382a8b3bc19739da21556af5ab9820843c351b39838f7f7c84cb3a68d4b9",
     "pairs/data-1006_encoder-2002/models/mlp-budget-20.joblib": "1c75c0984fabdb88ce0623382d4955578ab39afe630546e49c88469a95e1ccc5",
     "pairs/data-1006_encoder-2002/models/mlp-budget-5.joblib": "a6e24bd1523eda7d3b4d84654adfa65047e8aa9654e8f584791c7e4a173cfd21",
-    "pairs/data-1006_encoder-2003/results.json": "833e0db5dc663ebd2e4e0950718289aa7cb13c46b033cd2ccd434d9888014050",
+    "pairs/data-1006_encoder-2003/results.json": "5f9208ca39467386c4886ee70bb37b7a1e25cab4510a7b9f7c3b98619f1d7fdb",
     "pairs/data-1006_encoder-2003/case.json": "229ae084e90a8da56dafa0df49bba48d40b9b8c1e480f0f1558f543b815cfb7b",
     "pairs/data-1006_encoder-2003/online.json": "43975238935668ad12b219817bbbc17497f4fccb4e443a56997fc15a1d39a6db",
     "pairs/data-1006_encoder-2003/retrieval_errors.json": "7a28a772931174aaddde53f0a28038406a53988a11f1e72a4b0c83a13f5a5d01",
@@ -253,7 +254,7 @@
     "pairs/data-1006_encoder-2003/models/mlp-budget-2.joblib": "574e1e3f9e430f716ea9fb715c8bb172389b1113be177ef57a2cdd1569837b4b",
     "pairs/data-1006_encoder-2003/models/mlp-budget-20.joblib": "25dad4fdbf7f07a0a0f30aa29a75f04c0ee3294704fed8eb06e6fb71990a7c93",
     "pairs/data-1006_encoder-2003/models/mlp-budget-5.joblib": "92344b137ecbce6ded48388eb72750d3ef770dbb2ad61126bf90311909087b5e",
-    "pairs/data-1007_encoder-2001/results.json": "3f01f58283efef9d12409e5788c2ce2b8d39805712fe83f0a4f4d878df7aaeb3",
+    "pairs/data-1007_encoder-2001/results.json": "1f060544bcc140cc61be57403055fd2c46fbaf9d95491dde9080e2010c5a4b4a",
     "pairs/data-1007_encoder-2001/case.json": "ce6079da8d12899c69f5822d4895a61d53b9a51b4200aea84a36dd3e2f33db94",
     "pairs/data-1007_encoder-2001/online.json": "ba362e51a9daea6d5722c81528d4e2e7c07a9a5a6365ff40283af8d6168669a2",
     "pairs/data-1007_encoder-2001/retrieval_errors.json": "a462c4228ef617de6399337237a95632c3fc3842b33a650d94a0010f69e272aa",
@@ -267,7 +268,7 @@
     "pairs/data-1007_encoder-2001/models/mlp-budget-2.joblib": "dc69350690f5f170076b111dd7d12c7a5631c372330c4bfdb48a35dacfe7f96a",
     "pairs/data-1007_encoder-2001/models/mlp-budget-20.joblib": "b5f0c0dffdc2d5d3bc97ac8507322997f4e8e499dbd4f934ca262b91c3f6275a",
     "pairs/data-1007_encoder-2001/models/mlp-budget-5.joblib": "2e63c7de7d2abbacf5d8abb762e78736b399f5ed1e14d4a0fa7c93542c7ff504",
-    "pairs/data-1007_encoder-2002/results.json": "29e50022756cb62ed94783b966741027f1477139b4e57f28b385de154c6ae436",
+    "pairs/data-1007_encoder-2002/results.json": "c7797de8f9b251f6a9dd8b5a5b478c5732f2fe1cb2ff28fd9a6cbf257bbd3eec",
     "pairs/data-1007_encoder-2002/case.json": "edc940e4041a826aea59c93ef1dbe913ba9c9157367dd9e121c36ad965d3c855",
     "pairs/data-1007_encoder-2002/online.json": "5a96c5d251e3d04cd081565803b88e424366258a96fa47c9200e5aac9252e1de",
     "pairs/data-1007_encoder-2002/retrieval_errors.json": "985cbb6d5be453d30c1c0deb669fec148a042f54496de9906285555c872249f8",
@@ -281,7 +282,7 @@
     "pairs/data-1007_encoder-2002/models/mlp-budget-2.joblib": "a1c69092b95ba9ece9b9be681b6a043b61a5b26f7dedbdd5dfa1b0ed61a8a597",
     "pairs/data-1007_encoder-2002/models/mlp-budget-20.joblib": "673f176d6ace28ccb4079563a1277e83413c9201490b187dda23b4e495ffd15e",
     "pairs/data-1007_encoder-2002/models/mlp-budget-5.joblib": "cecf203f87a6eec76723bc3d653da71d23655b27f33aa344db6727c831addd27",
-    "pairs/data-1007_encoder-2003/results.json": "b26793c771a4ee72d8ec431acef8164dc30f8e35272a99139eedef0d5cfe86c7",
+    "pairs/data-1007_encoder-2003/results.json": "5b4c5a884112c4f9a984e7c6830725af359d828aa4c5e6cbbb77697a78c67b64",
     "pairs/data-1007_encoder-2003/case.json": "d87007190b270ba316952a3cc76d6cd55a6666af113d076673a90d0fcaed7530",
     "pairs/data-1007_encoder-2003/online.json": "d1002ddbf6af601d414ba7c7371180fbde1c7e881785ef24e8a4feb0992b770b",
     "pairs/data-1007_encoder-2003/retrieval_errors.json": "a6f9254cb37b33669eebfe8888422e4e6af415d50fc015faa19abdd972c0f230",
@@ -295,7 +296,7 @@
     "pairs/data-1007_encoder-2003/models/mlp-budget-2.joblib": "4be5b6bef786e9b56c4ff4afdd9324a2b584e843cc1de7747cb0c8b947768622",
     "pairs/data-1007_encoder-2003/models/mlp-budget-20.joblib": "b142a335ca27f449cfc58046f9a0d0fa7ea20bed88efd23dc9baacfef4aab7f1",
     "pairs/data-1007_encoder-2003/models/mlp-budget-5.joblib": "66bf1f7d2852a273276da3a166048fdb27de840e8c1a71134db410f18d1abed9",
-    "pairs/data-1008_encoder-2001/results.json": "175655b71ef2f9ce6e84b25fbf55ab48cbc6942dc454967ab007778931acef2a",
+    "pairs/data-1008_encoder-2001/results.json": "8c5aadb416d6e80d9e6c13966a1a36d33c4adba0bc4ec3acbec0786e3a10ff2e",
     "pairs/data-1008_encoder-2001/case.json": "7b9cb347ed9319013369cc56dbe7e36f8c7d01337fc26a94b25cf11868313cb5",
     "pairs/data-1008_encoder-2001/online.json": "9717c9b3ef7f5775d301ded13855dcbfd5301767a0ba25f2c6218815dd4db0b5",
     "pairs/data-1008_encoder-2001/retrieval_errors.json": "f4feb637365cf3b9a8bba78534099e8c1fa6a4e5ec1c333c4a6d5caf13c8face",
@@ -309,7 +310,7 @@
     "pairs/data-1008_encoder-2001/models/mlp-budget-2.joblib": "1c5df505a8ec30a89b043ba830560b19916966d059e561097a3057bc62fbd577",
     "pairs/data-1008_encoder-2001/models/mlp-budget-20.joblib": "55e4317ab8b8a84f4d9a99a439f457c792751797c865e759e23aeefdd7dd627a",
     "pairs/data-1008_encoder-2001/models/mlp-budget-5.joblib": "9a6be93dc109c7936546d6d05bfce0fde6c1b1d497b51f8ab1d0444bc5421596",
-    "pairs/data-1008_encoder-2002/results.json": "42eeb5f69fc43002ca6210705130dc630f8ee58f3279819e93870ccd3f5fe781",
+    "pairs/data-1008_encoder-2002/results.json": "0c2d9cafe5782da367bf8448f6f5208c11a81703b5a8005380453314745027e1",
     "pairs/data-1008_encoder-2002/case.json": "38e2ac7fe95f52e052b34ee85cc5faf62d8d7c314b2fab4d6ed03c00d6708226",
     "pairs/data-1008_encoder-2002/online.json": "9b88060459d3d91b600f0c37034adf32aece19bc56a1eaba09633eff183d14c9",
     "pairs/data-1008_encoder-2002/retrieval_errors.json": "82e6635dfdd73d8e222b1a34ca8d9defb955eb470eb10cc23e019d14bbc49ad8",
@@ -323,7 +324,7 @@
     "pairs/data-1008_encoder-2002/models/mlp-budget-2.joblib": "94bebaabc804b0edf50b6188ddaa3fa27f3d918ee8ee9ba53cdfde0ca145a2c0",
     "pairs/data-1008_encoder-2002/models/mlp-budget-20.joblib": "2bff2fb24c554b9ffccbdf40d254d538e9253fd67a94553e3582df81e8581f96",
     "pairs/data-1008_encoder-2002/models/mlp-budget-5.joblib": "ba0eff0f65d3278969ff3251f3c540cdb316a328043183e821d5e0804e18ec47",
-    "pairs/data-1008_encoder-2003/results.json": "7525a69de544c01885cd5c740b8990de371648dc8674a6711bf38415641adf4a",
+    "pairs/data-1008_encoder-2003/results.json": "69b1c39d71148d0f7ab4305f8b00f32b2081395b22d9a1f2c6fd5f18b28df3f8",
     "pairs/data-1008_encoder-2003/case.json": "1bca03c010daad3a2797d261e402cbc07e66a9b43f0dfee7e4bf1736d46e631d",
     "pairs/data-1008_encoder-2003/online.json": "7a2d44c9ba047b2a2ac4ff9eb7251519742995f8e9cb1871abb90a817cb23067",
     "pairs/data-1008_encoder-2003/retrieval_errors.json": "6c1888fa1e60fe8b2fe4f760eb76efc3d093b5b65f5e2619b27f80c1e7f570bb",
@@ -337,7 +338,7 @@
     "pairs/data-1008_encoder-2003/models/mlp-budget-2.joblib": "a4ac1572217ad5fe60b2d62db8e8d351bf3c281027a40c9c4c81e21f7c91eb05",
     "pairs/data-1008_encoder-2003/models/mlp-budget-20.joblib": "a27b028a02d437bbfe86ce7c689430d250460683403cedd07ea098d24caed0c6",
     "pairs/data-1008_encoder-2003/models/mlp-budget-5.joblib": "f0bad245209d7e195200b071d9d2e42b1987f2aa5016843f6c1427f6fbe67095",
-    "pairs/data-1009_encoder-2001/results.json": "032995f03156fbd64ed1530853426d5aee9e904eaaf7716fbf7efee5e8bd9668",
+    "pairs/data-1009_encoder-2001/results.json": "3c72cca51156390cd6717a4f654fabef14805a938355ee702d96c87225750505",
     "pairs/data-1009_encoder-2001/case.json": "e2627817a7f941f06a51e8f45a6bc6a4e97bb89de6f0f713b18488c47f2de62a",
     "pairs/data-1009_encoder-2001/online.json": "4c8d8c6dd3fa8b9643ee8b53ed145551f11dc9c613eda765f8a55dec4add089a",
     "pairs/data-1009_encoder-2001/retrieval_errors.json": "a373795f095f4c8b70c174e9a5c73332a0c9f886d2860d54680e531e59da43ce",
@@ -351,7 +352,7 @@
     "pairs/data-1009_encoder-2001/models/mlp-budget-2.joblib": "2579b3ea1de248cadf7b64e3c89aef6b50f307a9aac186644958cbdd1ba23aba",
     "pairs/data-1009_encoder-2001/models/mlp-budget-20.joblib": "fdc90d492cf8b4b635baf265193fcdbe9632d8df2dca1a82d620e584f2edc8d6",
     "pairs/data-1009_encoder-2001/models/mlp-budget-5.joblib": "f29f7e254ffb26c943f652f55f72ec5262615e942f3388b734417536714a7841",
-    "pairs/data-1009_encoder-2002/results.json": "44af627bfce401ac87381d7c30d2eeca4c3f244655c586928de7bf251c25a5a9",
+    "pairs/data-1009_encoder-2002/results.json": "d5d8f56f54047a9fb7741cbd27f0f51f9d030889cfae656dbdfe5f8954e26fe8",
     "pairs/data-1009_encoder-2002/case.json": "361ea72c3383c542ea053694534386d2d94687f98fe4f8e4d1b2962fd54bed0c",
     "pairs/data-1009_encoder-2002/online.json": "93ce1adfdc2ce981800ef164b416d3478f13905d32b302a786d7b78675e2b9bc",
     "pairs/data-1009_encoder-2002/retrieval_errors.json": "8acc18cfb98c3df6c1c07f3a5c223a29da9143d9cf18cc2316238c5cd6716a00",
@@ -365,7 +366,7 @@
     "pairs/data-1009_encoder-2002/models/mlp-budget-2.joblib": "a3696083318a024747c34ced3bc38704051dd8162e013782737a93b4882c0c66",
     "pairs/data-1009_encoder-2002/models/mlp-budget-20.joblib": "6cb02353d947fd51db2c9edf0c779592d1fb06052c3008894ccdd894351e92b1",
     "pairs/data-1009_encoder-2002/models/mlp-budget-5.joblib": "dbdc140e2dd229129c99907108d97170ba6f349c66baa1ed50236ed7fd74e21f",
-    "pairs/data-1009_encoder-2003/results.json": "ebea33d5b3b0d2fd55f66fa8ab1833d46ba1e786ef82f888862a2e6421777c75",
+    "pairs/data-1009_encoder-2003/results.json": "f9c2832d7d8ef52fd2e94c7382f933c0ec948f2272c26b230aef2ade31107c85",
     "pairs/data-1009_encoder-2003/case.json": "9c8d3c4306f7f8cb0144f450841280fa12969f2545b227a906bc20d6883a3d21",
     "pairs/data-1009_encoder-2003/online.json": "2187128a4c9d4e2a7bed3835c75a7fdffeb19c399f8ca7691b95085a0583b1d0",
     "pairs/data-1009_encoder-2003/retrieval_errors.json": "0b364a83606cd3061b483eec7bd7ae7b4a4a2e1f2782133da636ce5bb94e978d",
@@ -379,7 +380,7 @@
     "pairs/data-1009_encoder-2003/models/mlp-budget-2.joblib": "23eb0f66405e0e63a79fec152d11daf94543d33208e3c88bf1575702f33abbfd",
     "pairs/data-1009_encoder-2003/models/mlp-budget-20.joblib": "bbb6aedddd53af3816938e7c012d3fdd431c9345a9de5faf25b1a0317a96f750",
     "pairs/data-1009_encoder-2003/models/mlp-budget-5.joblib": "e0c4c2f2485424417c82f5a38221867b5c855dfdd58fa3dce181ae9b3f017e57",
-    "pairs/data-1010_encoder-2001/results.json": "43bdb6eb22399df5b8deeb3e22a6b07e766466e8cf3c6582f50dd95c80a909ab",
+    "pairs/data-1010_encoder-2001/results.json": "276e2d8bac500b52cbaa99c8c280ac8eb4f1d5364c5392b4da29a7aa591221a7",
     "pairs/data-1010_encoder-2001/case.json": "173da024fe4fea547a385b3f2c0b7f4b727ef0b608374d75baa7e33c98e0001c",
     "pairs/data-1010_encoder-2001/online.json": "93e89e69f721744ae29e117dcd59c6c866c1976ad5106e9672f714d2b1d997bf",
     "pairs/data-1010_encoder-2001/retrieval_errors.json": "c4fb0c8f8d16e7ad4555dd68c357b8cc6fd2cf37bfcddf6e069cf86983480700",
@@ -393,7 +394,7 @@
     "pairs/data-1010_encoder-2001/models/mlp-budget-2.joblib": "8634d17983e17d2db6e50874375badc2055079e280278aa69cb46c09cc1e0951",
     "pairs/data-1010_encoder-2001/models/mlp-budget-20.joblib": "461c57c9f189786c3c29097e7114c6a21680ff0140e36a04d0fafc119ff431c0",
     "pairs/data-1010_encoder-2001/models/mlp-budget-5.joblib": "68fe1635d6108bb958be43fe4d86e874eb5d3d73f9b550c781de0fceeb00093c",
-    "pairs/data-1010_encoder-2002/results.json": "ed6fcc13545a8e84543895c71083a95df30bcb08fe79bee515f65d70bf403930",
+    "pairs/data-1010_encoder-2002/results.json": "25a8bf6fa830e0f605c881af4696eb4c20634a22dd5174aeec27f99cac98a659",
     "pairs/data-1010_encoder-2002/case.json": "5ff662dbdbd92fd288d3580366c39e9b9bae8703f94079ac2188d20761e35161",
     "pairs/data-1010_encoder-2002/online.json": "9ad88d1da1ba2b507eb43aaa1d8313168c55d7c4be1caeeaf05392be30b096e4",
     "pairs/data-1010_encoder-2002/retrieval_errors.json": "84132d2bf0ced9b8dff341483f0c706d288f3207e3cd26f7f71ceec1719afaee",
@@ -407,7 +408,7 @@
     "pairs/data-1010_encoder-2002/models/mlp-budget-2.joblib": "f3b675355939d402f5d5082f4c98115b41800998e55bccf9f535eb3cace838f4",
     "pairs/data-1010_encoder-2002/models/mlp-budget-20.joblib": "955b2509d8ce94d43c9d2a22a8aa7c265855d2275eab1515ef1226483fb86dfa",
     "pairs/data-1010_encoder-2002/models/mlp-budget-5.joblib": "2d3dd1dc513ac25d2d7537470583b7239dc715153c0c85939848dabf15a848fe",
-    "pairs/data-1010_encoder-2003/results.json": "b5edac892968d2f296a20e401762ee95baa926e4ef706a81f34c7c1f16d87f9a",
+    "pairs/data-1010_encoder-2003/results.json": "1e948e3c6415fa13c751e446b0130f32135f7aa700cfd75e4ae2f31d20898e33",
     "pairs/data-1010_encoder-2003/case.json": "cba958dcf3513e60ce77ed037ee2758c2df100f6325485eb4c67fb93d0d529fc",
     "pairs/data-1010_encoder-2003/online.json": "00aa776c95fa75c59a59aaff5c12d6bfae5a88d54e8af22b97f34999ca0e9305",
     "pairs/data-1010_encoder-2003/retrieval_errors.json": "8b85ba87d72fea5c334ce469c3b74e8699cef2c38af2573ceeafbf69a7b1db30",
@@ -420,8 +421,6 @@
     "pairs/data-1010_encoder-2003/models/mlp-budget-10.joblib": "f3299020ff2defcb43e3d5ce8e6bbb3a6f97dca5f141e340d729328e7b4bd7a3",
     "pairs/data-1010_encoder-2003/models/mlp-budget-2.joblib": "593f0ae74843ee2b8b75b18257ea28ab3ff4e011d6f69edfbfbaa4a9afdc7f7f",
     "pairs/data-1010_encoder-2003/models/mlp-budget-20.joblib": "e51621cbe11b1d7e6b1685049b313d2ae97dc768fafd9b3552bef2de1835ce99",
-    "pairs/data-1010_encoder-2003/models/mlp-budget-5.joblib": "171aec03adb6835142b5a9a423c1d7408db58652a6b669bbc710c8b2ad9f81b7",
-    "metrics.json": "88c2b6da7ea7532f96d0c6bfabed7335329e60ccdcd3da6ffe5c9833fd0d5c2f"
-  },
-  "publication_scope": "Retained evidence projects original measurements onto HDC retrieval diagnostics and HDC/LR/MLP learning. Original experiment and source-result hashes remain unchanged."
+    "pairs/data-1010_encoder-2003/models/mlp-budget-5.joblib": "171aec03adb6835142b5a9a423c1d7408db58652a6b669bbc710c8b2ad9f81b7"
+  }
 }
