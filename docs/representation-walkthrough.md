@@ -515,7 +515,7 @@ h_{\text{handset}}
 =0.25\,
 h_{\text{handset channel}}
 \otimes h_{\text{handset property}}
-\otimes h_{\text{model\_0}}.
+\otimes h_{\text{model}\_0}.
 $$
 
 Here the role-value pair is the handset-model property role bound to the `model_0` value hypervector. The channel marker distinguishes this contribution from the numeric measurements.
