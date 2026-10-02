@@ -38,6 +38,15 @@ UPDATE_NAMES = {
     "logistic_regression": "LR retraining",
     "mlp": "MLP retraining",
 }
+
+# Everyday descriptions of the patterns, for the high-level key findings.
+PLAIN_PATTERNS = {
+    "radio_deteriorating": "a phone's signal getting steadily weaker",
+    "transient_recovery": "a phone's signal dropping and then recovering",
+    "shared_transport": "faults in network equipment that many phones share",
+    "normal": "normal service",
+}
+
 REPORT_TEMPLATES = ROOT / "docs" / "report-templates"
 PLACEHOLDER = re.compile(r"\{\{\s*([a-z][a-z0-9_]*)\s*\}\}")
 
@@ -1018,14 +1027,13 @@ def create_report(run_dir):
             f"- **On par, not ahead, once reviews accumulate.** From {learned['on_par']} reviews per class, the three "
             f"methods are within {learned['spread']:.1f} points of one another."
         )
-    tradeoffs.append(
-        f"- **Weakest on {PATTERNS[hardest]}.** HDC mislabels these incidents more often than LR and the MLP"
-        + (
-            ", and they make up most of its retrieval misses."
-            if hardest_misses * 2 > mismatches
-            else "."
-        )
-    )
+    weakness = [
+        f"- **Weakest at recognising {PLAIN_PATTERNS[hardest]}.**",
+        "  - HDC gets these incidents wrong more often than LR and the MLP.",
+    ]
+    if hardest_misses * 2 > mismatches:
+        weakness.append("  - They also make up most of its retrieval mistakes.")
+    tradeoffs.append("\n".join(weakness))
     key_tradeoffs = "\n".join(tradeoffs)
     claim_rows = [
         (

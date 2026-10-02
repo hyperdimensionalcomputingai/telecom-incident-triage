@@ -1,6 +1,6 @@
 {
   "code_hash": "ce05796d8b5b630774b79b000c5663316820dfd840a2fed29b25ef5792caf133",
-  "report_generator_hash": "ef58f103011aa7892659ff37c93a32fe3b4cb3901a40db7fd2493cf5bc699ee1",
+  "report_generator_hash": "8813c155e244d1992317dfd9ae42f892f3abd1aa2a411bb411d59bf2a00b30b8",
   "report_template_hashes": {
     "encoder.md": "ec2628026d1ade21f5606d6fba8d87cebf7b6016e3f30f39d5c02522e02403ee",
     "geographic-enhancements.md": "7a5e069e49f29e4b2a247691799a51cdedf76542b88d7e5ed91f02745153f248",
@@ -13,9 +13,9 @@
     "figures/learning-updates.png": "7627c3e07e6a8d941740783bab96d7b91fc8433a80b485eb57d1fe2bf8b0a160",
     "figures/learning.png": "fb7267a7d81dccdb583caf285d3acd9a94314a2ec0f25b59b1af561537c0c96b",
     "figures/retrieval.png": "5ac62b27e555c56ada34b71d9231ee35a6e77c2158f9fee823caec34c3e55ef5",
-    "figures/schema.html": "362f9075904611e1bcf922c17c31b241f618de80f33800f13a5f89831506d743",
+    "figures/schema.html": "345c3a5e985883eadc22e63a24ab8febf35fea67472b26909e94f0a63512f4a6",
     "figures/schema.png": "168c7de35207927b3bcb7e4030d5b6b88b5c3ac4fb25b99f24e341aace58e68a",
-    "figures/schema.svg": "ed9e11c955dd78e482a276e8f34007f4a34dbb462c5bfe68ffff4d6013a5df66"
+    "figures/schema.svg": "ba7da9db288c673aaa4a0b90ad8d33a46b7330a052fd14a40a33a994cb6fda58"
   },
   "claims": [
     {
@@ -49,5 +49,5 @@
       "boundary": "HDC costs more storage here; the float16 search copy halves it without measurable loss."
     }
   ],
-  "report_hash": "903bef151bcfc21ccd5486a6026a8a7cfe14f41a31c10809fa9bd3271f2485b3"
+  "report_hash": "488ef340f91b0b25556cc300b259b240dfdf0f7f6e8be88eda993bd7185e2f48"
 }

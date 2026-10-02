@@ -46,7 +46,9 @@ The learning and cost experiments compare HDC with regularized logistic regressi
 
 - **More storage.** Each incident needs 16,384 bytes as a hypervector, about 195× the 84 bytes of its raw measurements.
 - **On par, not ahead, once reviews accumulate.** From 5 reviews per class, the three methods are within 2.0 points of one another.
-- **Weakest on shared transport impairment.** HDC mislabels these incidents more often than LR and the MLP, and they make up most of its retrieval misses.
+- **Weakest at recognising faults in network equipment that many phones share.**
+  - HDC gets these incidents wrong more often than LR and the MLP.
+  - They also make up most of its retrieval mistakes.
 
 ## The dataset
 
