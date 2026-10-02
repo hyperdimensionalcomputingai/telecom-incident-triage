@@ -38,13 +38,6 @@ UPDATE_NAMES = {
     "logistic_regression": "LR retraining",
     "mlp": "MLP retraining",
 }
-PATTERN_DESCRIPTIONS = {
-    "radio_deteriorating": "the phone's received signal weakens across the episode",
-    "transient_recovery": "the phone's received signal improves by the end of the episode",
-    "shared_transport": "a shared backhaul link and the peer phones on it show packet loss, whatever the commuter's own signal does",
-    "normal": "neither a large signal change nor a shared backhaul impairment occurs",
-}
-
 REPORT_TEMPLATES = ROOT / "docs" / "report-templates"
 PLACEHOLDER = re.compile(r"\{\{\s*([a-z][a-z0-9_]*)\s*\}\}")
 
@@ -1025,31 +1018,14 @@ def create_report(run_dir):
             f"- **On par, not ahead, once reviews accumulate.** From {learned['on_par']} reviews per class, the three "
             f"methods are within {learned['spread']:.1f} points of one another."
         )
-    others = ("logistic_regression", "mlp")
-    strongest = max(
-        LABELS,
-        key=lambda label: min(class_errors[m][label] for m in others) - class_errors["hdc"][label],
-    )
-    weakness = (
-        f"- **Weakest on {PATTERNS[hardest]}**, where {PATTERN_DESCRIPTIONS[hardest]}. At {error_budget} reviews per class, "
-        f"HDC assigns {percent(class_errors['hdc'][hardest])} of these incidents to a different pattern, against "
-        f"{percent(class_errors['logistic_regression'][hardest])} for LR and {percent(class_errors['mlp'][hardest])} for the MLP."
-    )
-    if hardest_misses:
-        weakness += (
-            f" In retrieval, {hardest_misses} of the {mismatches} queries whose top result had the wrong pattern were "
-            "this kind of incident."
+    tradeoffs.append(
+        f"- **Weakest on {PATTERNS[hardest]}.** HDC mislabels these incidents more often than LR and the MLP"
+        + (
+            ", and they make up most of its retrieval misses."
+            if hardest_misses * 2 > mismatches
+            else "."
         )
-    if (
-        strongest != hardest
-        and min(class_errors[m][strongest] for m in others) > class_errors["hdc"][strongest]
-    ):
-        weakness += (
-            f" HDC makes up for it on {PATTERNS[strongest]}, mislabelling {percent(class_errors['hdc'][strongest])} of those "
-            f"incidents against {percent(class_errors['logistic_regression'][strongest])} for LR and "
-            f"{percent(class_errors['mlp'][strongest])} for the MLP, so overall F1 comes out on par."
-        )
-    tradeoffs.append(weakness)
+    )
     key_tradeoffs = "\n".join(tradeoffs)
     claim_rows = [
         (
