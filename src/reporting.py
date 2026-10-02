@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 import statistics
 from pathlib import Path
 
@@ -28,6 +29,20 @@ PATTERNS = {
     "shared_transport": "shared transport impairment",
     "normal": "normal service",
 }
+
+
+REPORT_TEMPLATES = ROOT / "docs" / "report-templates"
+PLACEHOLDER = re.compile(r"\{\{\s*([a-z][a-z0-9_]*)\s*\}\}")
+
+
+def render_template(name, values=None):
+    """Fill named Markdown placeholders once, preserving LaTeX and inserted content."""
+    template = (REPORT_TEMPLATES / name).read_text()
+    values = {} if values is None else values
+    missing = set(PLACEHOLDER.findall(template)) - values.keys()
+    if missing:
+        raise ValueError(f"Missing report values in {name}: {', '.join(sorted(missing))}")
+    return PLACEHOLDER.sub(lambda match: str(values[match.group(1)]), template)
 
 
 def read(path):
@@ -585,190 +600,40 @@ def learning_update_explanation(results, config):
         if skipped
         else "Every requested batch size was measured."
     )
-    return rf"""### Next evaluation: per-sample incremental learning versus batch retraining
-
-**Question.** Starting from the same reviewed history, how much compute and latency does each method need to incorporate newly reviewed incidents? This requested follow-up is now a completed experiment.
-
-**Setup.** Each measurement starts with {initial} reviewed incidents ({max(config.budgets)} per class), using the same review IDs across methods. Batches contain {", ".join(str(batch) for batch in batches)} chronologically later memory-partition reviews. For each batch, every method encodes the new incidents, incorporates their labels, then predicts that batch with the updated memory or model. Final-test and validation reviews do not participate.
-
-HDC normalizes each new hypervector and adds it to the labelled class accumulator; it does not revisit earlier incidents or optimize an encoder. LR and the MLP reuse the retained earlier feature vectors and perform **one full L-BFGS refit per arriving batch**, on the initial reviews plus that batch, with the already frozen regularization and model settings. Twenty new reviews therefore mean one refit on {initial + 20} reviews, rather than twenty separate refits; forty mean one refit on {initial + 40}.
-
-Each repetition resets to the same starting state. Initial fitting and HDC state restoration occur outside the timer. All methods use one Torch/BLAS CPU thread, {config.refit_warmup} warm-up repetitions and {config.refit_repeats} measured repetitions per batch and seed pair, with a warm encoder cache. The measurements include feature/vector encoding, learning, and prediction; joins, geographic eligibility, audit persistence and database work remain separate. {skipped_text}
-
-For $B$ new reviews and $N$ previously reviewed incidents, the measured operations are:
-
-$$
-T_{{\mathrm{{HDC}}}}(B)=T_{{\mathrm{{encode}}}}(B)+T_{{\mathrm{{normalize+add}}}}(B)+T_{{\mathrm{{predict}}}}(B),
-$$
-
-$$
-T_{{\mathrm{{LR/MLP}}}}(N,B)=T_{{\mathrm{{encode}}}}(B)+T_{{\mathrm{{refit}}}}(N+B)+T_{{\mathrm{{predict}}}}(B),
-\qquad t_{{\mathrm{{per\ new\ review}}}}=\frac{{T(N,B)}}{{B}}.
-$$
-
-The per-review number for LR/MLP is **amortized batch cost**. It is not the time to update immediately when each sample arrives; collecting a batch introduces a waiting time that this compute benchmark does not measure. For HDC, the same additions can be applied one review at a time without waiting for a batch. The delayed-feedback experiment demonstrates that separate behaviour.
-
-**Result.** Total wall latency and amortized cost per new review, reported as the median of seed-pair medians. The p95 column is the median of seed-pair p95 measurements; it is descriptive timing variation, not an independent-world confidence interval. Process CPU time measures CPU work during the complete operation alongside elapsed wall time.
-
-![Complete batch latency and amortized cost per newly reviewed incident](figures/learning-updates.png)
-
-| New reviews | Learning method | Reviews after update | Total wall, ms | Wall p95, ms | Wall per new review, ms | CPU per new review, ms |
-|---:|---|---:|---:|---:|---:|---:|
-{table}
-
-The corresponding stage costs per new review are:
-
-| New reviews | Learning method | Encoding, ms | Addition or refit, ms | Prediction, ms |
-|---:|---|---:|---:|---:|
-{breakdown}
-
-{finding}
-
-Stage medians need not sum exactly to the median complete-operation latency. Raw repeated measurements and fit diagnostics are retained under `resources.learning_updates` in every pair's `results.json`. Timed HDC updates must exactly match a complete reconstruction from the initial and newly reviewed hypervectors; those checks occur outside the timer. There are {warning_count} convergence-warning refits among the measured batch repetitions; diagnostics are retained rather than silently discarded.
-
-**Interpretation.** This compares additive HDC class-memory updates with these implementations' full batch retraining strategy, including the cost of encoding new incidents. It does not benchmark incremental SGD, warm starts, cached encoder-free updates, energy or a production pipeline. HDC's update work depends on the incoming hypervectors and fixed class memory, while a batch refit consumes the growing retained review set. Because the initial history is fixed at {initial} reviews, the experiment measures the requested batch costs; it does not establish a scaling law over arbitrarily large training histories.
-"""
+    return render_template(
+        "learning-updates.md",
+        {
+            "initial_reviews": initial,
+            "max_reviews_per_class": max(config.budgets),
+            "batch_sizes": ", ".join(str(batch) for batch in batches),
+            "reviews_after_twenty": initial + 20,
+            "reviews_after_forty": initial + 40,
+            "refit_warmup": config.refit_warmup,
+            "refit_repeats": config.refit_repeats,
+            "batch_coverage": skipped_text,
+            "learning_update_rows": table,
+            "learning_update_stage_rows": breakdown,
+            "learning_update_finding": finding,
+            "refit_warning_count": warning_count,
+        },
+    )
 
 
 def encoder_explanation(config):
-    explanation = r"""## How the encoder is built
+    return render_template(
+        "encoder.md",
+        {
+            "dimension": f"{config.dimension:,}",
+            "levels": config.levels,
+            "phone_signal_weight": config.local_weight,
+            "context_weight": config.context_weight,
+            "handset_weight": config.handset_weight,
+        },
+    )
 
-The encoder turns an episode into one **@D@-dimensional hypervector**. Think of it as an additive description: a measurement contributes according to what it measures, where it sits in the dependency path, and when it occurs. The result retains those distinctions while supporting a single similarity comparison.
 
-### 1. Resolve the facts before encoding
-
-At each of three observations, exact temporal joins follow the phone's serving cell and that cell's valid backhaul edge. They supply six numeric facts. The table names the source of each fact so that “context” means a specific network relationship:
-
-| Source at the observation time | Measurement | Physical range used for encoding |
-|---|---|---|
-| The commuter's phone | Received cellular signal strength | −125 to −65 dBm |
-| The cell serving that phone | Cell load | 0–100% |
-| The backhaul link used by that cell | Packet loss | 0–10% |
-| The same backhaul link | Latency | 0–120 ms |
-| Peer phones sharing that backhaul link | Mean received signal strength | −125 to −65 dBm |
-| The same peer phones | Mean packet loss | 0–10% |
-
-The **phone signal channel** contains the commuter phone's own signal measurement. The **connected-context channel** contains the other five measurements: cell load, backhaul loss and latency, and the two peer averages, all joined through the active dependency at the same time. Three observation times produce three phone signal facts and fifteen context facts per episode. The phone's handset model is a separate, small categorical contribution.
-
-The graph chooses which source measurements enter the representation. The encoder binds **typed roles**, such as phone → serving cell → backhaul; it does not bind subscriber, cell or link identifiers. Two unrelated subscribers can therefore resemble each other when their measurements and connected context match. Changing an edge can change the joined facts even when the full network contains the same measurements.
-
-### 2. Make nearby numbers similar
-
-For a measurement $x$ with physical range $[a_f,b_f]$, first map it to a clipped fraction, then to one of @K@ numeric levels:
-
-$$
-s_f(x)=\operatorname{clip}\!\left(\frac{x-a_f}{b_f-a_f},0,1\right),
-\qquad q_f(x)=\operatorname{round}\!\left((K-1)s_f(x)\right).
-$$
-
-TorchHD supplies a seeded family of correlated level hypervectors $\ell_0,\ldots,\ell_{K-1}$. Adjacent levels overlap more than distant levels. For example, −90 and −92 dBm receive nearby representations, while −90 and −115 receive more distinct ones. The ranges are fixed physical bounds, not statistics fitted to validation or test data. Values outside them are clipped; rounding introduces finite numeric resolution.
-
-The same level family serves every numeric field. Binding each value to its attribute role distinguishes radio strength from packet loss, even if their scaled fractions coincide.
-
-### 3. Bind the value to its meaning and connected role
-
-We use $\otimes$ for **binding**, $\oplus$ for **bundling**, and $\rho$ for **permutation**. Here binding multiplies corresponding coordinates, bundling adds corresponding coordinates without thresholding, and $\rho^j(v)$ rotates the coordinates of $v$ by $j$ positions. The repeated-bundling symbol $\bigoplus$ combines several hypervectors. Atomic roles and channel markers are seeded bipolar arrays containing +1 and −1.
-
-For the commuter phone's signal strength, the role product is:
-
-$$
-P_{\mathrm{radio}}=r_{\mathrm{phone}}\otimes r_{\mathrm{radio}}.
-$$
-
-For packet loss on the connected link, it includes the ordered dependency roles:
-
-$$
-P_{\mathrm{loss}}=
-r_{\mathrm{phone}}
-\otimes\rho^1\!\left(r_{\mathrm{serves}}\right)
-\otimes\rho^2\!\left(r_{\mathrm{cell}}\right)
-\otimes\rho^3\!\left(r_{\mathrm{uses}}\right)
-\otimes\rho^4\!\left(r_{\mathrm{backhaul}}\right)
-\otimes\rho^4\!\left(r_{\mathrm{loss}}\right).
-$$
-
-The rotations mark positions along the typed path. Peer facts extend it with shared-dependency and peer-phone roles. This role product specifies the meaning of the joined measurement; source identities remain in the accompanying manifest for provenance.
-
-### 4. Preserve observation order, then bundle the channels
-
-For observation position $p\in\{0,1,2\}$ and field $f$, the unweighted contribution is:
-
-$$
-e_{p,f}=\rho^{p+1}\!\left(c_{\mathrm{channel}(f)}\otimes P_f\otimes\ell_{q_f(x_{p,f})}\right).
-$$
-
-The outer rotation marks **before, during or after**. It is separate from the rotations marking path roles. Moving a radio measurement from before the disruption to after it changes its contribution, allowing deterioration and recovery to remain distinguishable.
-
-Bundling adds these contributions. Define the phone signal channel $S$ and context channel $C$ as:
-
-$$
-S=\frac{1}{\sqrt{3}}\bigoplus_{p=0}^{2}e_{p,\mathrm{radio}},
-\qquad
-C=\frac{1}{\sqrt{15}}\bigoplus_{p=0}^{2}\bigoplus_{f\in\mathcal F_C}e_{p,f}.
-$$
-
-The square-root divisors account for the different numbers of terms; they do not force every episode's channel norm to be equal. If $H$ is the handset-category hypervector bound to its attribute and channel roles, the raw episode accumulator is:
-
-$$
-z=(w_S S)\oplus(w_C C)\oplus(w_H H),
-\qquad (w_S,w_C,w_H)=(@LOCAL@,@CONTEXT@,@HANDSET@).
-$$
-
-**“Context weight” means $w_C$, the multiplier of the bundled connected-context channel $C$ before normalization.** Context here consists of the five graph-joined network and peer measurements in the table, at each of three times; it does not mean location, subscriber identity or free text. With the active defaults, the complete equation is:
-
-$$
-z=\frac{1}{\sqrt{3}}\bigoplus_{p=0}^{2}e_{p,\mathrm{radio}}
- \oplus\frac{2}{\sqrt{15}}\bigoplus_{p=0}^{2}\bigoplus_{f\in\mathcal F_C}e_{p,f}
- \oplus0.25H.
-$$
-
-Each radio fact therefore has raw coefficient $1/\sqrt{3}\approx0.577$, while each network-context fact has $2/\sqrt{15}\approx0.516$. The channel multiplier is two, but each context fact does not receive twice the coefficient of a radio fact: the channel contains more terms. The experiment configuration and stored term manifests record these coefficients explicitly.
-
-**Why give connected context more weight?** A shared transport incident can accompany weak, recovering or normal phone radio. Its common evidence lies upstream. Weight @CONTEXT@ was chosen in the earlier validation diagnosis and frozen before this fresh evaluation. It keeps the network evidence from being overwhelmed by the varying radio profile. It is a modelling choice for this study, not a universal HDC constant.
-
-These are weights on raw contributions. Doubling a channel multiplies its direct contribution to a pairwise dot product by four before normalization; cross terms and normalization also affect the final score. It does not reserve a fixed percentage of similarity for that channel.
-
-### 5. Use the same accumulator for retrieval, editing and learning
-
-All arithmetic above uses float32 and retains the unthresholded bundle. Only then normalize:
-
-$$
-\hat z=\frac{z}{\lVert z\rVert_2},
-\qquad \operatorname{similarity}(q,x)=\hat z_q^\mathsf{T}\hat z_x.
-$$
-
-Retrieval first applies exact spatial/time eligibility, then ranks eligible earlier episodes by similarity. Search storage uses float16; computation returns to float32 and the stored-vector residual is checked separately.
-
-Because the raw bundle is retained, removing the handset means $z'=z\oplus(-w_HH)$, followed by normalization. Subtracting a component from an already normalized vector would be a different operation. The acceptance checks compare this edit with a complete rebuild.
-
-A reviewed incident labelled $y$ updates a class accumulator by addition:
-
-$$
-A_y\leftarrow A_y\oplus\hat z,
-\qquad \operatorname{score}_y(q)=\hat z_q^\mathsf{T}\frac{A_y}{\lVert A_y\rVert_2}.
-$$
-
-This is an **additive cosine class-memory classifier**: one accumulator per class, containing the sum of normalized hypervectors from that class's reviewed incidents. Prediction chooses the available class whose normalized accumulator has the highest cosine similarity to the query. The class representative is sometimes called a prototype; it is specifically this accumulated vector, not a separate feature model or neural network. The encoder stays fixed while labelled memory grows. Unseen classes are excluded from prediction; before any reviews, the system reports insufficient labelled memory. Updates retain an audit record and support exact reversal.
-
-For an inspected candidate with weighted terms $t_j$, the retained manifest also permits exact arithmetic attribution:
-
-$$
-z_x=\bigoplus_{j=1}^{m} t_j,
-\qquad a_j=\frac{\hat z_q^\mathsf{T}t_j}{\lVert z_x\rVert_2},
-\qquad \operatorname{similarity}(q,x)=a_1+\cdots+a_m.
-$$
-
-The $t_j$ are hypervector contributions, combined by bundling; each $a_j$ is a scalar contribution to the cosine score. Each contribution links back to source observations, telemetry and valid edges. These contributions explain how the numeric score was assembled, including interference between terms. They do not establish the cause of a dropped call: the source records provide provenance, while similarity proposes comparisons.
-"""
-    for marker, value in {
-        "@D@": f"{config.dimension:,}",
-        "@K@": config.levels,
-        "@LOCAL@": config.local_weight,
-        "@CONTEXT@": config.context_weight,
-        "@HANDSET@": config.handset_weight,
-    }.items():
-        explanation = explanation.replace(marker, str(value))
-    return explanation
+def geographic_enhancement_explanation():
+    return render_template("geographic-enhancements.md")
 
 
 def create_report(run_dir):
@@ -985,244 +850,121 @@ def create_report(run_dir):
     claims = "\n".join(
         f"| {name} | {evidence} | {boundary} |" for name, evidence, boundary in claim_rows
     )
-    report = f"""# Hyperdimensional Computing for Telecom Incident Triage
-
-*An experimental study of composable representations, retrieval with provenance, and incremental learning*
-
-## The operational problem
-
-Telecom service assurance concerns the quality of the calls and data sessions customers use. When service degrades, an operations team needs to decide where to investigate first and how widely the problem may extend. A symptom affecting one subscriber might involve the phone's radio connection; similar symptoms across several subscribers might involve a shared network dependency. This first assessment is **incident triage**. It guides investigation before a cause is confirmed.
-
-The evidence spans several kinds of data: subscriber and handset records, measurements over time, network telemetry, locations, and the relationships between network components. A useful comparison must connect those records. The same measurement can mean different things depending on which component produced it, which other components depend on it, and whether service is worsening or recovering.
-
-Earlier incidents offer a practical starting point. A triage tool can bring comparable cases to an engineer's attention, show the observations and network facts supporting the comparison, and incorporate the outcomes of reviewed cases into future decisions. This creates a combined data-engineering and learning problem: preserve the meaning of connected, changing evidence while maintaining a memory that can grow as reviews arrive.
-
-## Scope and research questions
-
-We narrow that broader use case to one question:
-
-> A commuter's call drops. Which earlier incidents resemble it, what network facts support that comparison, and how can reviewed incidents improve future triage?
-
-The study evaluates two tasks: retrieving comparable earlier incidents, and assigning a triage pattern using previously reviewed examples. Each incident includes a short sequence of phone measurements and the network context connected to that phone at those times. Triage happens after the full observation window, so the available evidence can include deterioration or recovery.
-
-**Hyperdimensional computing (HDC)** represents these facts in long numeric arrays called hypervectors. Its operations can attach a value to a role, combine contributions, and preserve order. We study whether an episode built with those operations can support retrieval, inspection of its source evidence, and learning through additions to labelled class memory while the encoder stays fixed.
-
-The experiments examine four questions:
-
-- **Representation:** Do roles, event order and network connectivity change the meaning of an encoded incident?
-- **Retrieval and evidence:** Can it find comparable earlier incidents and return the source records supporting the comparison?
-- **Learning:** How useful does class memory become as reviewed examples arrive, and when do updates help or hurt?
-- **Resources:** What do encoding, prediction, learning updates, retrieval and storage cost, including the cost per new review?
-
-The learning comparison evaluates HDC against regularized logistic regression and a small MLP. All three learners receive the same reviewed incidents and connected measurements. Retrieval evaluates HDC itself, with order and connectivity ablations as internal representation checks. These checks are not additional comparison models.
-
-## The dataset
-
-We use a controlled simulation with a recognizable geographic setting: a commute corridor along Bloor Street West in Toronto. Public street geometry supplies the map. Every subscriber, handset, trajectory, network component, measurement and review is simulated. This lets us vary roles, chronology and connectivity deliberately, and check results against retained source records. It does not establish performance on a carrier's operational data.
-
-### Just enough telecom to read the example
-
-A **subscriber** is the simulated customer; a **handset** is their phone. **Radio** means the wireless part of its connection. The **serving cell** provides that phone's cellular connection at the observation time, through base-station equipment. A **backhaul link** carries traffic from the cell into the rest of the operator's network. The simplified path is **phone → serving cell → backhaul link**. Other phones can use different cells but share that link; we call them **peer phones**. This [radio/transport distinction](https://www.ericsson.com/en/public-policy-and-government-affairs/5-key-facts-about-5g-radio-access-networks) is what makes connected evidence useful.
-
-| Measurement | What it tells us |
-|---|---|
-| Received signal strength, in dBm | How much cellular signal power reaches the phone. **−80 dBm is stronger than −90 dBm.** |
-| Cell load, in % | How busy the serving cell is; a simulated utilization indicator in this study. |
-| Packet loss, in % | The share of data packets that fail to arrive. A packet is a small chunk of transmitted data; 1% loss means about one in 100 is missing. |
-| Latency, in ms | How long data takes to travel over the link. One millisecond is 0.001 seconds. |
-| Peer averages | Mean signal-strength and loss measurements from phones sharing the same backhaul link at the same time. |
-
-**dBm** expresses power on a logarithmic scale relative to one milliwatt. Negative values mean power below that reference, not negative power. A 10 dB decrease means ten times less power. We simulate a generic received-power measurement; signal strength alone does not determine call quality. [Unit reference](https://scdn.rohde-schwarz.com/ur/pws/dl_downloads/dl_application/application_notes/1sl378/1SL378_0e_ColdSrcNF.pdf).
-
-### The connected records
-
-![Conceptual graph: a subscriber's phone, ordered observations, and two cells sharing a backhaul link, with node and edge properties](figures/schema.png)
-
-[Open the schema at full size](figures/schema.svg) or [in a browser](figures/schema.html). Circles are nodes; directed arrows are relationships reconstructed from record IDs. The property values are illustrative. The phone → cell relationship comes from its observation at time $t$; cell → link edges are valid when $t_0 ≤ t < t_1$. Cell load and link measurements marked **(t)** are joined telemetry at that time, rather than static component properties. Peer observations are separate source records; they need not identify individual peer subscribers.
-
-Each simulated network/time block contains six cells and two backhaul links with one consistent **telemetry** timeline: measurements describing their state over time. Phones using the same component at the same time see the same infrastructure state. The cell-to-link edges change halfway through the block, with recorded validity intervals. Subscriber identities connect records; they do not determine similarity.
-
-The unit of analysis is an **episode**: three observations at 0, 20 and 40 seconds, before, during and after a disruption or a normal-service reference window. Four balanced patterns define the evaluation classes:
-
-| Pattern | What the observations show |
-|---|---|
-| Deteriorating radio | The phone's received signal becomes weaker across the episode. |
-| Transient recovery | The phone's received signal improves by the end of the episode. |
-| Shared transport impairment | The shared backhaul link and peer phones show packet loss; the phone's own signal profile can vary. |
-| Normal service | Neither a large signal change nor the shared backhaul impairment occurs. |
-
-An independent checker reconstructs these labels from source measurements, event order and valid edges. Encoder input does not include generator scenario names, labels or service-disruption outcomes. Review labels become available {config.review_delay_s} seconds after the complete episode; they stand in for analyst feedback in the demonstration. No human reviews were collected.
-
-Each data seed produces {config.blocks * config.episodes_per_block:,} episodes across {config.blocks} independent network/time blocks. Of those blocks, {config.memory_blocks} build labelled memory, {config.validation_blocks} support model selection, and {config.blocks - config.memory_blocks - config.validation_blocks} are reserved for final testing. Subscribers and shared incidents stay within their assigned block. No validation or final-test label updates memory.
-
-The full experiment crosses {len(config.data_seeds)} data seeds with {len(config.encoder_seeds)} encoder seeds. It scores {summary["final_queries_scored"]:,} final queries across repetitions, representing {summary["independent_final_worlds"]} distinct final-test worlds. Repeated encoders reuse episodes and are averaged before uncertainty intervals resample data seeds and complete worlds. Those intervals describe this generator.
-
-The street snapshot contains {geography["corridor_segments"]} Bloor Street segments, with frozen source checksums and longitude/latitude coordinates (EPSG:4326). No distances are computed from angular coordinates, and the simulation does not predict signal strength from the street geometry. {geography["attribution"]} [Dataset]({geography["dataset_url"]}); [licence]({geography["licence_url"]}).
-
-## Start with one incident
-
-![A simulated commute, three signal-strength observations, and the connected network facts](figures/incident.png)
-
-Consider a simulated commuter travelling along Bloor Street West. In this walkthrough, the phone's received signal strength changes from {case["query"]["observations"][0]["radio_dbm"]:.1f} dBm before the disruption to {case["query"]["observations"][2]["radio_dbm"]:.1f} dBm afterwards. More negative dBm values indicate weaker received signal strength. At the middle observation, the connected backhaul link reports {case["query"]["observations"][1]["link_loss_pct"]:.1f}% packet loss, and peer phones using that dependency report {case["query"]["observations"][1]["peer_loss_pct"]:.1f}% mean loss.
-
-These facts make the comparison specific: look for an earlier episode with a similar signal-strength trajectory and connected network conditions. Exact spatial and time filters first identify eligible earlier memory episodes. Similarity then ranks them, and retained observations, telemetry and valid edges let the engineer inspect what the retrieved episode has in common.
-
-The query is **{case["query"]["episode_id"]}**, whose independently reconstructed pattern is **{PATTERNS[case["query_label"]]}**. Its first retrieved comparison is **{case["candidate"]["episode_id"]}**, labelled **{PATTERNS[case["candidate_label"]]}**. The walkthrough uses the first final-test episode with an observed service disruption, selected before inspecting retrieval correctness. It illustrates the workflow; the experiments below evaluate all final-test queries.
-
-A retrieved comparison is evidence for further inspection. The triage labels describe the observed patterns in this simulation; they do not confirm the cause of the commuter's dropped call. The next section shows how the phone and network facts become one composable representation, before we measure retrieval and learning performance.
-
-{encoder_explanation(config)}
-
-## Experiment 1: what do the operators preserve?
-
-**Question.** Can the representation distinguish the same values attached to different meanings, appearing in different orders, or connected through different edges?
-
-**Setup.** Binding attaches a value to a role. Bundling adds contributions. Permutation marks an observation's place in the episode. The phone signal channel has weight {config.local_weight:g}; connected cell/link/peer context has weight {config.context_weight:g}. Numeric levels preserve neighbourhoods; the handset contribution has weight {config.handset_weight:g}. The dimension is {config.dimension:,}.
-
-Hyperdimensional computing (HDC) represents information in long numeric arrays called hypervectors. Here, each atomic role starts as a seeded array of +1 and −1 values. Distinct roles have little overlap, while nearby numeric measurements deliberately receive correlated arrays. An episode becomes a sum of these encoded contributions rather than an opaque identifier.
-
-In this implementation, binding multiplies arrays element by element, bundling adds them, and permutation rotates their coordinates by a fixed number of positions. Binding gives radio strength a different meaning from link loss. A position-specific rotation distinguishes the same observations in reverse order. The connected channel follows the time-valid phone → cell → backhaul dependency before encoding its measurements and peer context.
-
-The operator vocabulary is small: `bind(role, value)` keeps a measurement attached to its meaning; `bundle(facts)` combines contributions; `permute(observation, position)` marks order. Learning reuses addition: `class_memory += normalize(episode_vector)`. The encoder implements these operations with TorchHD; no text embedding model is needed for these tabular records.
-
-**Result.** Swapping good/bad states between phone radio and an upstream link gives cosine {operator["role_binding"]["bound_cosine"]:.3f}. Omitting binding makes the two accumulators equal within {operator["role_binding"]["without_binding_max_error"]:.2g}. Reversing the observations gives cosine {operator["event_order"]["with_order_cosine"]:.3f}; omitting order leaves error {operator["event_order"]["without_order_max_error"]:.2g}. Rewiring one serving edge gives cosine {operator["connectivity"]["with_path_cosine"]:.3f}; pooling the same network measurements without their connections leaves error {operator["connectivity"]["without_path_max_error"]:.2g}. The adjacent numeric-level cosine is {operator["numeric_neighbourhood"]["adjacent_cosine"]:.3f}, compared with {operator["numeric_neighbourhood"]["far_cosine"]:.3f} for distant levels.
-
-**Interpretation.** These controlled illustrations show exactly what the operators do. The graph pair retains every measured value and changes one edge in a separate counterfactual world. Its two-candidate ranking has a 50% random reference and serves as an illustration, not a practical graph benchmark. Broader retrieval usefulness is measured next.
-
-The handset contribution can be removed from a raw query without re-encoding the other facts. Reconstruction error in the walkthrough is {case["query_edit_max_error"]:.2g}. The original top five are `{", ".join(case["original_top5"])}`; after removing handset they are `{", ".join(case["without_handset_top5"])}`. A changed ranking is an editable query, not automatically a better result.
-
-## Experiment 2: can it retrieve useful earlier incidents?
-
-**Question.** Does the representation return earlier incidents with the same independently checked triage pattern, and can their source evidence be inspected?
-
-**Setup.** Every query uses an exact corridor/time filter and a memory-only candidate set. All three observations must qualify. Lance and independently registered GeoDataFusion agree on selected observation identities. The first run has {counts["min"]}–{counts["max"]} candidates per query (mean {counts["mean"]:.1f}). Relevance means the same triage pattern, not the same real-world cause. Connectivity and order are removed separately in HDC ablations to check their contribution to retrieval.
-
-![Retrieval precision with grouped uncertainty intervals](figures/retrieval.png)
-
-| Method | Precision@5, 95% interval | Top-1 match | Reciprocal rank@10 |
-|---|---:|---:|---:|
-{retrieval_rows}
-
-Random ranking yields expected precision {percent(summary["random_precision_at_5"])}, based on each query's eligible label prevalence. The paired HDC difference when connectivity is omitted is {path_gain["mean"] * 100:.1f} percentage points [{path_gain["lower"] * 100:.1f}, {path_gain["upper"] * 100:.1f}]. When order is omitted, the difference is {order_gain["mean"] * 100:.1f} points [{order_gain["lower"] * 100:.1f}, {order_gain["upper"] * 100:.1f}].
-
-**Evidence.** Every stored-vector top hit was checked against its source records. Maximum raw reconstruction error across runs is {max(r["evidence_audit"]["max_raw_reconstruction_error"] for r in results):.2g}; maximum float32 reference-score reconstruction error is {max(r["evidence_audit"]["max_score_reconstruction_error"] for r in results):.2g}. Reference scores are decomposed into additive term contributions under the raw accumulator's normalization. A separately recorded quantization residual connects that reference to the stored float16 vector's cosine. These contributions include cross-term interference; they are not causal importance scores. Source identities and timestamps support each term.
-
-**Errors.** The first fixed run has {mismatches} top-1 mismatches out of {results[0]["n_queries"]}. Examples are retained rather than discarded:
-
-| Query | Expected pattern | Retrieved pattern |
-|---|---|---|
-{error_text}
-
-**Interpretation.** The HDC ablations reveal the value of retaining order and connected context. This retrieval experiment does not establish an advantage over LR or MLP, which are evaluated as classifiers in Experiment 3. Float16 search storage is independently verified against its quantized vectors; its mean precision difference from float32 is {statistics.mean(r["float16_quantization"]["precision_at_5_change"] for r in results) * 100:.3f} points. Float32 accumulators remain authoritative for arithmetic and updates.
-
-## Experiment 3: how does memory grow through reviews?
-
-**Question.** How useful is class memory with few labelled incidents, and what happens when feedback arrives after a decision?
-
-**Setup.** Each class starts with no vector. Encoding produces an episode hypervector; a review adds its normalized vector to the appropriate float32 class accumulator. Prediction compares the episode with normalized class memories. The comparison models are regularized multinomial logistic regression and a small one-hidden-layer ReLU MLP. Both receive the same 21 input features: six measurements at each of three ordered observations, plus three handset-category indicators. The connected measurements come from the same valid graph joins as HDC. Validation chooses between the already declared physical range scaling and an additional StandardScaler fitted only to the reviewed memory examples at each budget. Both models use L-BFGS optimization to a declared tolerance; they are not limited to one training pass. LR regularization and MLP width/regularization are selected separately at each budget using the first data seed's validation worlds, averaged across three initialization seeds, then frozen for every final test. Every method receives the same reviewed incidents. Review budgets count training labels; additional labelled validation worlds support model selection.
-
-![Learning from reviewed incidents with no encoder retraining](figures/learning.png)
-
-| Reviews per class | HDC macro F1 | Trained LR macro F1 | Small MLP macro F1 |
-|---:|---:|---:|---:|
-{learning_rows}
-
-**Result.** {learning_direction} {low_sample} The curve can plateau or regress at intermediate budgets; more reviews do not guarantee improvement. Macro F1 gives each pattern equal weight, with 1.0 representing perfect classification. The first delayed-feedback replay's HDC accuracy is {percent(online["metrics"]["hdc"]["accuracy"])}, with prediction coverage {percent(online["metrics"]["hdc"]["coverage"])}. Coverage includes initial decisions for which no review has arrived; these produce “insufficient labelled memory”. This replay uses memory-building episodes, while the learning curves above use independent final-test worlds.
-
-At {error_budget} reviews per class, the paired, world-grouped differences are {difference_text}. There are {warning_count} convergence warnings among the {len(results) * len(config.budgets) * 2} final LR/MLP fits, and {trial_warning_count} among {len(trial_fits)} validation-selection fits. Diagnostics and iteration counts are retained for every fit.
-
-The aggregate score can hide a difficult pattern. At {error_budget} reviews per class, the following share of final-test examples is assigned to the wrong class, averaged across the seed grid. These are descriptive per-class errors; the grouped uncertainty intervals above apply to macro F1. Detailed confusion matrices are retained for every budget and world.
-
-| Actual pattern | HDC error rate | Trained LR error rate | Small MLP error rate |
-|---|---:|---:|---:|
-{class_error_rows}
-
-Updates are not guaranteed to help. The first fixed replay contains these examples:
-
-{effect_text}
-
-These examples use a fixed diagnostic probe within the memory partition, including episodes that are later reviewed. They are neither held-out performance estimates nor a signal for choosing updates. All updates follow the configured review schedule. The full log records review provenance, availability time, encoder hash, update-vector hash and before/after accumulator hashes. Exact reversal restores the previous float32 snapshot rather than relying on rounded subtraction.
-
-**Interpretation.** There is supervised learning, but no encoder retraining or optimization loop for the HDC memory. Adding unlabelled records to a retrieval store is a different operation. The learning curves determine how strongly we can describe sample efficiency on these patterns; they do not establish it across telecom tasks.
-
-## Experiment 4: how cheap is the complete operation?
-
-**Question.** What does it cost to encode an episode, score it and update memory, and how much storage is used?
-
-**Setup.** One Torch/BLAS CPU thread; batch one; {config.warmup} warm-up iterations and {config.benchmark_repeats} measurements for prediction/addition per seed pair. More expensive classifier refits use {config.refit_warmup} warm-ups and {config.refit_repeats} measurements. The table reports the median of run medians and the median of run p95 measurements. The runtime is {manifest["runtime"]["platform"]}, Python {manifest["runtime"]["python"]}. Joins, geo selection and database writes are separate from these warm compute measurements.
-
-![Measured CPU operation costs, with addition distinguished from the full operation](figures/compute.png)
-
-| Operation | Median of run medians | Median of run p95 |
-|---|---:|---:|
-{timing_rows}
-
-HDC's raw accumulator uses {results[0]["resources"]["hdc_raw_vector_bytes"]:,} bytes per episode; its search vector uses {results[0]["resources"]["hdc_search_vector_bytes"]:,} bytes in float16. The LR/MLP input vector uses {results[0]["resources"]["model_input_bytes"]} bytes in float32. Four HDC class accumulators use {results[0]["resources"]["class_memory_bytes"]["hdc"]:,} bytes, before mappings, counters, audit history and exact-undo snapshots. These sizes describe representations, not the complete trained models. This dataset supports no compression claim.
-
-Measured resource totals in the first fixed run:
-
-| Resource | Size |
-|---|---:|
-| All float32 HDC episode tensors | {results[0]["resources"]["hdc_representation_tensor_bytes"] / 2**20:.2f} MiB |
-| All LR/MLP input tensors | {results[0]["resources"]["model_input_tensor_bytes"] / 2**20:.2f} MiB |
-| Cached encoder basis tensors | {results[0]["resources"]["encoder_cached_basis_bytes"] / 2**20:.2f} MiB |
-| Lance vector store, raw/search vectors and manifests | {results[0]["resources"]["vector_store_bytes"] / 2**20:.2f} MiB |
-| Lance source-record store | {results[0]["resources"]["source_store_bytes"] / 2**20:.2f} MiB |
-
-LR and MLP trained estimators, including any fitted scalers, are saved and checked for identical predictions after reloading. Their serialized sizes and initial fit times are recorded separately at every review budget.
-
-At {max(config.budgets)} reviews per class, median serialized estimator size is {classifier_bytes["logistic_regression"]:,.0f} bytes for LR and {classifier_bytes["mlp"]:,.0f} bytes for MLP. These include estimator metadata and any fitted scaling, but exclude the retained review buffer. That buffer uses {results[0]["resources"]["review_buffer_feature_and_label_bytes"]:,} bytes for the refit measurement. HDC's class tensor size also excludes audit history and encoder basis tensors.
-
-Observed median initial fit times across the seed grid, excluding encoding and persistence:
-
-| Reviews per class | HDC memory building, ms | LR fitting, ms | MLP fitting, ms |
-|---|---:|---:|---:|
-{fit_rows}
-
-These initial fits are recorded once per run and budget; the repeated refit benchmark above supplies a separate measurement of incorporating a further review. Model-selection compute is recorded in the frozen settings and is not included in these initial fits.
-
-The directory totals include retained Lance versions and metadata. They describe these artifacts rather than an optimized storage comparison. Tensor totals exclude Python objects, source tables, temporary allocations and audit history; peak process memory was not measured.
-
-The first run encodes all episodes in {results[0]["resources"]["encode_all_s"]:.3f} s, persists the vectors and manifests in {results[0]["resources"]["persistence_s"]:.3f} s, and performs all validation/test geography gates plus independent checks in {results[0]["resources"]["exact_gate_s"]:.3f} s. LanceDB retrieval median is {results[0]["resources"]["retrieval_latency"]["hdc_lance_float16"]["median_ms"]:.3f} ms; the matched in-memory HDC scoring-and-ranking median is {results[0]["resources"]["retrieval_latency"]["hdc"]["median_ms"]:.3f} ms. They measure different layers and are not an implementation speed contest.
-
-**Interpretation.** The addition is cheap. For LR and MLP, review incorporation here means encoding the new incident, refitting on {results[0]["resources"]["review_refit_training_examples"]} retained reviewed examples, then predicting it. HDC encodes, predicts with its existing class memory, and adds the new review. Those are different update strategies. Conventional incremental optimizers and warm starts could reduce refit cost; they are not evaluated here, so this comparison supports no general claim that conventional ML must retrain from scratch. The complete operation and alternative methods deserve equal attention. These are component measurements on one machine, without energy, production serving, spatial-index or ANN benchmarks. Near-real-time suitability requires an application latency budget and its complete data path.
-
-{learning_update_explanation(results, config)}
-
-## What this supports
-
-| Claim | Evidence | Boundary |
-|---|---|---|
-{claims}
-
-The simulator uses simple observed rules and deliberately balanced classes, with complete telemetry. This makes the mechanisms observable and supplies a compact feature table that conventional trained classifiers can use effectively. It does not demonstrate operational diagnosis, realistic class prevalence, continual adaptation under drift, robustness to missing telemetry, or coverage across new incident types. Those would need separate experiments.
-
-## Takeaways
-
-In this controlled study, HDC combines role-sensitive, ordered representations with connected network evidence. Retrieval returns comparable earlier incidents with source records that can be inspected, and reviewed examples improve class memory through reversible additions while the encoder stays fixed.
-
-HDC performs well with few reviewed examples. Its advantage is clearest at the smallest label budgets; LR and the MLP become competitive as more reviews arrive. The results support composable representation and incremental memory building, with usefulness measured against familiar trained classifiers.
-
-The resource comparison depends on the update strategy and batch size. HDC incorporates individual reviews quickly, while LR batch retraining amortizes well and is cheaper per review at the largest measured batch. HDC uses more representation storage than the LR/MLP input vector. These findings apply to the simulated patterns and measured CPU workload; operational telemetry, missing data and drift remain untested.
-
-## Reproduce and inspect
-
-Inspect the [source code]({source_link}) for the implementation. Run `uv run src/prepare.py`, `uv run src/run.py`, then `uv run src/report.py` from the repository root. All three scripts use the paths in `src/settings.py`. The manifest records dependency versions, source checksums, configuration, encoder and code hashes, and all completed seed pairs. The committed metrics retain block-level results, per-class errors and repeated timing measurements. Reproducing a run generates the detailed predictions, review logs, retrieval errors, query edits and source witnesses locally. The active learning comparison uses trained LR and a small MLP.
-
-The [LR](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) and [MLP](https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html) implementations come from locked scikit-learn 1.9.1. The encoder weighting was selected on separate validation worlds (data seeds 1001–1005) and frozen before this evaluation. The full study defaults now use fresh data seeds 1006–1010. These are new independent simulated worlds, not external carrier validation. The actual data seeds in this run are {", ".join(str(seed) for seed in config.data_seeds)}. LR/MLP settings use only this run's first data seed's validation worlds and are frozen before final testing.
-
-The declared search space uses LR C ∈ {{0.1, 1, 10}}, MLP hidden width ∈ {{16, 32}}, MLP alpha ∈ {{0.001, 0.1}}, and fixed physical range scaling or an additional training-fitted StandardScaler. C controls inverse L2 regularization strength; alpha controls MLP regularization. The HDC weighting is fixed throughout this run; no HDC variant search, additional feature engineering or test-based selection is performed. Only the active encoder is evaluated, alongside operator ablations that answer the representation questions. The frozen choices are:
-
-| Reviews/class | LR C | LR scaling | MLP width | MLP alpha | MLP scaling |
-|---|---:|---|---:|---:|---|
-{selected_rows}
-"""
+    report = render_template(
+        "summary.md",
+        {
+            "review_delay_s": config.review_delay_s,
+            "episode_count": f"{config.blocks * config.episodes_per_block:,}",
+            "block_count": config.blocks,
+            "memory_blocks": config.memory_blocks,
+            "validation_blocks": config.validation_blocks,
+            "test_blocks": config.blocks - config.memory_blocks - config.validation_blocks,
+            "data_seed_count": len(config.data_seeds),
+            "encoder_seed_count": len(config.encoder_seeds),
+            "final_query_count": f"{summary['final_queries_scored']:,}",
+            "final_world_count": summary["independent_final_worlds"],
+            "corridor_segments": geography["corridor_segments"],
+            "geography_attribution": geography["attribution"],
+            "geography_dataset_url": geography["dataset_url"],
+            "geography_licence_url": geography["licence_url"],
+            "first_phone_signal": f"{case['query']['observations'][0]['radio_dbm']:.1f}",
+            "last_phone_signal": f"{case['query']['observations'][2]['radio_dbm']:.1f}",
+            "middle_link_loss": f"{case['query']['observations'][1]['link_loss_pct']:.1f}",
+            "middle_peer_loss": f"{case['query']['observations'][1]['peer_loss_pct']:.1f}",
+            "query_episode_id": case["query"]["episode_id"],
+            "query_pattern": PATTERNS[case["query_label"]],
+            "candidate_episode_id": case["candidate"]["episode_id"],
+            "candidate_pattern": PATTERNS[case["candidate_label"]],
+            "encoder_explanation": encoder_explanation(config),
+            "phone_signal_weight": f"{config.local_weight:g}",
+            "context_weight": f"{config.context_weight:g}",
+            "handset_weight": f"{config.handset_weight:g}",
+            "dimension": f"{config.dimension:,}",
+            "bound_cosine": f"{operator['role_binding']['bound_cosine']:.3f}",
+            "unbound_error": f"{operator['role_binding']['without_binding_max_error']:.2g}",
+            "ordered_cosine": f"{operator['event_order']['with_order_cosine']:.3f}",
+            "unordered_error": f"{operator['event_order']['without_order_max_error']:.2g}",
+            "connected_cosine": f"{operator['connectivity']['with_path_cosine']:.3f}",
+            "disconnected_error": f"{operator['connectivity']['without_path_max_error']:.2g}",
+            "adjacent_level_cosine": f"{operator['numeric_neighbourhood']['adjacent_cosine']:.3f}",
+            "distant_level_cosine": f"{operator['numeric_neighbourhood']['far_cosine']:.3f}",
+            "handset_edit_error": f"{case['query_edit_max_error']:.2g}",
+            "original_top_five": ", ".join(case["original_top5"]),
+            "edited_top_five": ", ".join(case["without_handset_top5"]),
+            "minimum_candidates": counts["min"],
+            "maximum_candidates": counts["max"],
+            "mean_candidates": f"{counts['mean']:.1f}",
+            "retrieval_rows": retrieval_rows,
+            "random_precision": percent(summary["random_precision_at_5"]),
+            "path_gain_mean": f"{path_gain['mean'] * 100:.1f}",
+            "path_gain_lower": f"{path_gain['lower'] * 100:.1f}",
+            "path_gain_upper": f"{path_gain['upper'] * 100:.1f}",
+            "order_gain_mean": f"{order_gain['mean'] * 100:.1f}",
+            "order_gain_lower": f"{order_gain['lower'] * 100:.1f}",
+            "order_gain_upper": f"{order_gain['upper'] * 100:.1f}",
+            "reconstruction_error": f"{max(r['evidence_audit']['max_raw_reconstruction_error'] for r in results):.2g}",
+            "score_reconstruction_error": f"{max(r['evidence_audit']['max_score_reconstruction_error'] for r in results):.2g}",
+            "retrieval_mismatches": mismatches,
+            "query_count": results[0]["n_queries"],
+            "retrieval_error_rows": error_text,
+            "quantization_precision_change": f"{statistics.mean(r['float16_quantization']['precision_at_5_change'] for r in results) * 100:.3f}",
+            "learning_rows": learning_rows,
+            "learning_direction": learning_direction,
+            "low_sample_finding": low_sample,
+            "delayed_accuracy": percent(online["metrics"]["hdc"]["accuracy"]),
+            "delayed_coverage": percent(online["metrics"]["hdc"]["coverage"]),
+            "error_budget": error_budget,
+            "learning_difference": difference_text,
+            "classifier_warning_count": warning_count,
+            "classifier_fit_count": len(results) * len(config.budgets) * 2,
+            "selection_warning_count": trial_warning_count,
+            "selection_fit_count": len(trial_fits),
+            "class_error_rows": class_error_rows,
+            "update_effects": effect_text,
+            "warmup": config.warmup,
+            "benchmark_repeats": config.benchmark_repeats,
+            "refit_warmup": config.refit_warmup,
+            "refit_repeats": config.refit_repeats,
+            "runtime_platform": manifest["runtime"]["platform"],
+            "runtime_python": manifest["runtime"]["python"],
+            "timing_rows": timing_rows,
+            "raw_vector_bytes": f"{results[0]['resources']['hdc_raw_vector_bytes']:,}",
+            "search_vector_bytes": f"{results[0]['resources']['hdc_search_vector_bytes']:,}",
+            "model_input_bytes": results[0]["resources"]["model_input_bytes"],
+            "class_memory_bytes": f"{results[0]['resources']['class_memory_bytes']['hdc']:,}",
+            "representation_mib": f"{results[0]['resources']['hdc_representation_tensor_bytes'] / 2**20:.2f}",
+            "model_input_mib": f"{results[0]['resources']['model_input_tensor_bytes'] / 2**20:.2f}",
+            "encoder_cache_mib": f"{results[0]['resources']['encoder_cached_basis_bytes'] / 2**20:.2f}",
+            "vector_store_mib": f"{results[0]['resources']['vector_store_bytes'] / 2**20:.2f}",
+            "source_store_mib": f"{results[0]['resources']['source_store_bytes'] / 2**20:.2f}",
+            "max_reviews_per_class": max(config.budgets),
+            "lr_model_bytes": f"{classifier_bytes['logistic_regression']:,.0f}",
+            "mlp_model_bytes": f"{classifier_bytes['mlp']:,.0f}",
+            "review_buffer_bytes": f"{results[0]['resources']['review_buffer_feature_and_label_bytes']:,}",
+            "fit_rows": fit_rows,
+            "encode_seconds": f"{results[0]['resources']['encode_all_s']:.3f}",
+            "persistence_seconds": f"{results[0]['resources']['persistence_s']:.3f}",
+            "eligibility_seconds": f"{results[0]['resources']['exact_gate_s']:.3f}",
+            "lance_retrieval_ms": f"{results[0]['resources']['retrieval_latency']['hdc_lance_float16']['median_ms']:.3f}",
+            "memory_retrieval_ms": f"{results[0]['resources']['retrieval_latency']['hdc']['median_ms']:.3f}",
+            "refit_training_examples": results[0]["resources"]["review_refit_training_examples"],
+            "learning_update_explanation": learning_update_explanation(results, config),
+            "claims_rows": claims,
+            "geographic_enhancements": geographic_enhancement_explanation(),
+            "source_link": source_link,
+            "data_seeds": ", ".join(str(seed) for seed in config.data_seeds),
+            "selected_settings_rows": selected_rows,
+        },
+    )
     (root / "summary.md").write_text(report)
     save_json(
         root / "claims.json",
         {
             "code_hash": manifest["run_code_hash"],
             "report_generator_hash": file_hash(Path(__file__)),
+            "report_template_hashes": {
+                path.name: file_hash(path) for path in sorted(REPORT_TEMPLATES.glob("*.md"))
+            },
             "summary_hash": manifest["summary_hash"],
             "figure_hashes": {
                 str(path.relative_to(root)): file_hash(path)

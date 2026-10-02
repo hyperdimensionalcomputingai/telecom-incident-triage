@@ -30,6 +30,14 @@ The full study crosses five data seeds with three encoder seeds, with 2,400 epis
 
 Run the acceptance checks with `uv run pytest -q`.
 
+## Edit the report narrative
+
+The report's editable prose lives in [docs/report-templates/](docs/report-templates/). The main template is [summary.md](docs/report-templates/summary.md), with separate Markdown sections for the encoder, learning updates and potential geographic enhancements.
+
+Named placeholders such as `{{ retrieval_rows }}` mark where Python inserts calculated values or table rows. Figure links stay in the Markdown; the reporting script generates the images at those paths. These templates use simple named replacement, with no Jinja dependency or expressions to evaluate. A missing placeholder value stops report generation with a clear error.
+
+Edit the templates, then run `uv run src/report.py` for a completed run to rebuild its report. Keep prose edits in the templates: the generated `summary.md` is overwritten when reporting runs again. The report's provenance records hashes of the Python generator and Markdown templates.
+
 ## Results
 
 Read the [illustrated results summary](runs/reports/summary.md) for the encoder equations, graph schema, experiments and findings. The latest [aggregate results](runs/summary.json) and [detailed metrics](runs/metrics.json) are committed with their configuration and provenance; datasets, vectors and individual prediction traces are regenerated locally.
