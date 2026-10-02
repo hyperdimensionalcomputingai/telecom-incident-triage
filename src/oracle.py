@@ -38,6 +38,12 @@ def derive_reviews(rows, delay_s):
             edge = choices[0]
             state = link_status[edge["link_id"], observation["timestamp_s"]]
             peers = peer_groups[edge["link_id"], observation["timestamp_s"]]
+            # Synthetic evidence rule: >=3% link loss plus >=3% loss for every
+            # peer, with at least two peers, marks a shared transport pattern.
+            # The generator's healthy loss tops out at 1.8%, while stressed loss
+            # starts at 3.2%; 3% sits in that deliberately constructed gap.
+            # These thresholds define this demonstration, not a carrier diagnostic
+            # standard. Matching the rule does not establish the actual root cause.
             shared |= (
                 state["link_loss_pct"] >= 3
                 and len(peers) >= 2
@@ -46,6 +52,9 @@ def derive_reviews(rows, delay_s):
             witness.extend(
                 [edge["source_id"], state["source_id"], *[p["source_id"] for p in peers]]
             )
+        # End minus start in dBm: negative means weakening, positive means recovery.
+        # A 15 dB change is our chosen pattern threshold. Shared impairment takes
+        # precedence because it can coexist with either phone signal trajectory.
         delta = obs[-1]["radio_dbm"] - obs[0]["radio_dbm"]
         label = (
             LABELS[2]
@@ -64,6 +73,8 @@ def derive_reviews(rows, delay_s):
             "label": label,
             "label_status": "simulated_evidence_rule",
             "label_is_root_cause": False,
+            # Simulated feedback appears after the observation window; this delay
+            # never changes the facts available to the representation at decision.
             "ready_s": episode["decision_s"] + delay_s,
             "witness_source_ids": sorted(set(witness)),
         }

@@ -12,6 +12,8 @@ from config import LABELS
 def retrieval_metrics(rankings, query_indices, episodes, labels):
     rows = []
     for ranked, query in zip(rankings, query_indices):
+        # For this evaluation, "relevant" means matching the synthetic pattern
+        # label. It is not an independent judgement of real diagnostic usefulness.
         relevant = [int(labels[index]) == int(labels[query]) for index in ranked]
         rows.append(
             {
@@ -19,9 +21,13 @@ def retrieval_metrics(rankings, query_indices, episodes, labels):
                 "world_id": episodes[query]["world_id"],
                 "label": LABELS[int(labels[query])],
                 "top1": float(relevant[0]) if relevant else 0.0,
+                # Fraction of up to five returned cases with a matching label;
+                # an empty ranking scores zero via the denominator guard.
                 "precision_at_5": sum(relevant[:5]) / max(1, len(relevant[:5])),
                 "reciprocal_rank_at_10": next(
-                    (1 / (i + 1) for i, match in enumerate(relevant[:10]) if match), 0.0
+                    # First match at rank r scores 1/r; no match in ten scores 0.
+                    (1 / (i + 1) for i, match in enumerate(relevant[:10]) if match),
+                    0.0,
                 ),
                 "ranked_episode_ids": [episodes[index]["episode_id"] for index in ranked],
             }
@@ -38,6 +44,12 @@ def retrieval_metrics(rankings, query_indices, episodes, labels):
 
 
 def percentile(values, fraction):
+    """Linearly interpolate a percentile between adjacent sorted observations.
+
+    Map fraction 0..1 onto indices 0..N-1. A noninteger index lies between two
+    values; its fractional part supplies the interpolation weight. This is a
+    statistical convention for summaries, not the encoder's range scaling.
+    """
     values = sorted(values)
     position = (len(values) - 1) * fraction
     lower = math.floor(position)
@@ -60,6 +72,7 @@ def benchmark(operation, warmup, repeats):
     for _ in range(repeats):
         start = time.perf_counter_ns()
         operation()
+        # Divide nanoseconds by one million to express wall time in milliseconds.
         values.append((time.perf_counter_ns() - start) / 1e6)
     return latency_summary(values)
 
@@ -74,6 +87,8 @@ def grouped_interval(values_by_data_world, repeats=1000, seed=881):
     groups = list(values_by_data_world.values())
     draws = []
     for _ in range(repeats):
+        # Sample with replacement at both levels. Keep episodes sharing a network
+        # world together; treating them as independent would ignore shared evidence.
         selected = torch.randint(len(groups), (len(groups),), generator=generator).tolist()
         values = []
         for index in selected:
@@ -83,6 +98,7 @@ def grouped_interval(values_by_data_world, repeats=1000, seed=881):
         draws.append(statistics.mean(values))
     return {
         "mean": statistics.mean(value for group in groups for value in group),
+        # Central 95% bootstrap interval: 2.5th and 97.5th percentiles of draw means.
         "lower": percentile(draws, 0.025),
         "upper": percentile(draws, 0.975),
         "resampling": "Data seeds, then entire network/time blocks; encoder repeats averaged first",

@@ -100,6 +100,9 @@ def load_geography(root=GEOGRAPHY):
 def route_points(lines, rng):
     """Three locations along one public road segment; no RF propagation inference."""
     line = lines[int(rng.integers(len(lines)))]
+    # Coordinate-space lengths in longitude/latitude degrees let us place samples
+    # along a drawn line. These are not geodesic distances in metres and must not
+    # be interpreted as travel distance, speed, or a radio coverage calculation.
     lengths = [math.dist(a, b) for a, b in pairwise(line)]
     total = sum(lengths)
     if total <= 0:
@@ -110,6 +113,9 @@ def route_points(lines, rng):
         distance = 0.0
         for a, b, length in zip(line, line[1:], lengths):
             if length and distance + length >= target:
+                # Ordinary linear interpolation within this small line segment:
+                # t is the fraction from endpoint a to b, and a + t*(b-a) places
+                # the point. The full line fractions 0.15/0.5/0.85 are demo choices.
                 t = (target - distance) / length
                 points.append([a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])])
                 break
@@ -120,6 +126,9 @@ def route_points(lines, rng):
 def polygon_for(episode):
     xs = [o["longitude"] for o in episode["observations"]]
     ys = [o["latitude"] for o in episode["observations"]]
+    # Fixed angular padding creates a rectangular retrieval region; it is not a
+    # distance radius or inferred cellular coverage. Locations filter records and
+    # do not enter the episode hypervector.
     lo, hi = min(xs) - 0.012, max(xs) + 0.012
     bottom, top = min(ys) - 0.004, max(ys) + 0.004
     return f"POLYGON (({lo} {bottom}, {hi} {bottom}, {hi} {top}, {lo} {top}, {lo} {bottom}))"

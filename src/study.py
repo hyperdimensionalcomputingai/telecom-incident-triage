@@ -160,6 +160,13 @@ def verify_prepared(run_dir, config):
 
 
 def verify_evidence(query, candidate, encoder, lookup, raw_query, raw_candidate):
+    """Reconstruct a candidate's raw bundle and attribute its cosine arithmetically.
+
+    If candidate z = sum(t_j), cosine(q, z) = sum(unit(q) dot t_j / ||z||).
+    Divide every term by the same complete candidate norm; normalizing terms
+    separately would break the identity. Contributions can be negative and include
+    interference: this decomposition accounts for a score, not a causal diagnosis.
+    """
     manifest = encoder.manifest(candidate)
     terms = [Term(**record) for record in manifest["terms"]]
     reconstructed = encoder.encode_terms(terms)
@@ -324,6 +331,8 @@ def evaluate_pair(
     start = time.perf_counter()
     raws = torch.stack([encoder.encode(episode) for episode in episodes])
     encode_s = time.perf_counter() - start
+    # Each row is one complete episode. Normalize across its D coordinates (dim=1),
+    # preserving raw sums for reconstruction and component edits.
     vectors = F.normalize(raws, dim=1)
     features = torch.stack([model_input_features(episode) for episode in episodes])
     memory = [i for i, episode in enumerate(episodes) if episode["split"] == "memory"]

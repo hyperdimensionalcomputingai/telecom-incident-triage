@@ -648,7 +648,7 @@ At each of three observations, exact temporal joins follow the phone's serving c
 | Peer phones sharing that backhaul link | Mean received signal strength | −125 to −65 dBm |
 | The same peer phones | Mean packet loss | 0–10% |
 
-The **local channel** contains the commuter phone's own signal measurement. The **connected-context channel** contains the other five measurements: cell load, backhaul loss and latency, and the two peer averages, all joined through the active dependency at the same time. Three observation times produce three local facts and fifteen context facts per episode. The phone's handset model is a separate, small categorical contribution.
+The **phone signal channel** contains the commuter phone's own signal measurement. The **connected-context channel** contains the other five measurements: cell load, backhaul loss and latency, and the two peer averages, all joined through the active dependency at the same time. Three observation times produce three phone signal facts and fifteen context facts per episode. The phone's handset model is a separate, small categorical contribution.
 
 The graph chooses which source measurements enter the representation. The encoder binds **typed roles**, such as phone → serving cell → backhaul; it does not bind subscriber, cell or link identifiers. Two unrelated subscribers can therefore resemble each other when their measurements and connected context match. Changing an edge can change the joined facts even when the full network contains the same measurements.
 
@@ -669,7 +669,7 @@ The same level family serves every numeric field. Binding each value to its attr
 
 We use $\otimes$ for **binding**, $\oplus$ for **bundling**, and $\rho$ for **permutation**. Here binding multiplies corresponding coordinates, bundling adds corresponding coordinates without thresholding, and $\rho^j(v)$ rotates the coordinates of $v$ by $j$ positions. The repeated-bundling symbol $\bigoplus$ combines several hypervectors. Atomic roles and channel markers are seeded bipolar arrays containing +1 and −1.
 
-For local radio, the role product is:
+For the commuter phone's signal strength, the role product is:
 
 $$
 P_{\mathrm{radio}}=r_{\mathrm{phone}}\otimes r_{\mathrm{radio}}.
@@ -699,10 +699,10 @@ $$
 
 The outer rotation marks **before, during or after**. It is separate from the rotations marking path roles. Moving a radio measurement from before the disruption to after it changes its contribution, allowing deterioration and recovery to remain distinguishable.
 
-Bundling adds these contributions. Define the local and context channels as:
+Bundling adds these contributions. Define the phone signal channel $S$ and context channel $C$ as:
 
 $$
-L=\frac{1}{\sqrt{3}}\bigoplus_{p=0}^{2}e_{p,\mathrm{radio}},
+S=\frac{1}{\sqrt{3}}\bigoplus_{p=0}^{2}e_{p,\mathrm{radio}},
 \qquad
 C=\frac{1}{\sqrt{15}}\bigoplus_{p=0}^{2}\bigoplus_{f\in\mathcal F_C}e_{p,f}.
 $$
@@ -710,8 +710,8 @@ $$
 The square-root divisors account for the different numbers of terms; they do not force every episode's channel norm to be equal. If $H$ is the handset-category hypervector bound to its attribute and channel roles, the raw episode accumulator is:
 
 $$
-z=(w_L L)\oplus(w_C C)\oplus(w_H H),
-\qquad (w_L,w_C,w_H)=(@LOCAL@,@CONTEXT@,@HANDSET@).
+z=(w_S S)\oplus(w_C C)\oplus(w_H H),
+\qquad (w_S,w_C,w_H)=(@LOCAL@,@CONTEXT@,@HANDSET@).
 $$
 
 **“Context weight” means $w_C$, the multiplier of the bundled connected-context channel $C$ before normalization.** Context here consists of the five graph-joined network and peer measurements in the table, at each of three times; it does not mean location, subscriber identity or free text. With the active defaults, the complete equation is:
@@ -1077,7 +1077,7 @@ A retrieved comparison is evidence for further inspection. The triage labels des
 
 **Question.** Can the representation distinguish the same values attached to different meanings, appearing in different orders, or connected through different edges?
 
-**Setup.** Binding attaches a value to a role. Bundling adds contributions. Permutation marks an observation's place in the episode. The local channel has weight {config.local_weight:g}; connected cell/link/peer context has weight {config.context_weight:g}. Numeric levels preserve neighbourhoods; the handset contribution has weight {config.handset_weight:g}. The dimension is {config.dimension:,}.
+**Setup.** Binding attaches a value to a role. Bundling adds contributions. Permutation marks an observation's place in the episode. The phone signal channel has weight {config.local_weight:g}; connected cell/link/peer context has weight {config.context_weight:g}. Numeric levels preserve neighbourhoods; the handset contribution has weight {config.handset_weight:g}. The dimension is {config.dimension:,}.
 
 Hyperdimensional computing (HDC) represents information in long numeric arrays called hypervectors. Here, each atomic role starts as a seeded array of +1 and −1 values. Distinct roles have little overlap, while nearby numeric measurements deliberately receive correlated arrays. An episode becomes a sum of these encoded contributions rather than an opaque identifier.
 

@@ -33,6 +33,13 @@ def source(record, identity):
 
 
 def generate(root, config, seed, geography_root=None):
+    """Generate controlled patterns, not a physical mobile-network simulation.
+
+    A subscriber is a customer, a cell supplies a phone's wireless connection,
+    and a backhaul link carries that cell's traffic onward. Six cells share two
+    links per independent network/time block. All telemetry (component-state
+    measurements) is synthetic; public road geometry does not determine signal.
+    """
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
     lines, geography_manifest = (
@@ -49,9 +56,15 @@ def generate(root, config, seed, geography_root=None):
             if block < config.memory_blocks + config.validation_blocks
             else "test"
         )
+        # Separate blocks by one day (86,400 seconds) for a simple ordered timeline.
         beginning = BASE_TS + block * 86400
+        # Each slot supplies one episode of each of the four patterns. Balanced
+        # counts make this a controlled experiment, not realistic incident prevalence.
         slots = config.episodes_per_block // len(LABELS)
         middle = slots // 2
+        # Six cells / two links gives three cells per shared dependency: enough
+        # for a three-observation serving-cell route and peers on other cells.
+        # This is a small illustrative topology, not a model of a carrier network.
         cells = [f"{prefix}-C{i}" for i in range(6)]
         links = [f"{prefix}-L{i}" for i in range(2)]
         for cell in cells:
@@ -64,6 +77,8 @@ def generate(root, config, seed, geography_root=None):
             )
         mappings = []
         for phase in range(2):
+            # Randomly assign three cells to each link in each phase. Rewiring
+            # halfway through the slot sequence makes same-time connectivity matter.
             order = rng.permutation(6)
             mapping = {cells[int(c)]: links[i // 3] for i, c in enumerate(order)}
             mappings.append(mapping)
@@ -88,13 +103,18 @@ def generate(root, config, seed, geography_root=None):
         for slot in range(slots):
             phase = int(slot >= middle)
             mapping = mappings[phase]
+            # Two-minute slots leave a gap between the 40-second observation windows.
             start = beginning + slot * 120
             impaired = links[int(rng.integers(2))]
             healthy = next(link for link in links if link != impaired)
+            # An episode is a 40-second window with three samples, 20 seconds apart.
+            # The encoder tags their ordinal positions, not elapsed seconds.
             times = [start + pos * 20 for pos in range(3)]
             loss_by_link = {}
             for pos, timestamp in enumerate(times):
                 for i, cell in enumerate(cells):
+                    # Loads vary independently between 25% and 90%: contextual
+                    # background variation, not the rule that defines any label.
                     identity = f"{prefix}-CS{slot}-{pos}-{i}"
                     rows["cell_status"].append(
                         source(
@@ -108,6 +128,13 @@ def generate(root, config, seed, geography_root=None):
                         )
                     )
                 for i, link in enumerate(links):
+                    # Packet loss is a percentage of missing pieces of transmitted
+                    # data; latency is delay in milliseconds. Only one link's middle
+                    # sample is stressed. These sampled ranges deliberately create
+                    # separable patterns; they are not fitted carrier distributions.
+                    # Healthy loss is <=1.8%, stressed loss >=3.2%, leaving a gap
+                    # around the review rule's 3% threshold. Delay ranges overlap,
+                    # so high delay alone does not define shared impairment.
                     stressed = link == impaired and pos == 1
                     loss = float(rng.uniform(3.2, 8.0) if stressed else rng.uniform(0.05, 1.8))
                     latency = float(rng.uniform(28, 100) if stressed else rng.uniform(8, 48))
@@ -126,7 +153,14 @@ def generate(root, config, seed, geography_root=None):
                         )
                     )
                     attached = [cell for cell in cells if mapping[cell] == link]
+                    # Two peers supply corroborating shared-link evidence and a
+                    # simple average. The review rule also requires at least two.
                     for peer in range(2):
+                        # Each peer record represents another phone using this link.
+                        # Its loss copies the shared link's loss with small noise:
+                        # correlated trouble is built into the synthetic scenario.
+                        # Peer identities are not separately encoded; build_episodes
+                        # reduces the two records to two mean measurements per time.
                         identity = f"{prefix}-PEER{slot}-{pos}-{i}-{peer}"
                         cell = attached[peer]
                         edge_id = f"{prefix}-EDGE{phase}-{cells.index(cell)}"
@@ -151,6 +185,8 @@ def generate(root, config, seed, geography_root=None):
                 episode_id = f"{prefix}-E{slot:02d}-{incident_number}"
                 phone_id = f"{prefix}-PHONE{slot:02d}-{incident_number}"
                 subscriber_id = f"{prefix}-PERSON{slot:02d}-{incident_number}"
+                # Three arbitrary phone categories, sampled independently of the
+                # pattern: handset model is deliberately an incidental feature.
                 handset = f"model_{int(rng.integers(3))}"
                 rows["subscribers"].append(
                     source(
@@ -176,7 +212,15 @@ def generate(root, config, seed, geography_root=None):
                 link = impaired if category == 2 else healthy
                 attached = [cell for cell in cells if mapping[cell] == link]
                 route = [attached[int(i)] for i in rng.permutation(3)]
+                # A shared link problem can accompany weakening, recovering or
+                # steady phone signal. This is why signal alone cannot identify it.
                 profile = category if category != 2 else int(rng.choice([0, 1, 3]))
+                # dBm is logarithmic signal power; more negative means weaker.
+                # These three hand-designed trajectories are independent of map
+                # position; they are not predictions of wireless propagation.
+                # Their endpoints differ by at least 21 dB for weakening/recovery,
+                # leaving a margin around the review rule's +/-15 dB thresholds.
+                # Steady signal varies at most 6 dB across the +/-3 dB jitter.
                 if profile == 0:
                     radio = [rng.uniform(-84, -76), rng.uniform(-102, -91), rng.uniform(-116, -108)]
                 elif profile == 1:
@@ -277,6 +321,13 @@ def source_lookup(tables):
 
 
 def build_episodes(tables):
+    """Resolve connected facts before turning any measurements into hypervectors.
+
+    For each observation: phone -> serving cell -> time-valid backhaul link, then
+    that cell's load, that link's loss/delay, and peers sharing that link at that
+    exact time. IDs select the evidence but are not themselves encoded features.
+    Missing/duplicate/stale records fail instead of inventing measurements.
+    """
     lookup = source_lookup(tables)
 
     def frame(name):
@@ -307,11 +358,17 @@ def build_episodes(tables):
     )
     if peer["link_id"].null_count():
         raise ValueError("Missing peer topology edge")
+    # Validity intervals are half-open: start <= time < end. At a rewire boundary,
+    # the old edge has expired and the new edge applies, avoiding two active edges.
     if peer.filter(
         (pl.col("timestamp_s") < pl.col("valid_from_s"))
         | (pl.col("timestamp_s") >= pl.col("valid_to_s"))
     ).height:
         raise ValueError("Peer observation uses a stale topology edge")
+    # Average only peers on the same link at the same time, with equal weight.
+    # Averaging dBm operates in logarithmic units, not mean physical power in watts.
+    # Each average becomes one encoded term; individual variation and peer count
+    # are lost to this representation, while source IDs remain for inspection.
     summary = peer.group_by(["link_id", "timestamp_s"]).agg(
         pl.col("peer_radio_dbm").mean(),
         pl.col("peer_loss_pct").mean(),
@@ -319,6 +376,9 @@ def build_episodes(tables):
         pl.col("edge_id").alias("peer_edge_ids"),
         pl.col("available_s").max().alias("peer_available_s"),
     )
+    # Exact-time joins assume complete, synchronized snapshots. There is no nearest
+    # timestamp lookup, interpolation, missing-value imputation, or learned join.
+    # m:1 requires one matching infrastructure record per phone observation.
     df = (
         frame("observations")
         .join(phones, on="phone_id", how="left", validate="m:1")
@@ -360,11 +420,15 @@ def build_episodes(tables):
     episodes = []
     for meta in tables["episodes"].to_pylist():
         observations = grouped.get(meta["episode_id"], [])
+        # The encoder's sqrt(3)/sqrt(15) weights rely on this fixed episode shape.
         if len(observations) != 3 or [o["ordinal"] for o in observations] != [0, 1, 2]:
             raise ValueError("An episode requires three unique ordered observations")
         if sorted(meta["observation_ids"]) != sorted(o["observation_id"] for o in observations):
             raise ValueError("Episode observation identities disagree with source metadata")
         for observation in observations:
+            # Measurement time and availability time can differ. Every joined
+            # source must already be available at the decision (third observation),
+            # so later information cannot improve an earlier representation.
             if (
                 max(
                     observation[key]
@@ -381,6 +445,9 @@ def build_episodes(tables):
                 raise ValueError("Features contain future information")
         if meta["decision_s"] != max(o["timestamp_s"] for o in observations):
             raise ValueError("Decision timestamp does not match the available episode")
+        # The no-path comparison uses all same-time component/peer measurements,
+        # regardless of connection to this phone. Keep that pool separate from the
+        # five selected context fields used by the default representation.
         pool = []
         for observation in observations:
             values = {
