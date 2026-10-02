@@ -48,7 +48,7 @@ Read the [illustrated results summary](runs/reports/summary.md) for the encoder 
 - **Learning from a new review costs almost nothing, and the cost does not grow.** About 0.13 ms per review, versus about 3.7 ms to retrain LR and 40 ms to retrain the MLP on every update; retraining time also grows with the training set.
 - **Finds comparable incidents and shows why.** 96.3% precision@5 (random: 25%), and every similarity score breaks down into contributions traceable to source records.
 
-**Tradeoffs:** from five reviews per class, all three methods are on par; hypervectors need far more storage than raw measurements; and HDC is weakest at recognising faults in network equipment that many phones share. See the summary's [key findings](runs/reports/summary.md#key-findings).
+**Tradeoffs:** hypervectors need far more storage than raw measurements, and from five reviews per class all three methods are on par. See the summary's [key findings](runs/reports/summary.md#key-findings).
 
 These findings concern controlled synthetic patterns, and do not represent the operational carrier performance of any real provider. The run times reported in the results depend on the machine being used, so use them as guidance only.
 
