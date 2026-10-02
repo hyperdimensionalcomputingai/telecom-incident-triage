@@ -9,7 +9,7 @@ The experiments examine four questions:
 - **Representation:** Do roles, event order and network connectivity change the meaning of an encoded incident?
 - **Retrieval and evidence:** Can it find comparable earlier incidents and return the source records supporting the comparison?
 - **Learning:** How useful does class memory become as reviewed examples arrive, and when do updates help or hurt?
-- **Resources:** What do encoding, prediction, learning updates, retrieval and storage cost, including the cost per new review?
+- **Resources:** How long do prediction and learning from new reviews take, and how much storage does each representation need?
 
 The Python files live directly in [src/](src/).
 
@@ -44,8 +44,8 @@ Read the [illustrated results summary](runs/reports/summary.md) for the encoder 
 
 - Roles, order and connectivity matter; retrieved comparisons resolve to retained source evidence.
 - HDC retrieval achieves **96.3% precision@5**, with source records supporting each returned comparison.
-- At five reviews per class, HDC, LR and MLP achieve **96.5%, 94.8% and 96.3% macro F1**; the paired intervals do not establish an HDC advantage at this budget.
-- HDC memory updates are immediate additions. Batch retraining amortizes well for LR; these measurements show no universal compute advantage or HDC storage saving.
+- With just one review per class, HDC scores **7–9 points higher macro F1** than LR and the MLP (82.3% versus 74.9% and 73.4%). From five reviews per class, all three are on par, within about 2 points.
+- HDC learns from a single new review in about 0.13 ms, versus about 3.7 ms for an LR refit and 40 ms for an MLP refit. One refit can absorb a whole batch, though: at 40 reviews, LR is faster. All three predict in about 0.1 ms, and HDC uses more storage.
 
 These findings concern controlled synthetic patterns, and do not represent the operational carrier performance of any real provider. The run times reported in the results depend on the machine being used, so use them as guidance only.
 

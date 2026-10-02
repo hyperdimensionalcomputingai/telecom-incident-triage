@@ -1,6 +1,7 @@
 """Readable evidence, exportable figures, and measured claim boundaries."""
 
 import json
+import math
 import os
 import re
 import statistics
@@ -31,6 +32,13 @@ PATTERNS = {
 }
 
 
+UPDATE_METHODS = ("hdc", "logistic_regression", "mlp")
+UPDATE_NAMES = {
+    "hdc": "HDC addition",
+    "logistic_regression": "LR refit",
+    "mlp": "MLP refit",
+}
+
 REPORT_TEMPLATES = ROOT / "docs" / "report-templates"
 PLACEHOLDER = re.compile(r"\{\{\s*([a-z][a-z0-9_]*)\s*\}\}")
 
@@ -55,6 +63,41 @@ def percent(value):
 
 def interval_text(value):
     return f"{percent(value['mean'])} [{percent(value['lower'])}, {percent(value['upper'])}]"
+
+
+def timing_median(results, key, metric="median_ms"):
+    """Median across seed pairs of one per-call benchmark."""
+    return statistics.median(result["resources"]["timings"][key][metric] for result in results)
+
+
+def update_rows(results, method, batch):
+    return [
+        row
+        for result in results
+        for row in result["resources"]["learning_updates"]["rows"]
+        if row["method"] == method and row["batch_size"] == batch
+    ]
+
+
+def update_median(results, method, batch, stage="complete_wall_ms", metric="median_ms"):
+    """Median across seed pairs of the raw (not per-review) batch timing."""
+    return statistics.median(
+        row["timings"][stage][metric] for row in update_rows(results, method, batch)
+    )
+
+
+def update_batches(results):
+    return sorted(
+        {
+            row["batch_size"]
+            for result in results
+            for row in result["resources"]["learning_updates"]["rows"]
+        }
+    )
+
+
+def ms(value):
+    return f"{value:.3f}" if value < 10 else f"{value:.1f}"
 
 
 def figure_style():
@@ -363,89 +406,42 @@ def make_figures(root, summary, results, case, config, geography_root):
     axis.legend(frameon=False, loc="lower right")
     save_figure(figure, root, "learning", plt)
 
-    methods = (
-        "hdc_encode_predict",
-        "logistic_regression_encode_predict",
-        "mlp_encode_predict",
-        "hdc_encode_score_update",
-        "logistic_regression_review_refit",
-        "mlp_review_refit",
-    )
-    names = (
-        "HDC encode + predict",
-        "LR encode + predict",
-        "MLP encode + predict",
-        "HDC encode + predict + add review",
-        "LR incorporate review by batch refit",
-        "MLP incorporate review by batch refit",
-    )
-    medians = [
-        statistics.median(result["resources"]["timings"][method]["median_ms"] for result in results)
-        for method in methods
-    ]
-    p95 = [
-        statistics.median(result["resources"]["timings"][method]["p95_ms"] for result in results)
-        for method in methods
-    ]
-    figure, axis = plt.subplots(figsize=(10, 5.6), layout="constrained")
-    axis.barh(range(6), medians, color=["#287b78", "#a06935", "#7461a2"] * 2, height=0.6)
-    axis.scatter(
-        p95, range(6), color="#263647", marker="|", s=170, label="Median of run p95 measurements"
-    )
-    axis.set_yticks(range(6), names)
-    axis.invert_yaxis()
-    axis.set_xscale("log")
-    axis.set_xlabel("Elapsed time in milliseconds, logarithmic scale; database work excluded")
-    axis.set_title("Prediction and incorporation of one further review", loc="left")
-    axis.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.21))
-    save_figure(figure, root, "compute", plt)
-
-    batches = sorted(
-        {
-            row["batch_size"]
-            for result in results
-            for row in result["resources"]["learning_updates"]["rows"]
-        }
-    )
-    figure, axes = plt.subplots(1, 2, figsize=(11.2, 4.8), layout="constrained")
-    update_names = {
-        "hdc": "HDC additive memory",
-        "logistic_regression": "LR batch refit",
-        "mlp": "MLP batch refit",
-    }
-    for method in ("hdc", "logistic_regression", "mlp"):
-        totals = [
-            statistics.median(
-                row["timings"]["complete_wall_ms"]["median_ms"]
-                for result in results
-                for row in result["resources"]["learning_updates"]["rows"]
-                if row["method"] == method and row["batch_size"] == batch
-            )
-            for batch in batches
-        ]
-        for axis, values in zip(
-            axes, (totals, [total / batch for total, batch in zip(totals, batches)])
-        ):
-            axis.plot(
-                batches,
-                values,
-                "-o",
-                linewidth=2.4,
+    # Raw batch totals only; dividing by batch size would mix throughput with latency.
+    batches = update_batches(results)
+    figure, axis = plt.subplots(figsize=(9, 5), layout="constrained")
+    for method in UPDATE_METHODS:
+        totals = [update_median(results, method, batch) for batch in batches]
+        axis.plot(
+            batches,
+            totals,
+            "-o",
+            linewidth=2.4,
+            color=COLOURS[method],
+            label=UPDATE_NAMES[method],
+        )
+        for batch, total in zip(batches, totals):
+            axis.annotate(
+                f"{total:.2f} ms" if total < 10 else f"{total:.1f} ms",
+                (batch, total),
+                textcoords="offset points",
+                # HDC rises steeply, so label below its points to keep them off the line,
+                # except where it ends above the LR refit.
+                xytext=(8, -14) if method == "hdc" and batch != max(batches) else (8, 4),
+                fontsize=9,
                 color=COLOURS[method],
-                label=update_names[method],
             )
-            axis.set_xticks(batches)
-            axis.set_xlabel("Newly reviewed incidents in the arriving batch")
-            axis.set_yscale("log")
-    axes[0].set_ylabel("Complete batch wall latency, ms (log scale)")
-    axes[1].set_ylabel("Amortized wall latency per new review, ms (log scale)")
-    axes[0].set_title("Encode, incorporate reviews, then predict", loc="left")
-    axes[1].set_title("Batch refit cost shared across new reviews", loc="left")
-    axes[0].legend(frameon=False, fontsize=9)
+    axis.set_xticks(batches)
+    axis.set_xlim(min(batches) - 3, max(batches) + 8)
+    axis.set_yscale("log")
+    axis.set_ylim(bottom=min(update_median(results, "hdc", batch) for batch in batches) / 1.6)
+    axis.set_xlabel("Newly reviewed incidents arriving together")
+    axis.set_ylabel("Total time to encode, learn and predict, ms (log scale)")
     initial = results[0]["resources"]["learning_updates"]["rows"][0]["initial_training_examples"]
-    figure.suptitle(
-        f"Same {initial} starting reviews; fixed encoder and frozen LR/MLP settings", fontsize=13
+    axis.set_title(
+        f"Learning from new reviews, starting from the same {initial} reviewed incidents",
+        loc="left",
     )
+    axis.legend(frameon=False, loc="lower right")
     save_figure(figure, root, "learning-updates", plt)
 
     from geography import load_geography
@@ -523,96 +519,96 @@ def make_figures(root, summary, results, case, config, geography_root):
 
 
 def learning_update_explanation(results, config):
-    batches = sorted(
-        {
-            row["batch_size"]
-            for result in results
-            for row in result["resources"]["learning_updates"]["rows"]
-        }
-    )
-    rows, stages = [], []
-    for batch in batches:
-        for method in ("hdc", "logistic_regression", "mlp"):
-            trials = [
-                row
-                for result in results
-                for row in result["resources"]["learning_updates"]["rows"]
-                if row["batch_size"] == batch and row["method"] == method
-            ]
-
-            def median(group, key, metric="median_ms", trials=trials):
-                return statistics.median(row[group][key][metric] for row in trials)
-
-            name = {
-                "hdc": "HDC additive class memory",
-                "logistic_regression": "LR full batch refit",
-                "mlp": "MLP full batch refit",
-            }[method]
-            rows.append(
-                f"| {batch} | {name} | {trials[0]['total_reviewed_examples']} | "
-                f"{median('timings', 'complete_wall_ms'):.3f} | {median('timings', 'complete_wall_ms', 'p95_ms'):.3f} | "
-                f"{median('per_new_sample', 'complete_wall_ms'):.4f} | "
-                f"{median('per_new_sample', 'complete_cpu_ms'):.4f} |"
-            )
-            stages.append(
-                f"| {batch} | {name} | "
-                + " | ".join(
-                    f"{median('per_new_sample', key):.4f}"
-                    for key in ("encoding_ms", "learning_ms", "prediction_ms")
-                )
-                + " |"
-            )
-    initial = results[0]["resources"]["learning_updates"]["rows"][0]["initial_training_examples"]
-    largest_batch = max(batches)
-    costs = {
-        method: statistics.median(
-            row["per_new_sample"]["complete_wall_ms"]["median_ms"]
-            for result in results
-            for row in result["resources"]["learning_updates"]["rows"]
-            if row["method"] == method and row["batch_size"] == largest_batch
-        )
-        for method in ("hdc", "logistic_regression", "mlp")
+    batches = update_batches(results)
+    totals = {
+        method: {batch: update_median(results, method, batch) for batch in batches}
+        for method in UPDATE_METHODS
     }
-    comparison = (
-        "LR is cheaper per new review than HDC at this batch size."
-        if costs["logistic_regression"] < costs["hdc"]
-        else "HDC is cheaper per new review than LR at this batch size."
+    rows = "\n".join(
+        f"| {batch} | " + " | ".join(ms(totals[method][batch]) for method in UPDATE_METHODS) + " |"
+        for batch in batches
     )
+    single, largest = min(batches), max(batches)
+    stages = {
+        method: {
+            key: update_median(results, method, single, key)
+            for key in ("encoding_ms", "learning_ms", "prediction_ms")
+        }
+        for method in UPDATE_METHODS
+    }
+    stage_rows = "\n".join(
+        f"| {UPDATE_NAMES[method]} | "
+        + " | ".join(
+            ms(stages[method][key]) for key in ("encoding_ms", "learning_ms", "prediction_ms")
+        )
+        + f" | {ms(totals[method][single])} |"
+        for method in UPDATE_METHODS
+    )
+
+    def share(method, key):
+        # Floor so that, for example, 99.6% is not reported as the whole time.
+        return math.floor(100 * stages[method][key] / sum(stages[method].values()))
+
+    hdc, lr, mlp = (totals[method] for method in UPDATE_METHODS)
+    review = "review" if single == 1 else "reviews"
     finding = (
-        f"At {largest_batch} new reviews, complete amortized wall cost is "
-        f"{costs['hdc']:.4f} ms per review for HDC, {costs['logistic_regression']:.4f} ms for LR, "
-        f"and {costs['mlp']:.4f} ms for the MLP. {comparison} "
-        "The batch size changes the practical cost comparison; a one-review refit cost should not be extrapolated by multiplying it by the number of arriving reviews."
+        f"**Result.** For {single} new {review}, HDC finishes in {ms(hdc[single])} ms: "
+        f"about {lr[single] / hdc[single]:.0f}× faster than an LR refit ({ms(lr[single])} ms) and "
+        f"{mlp[single] / hdc[single]:.0f}× faster than an MLP refit ({ms(mlp[single])} ms). "
+        f"Encoding is {share('hdc', 'encoding_ms'):}% of HDC's time, while refitting is "
+        f"{share('logistic_regression', 'learning_ms'):}% of LR's and {share('mlp', 'learning_ms'):}% of the MLP's."
     )
+    if largest > single:
+        slope = (hdc[largest] - hdc[single]) / (largest - single)
+        faster = [
+            UPDATE_NAMES[method].split()[0]
+            for method in ("logistic_regression", "mlp")
+            if totals[method][largest] < hdc[largest]
+        ]
+        crossover = (
+            f"At {largest} reviews, one {' and one '.join(faster)} refit is faster than {largest} HDC additions "
+            f"({ms(hdc[largest])} ms)."
+            if faster
+            else f"At {largest} reviews, HDC ({ms(hdc[largest])} ms) is still faster than both refits."
+        )
+        finding += (
+            f"\n\nBatch size changes the comparison. HDC's total grows with every review it adds, "
+            f"by about {slope:.2f} ms each. A refit processes all retained reviews whatever the batch size, "
+            f"so its time depends little on how many reviews arrived: LR takes {ms(lr[single])} ms for {single} and "
+            f"{ms(lr[largest])} ms for {largest}; the MLP takes {ms(mlp[single])} and {ms(mlp[largest])} ms. {crossover}"
+        )
     warning_count = sum(
         bool(info["convergence_warnings"])
         for result in results
         for row in result["resources"]["learning_updates"]["rows"]
         for info in row["fit_diagnostics"]
     )
-    table = "\n".join(rows)
-    breakdown = "\n".join(stages)
+    initial = results[0]["resources"]["learning_updates"]["rows"][0]["initial_training_examples"]
     skipped = results[0]["resources"]["learning_updates"]["skipped_batches"]
     skipped_text = (
-        "The small run omits batches without enough later memory reviews: "
+        " The small run omits batches without enough later memory reviews: "
         + ", ".join(str(row["batch_size"]) for row in skipped)
         + "."
         if skipped
-        else "Every requested batch size was measured."
+        else ""
     )
+    sizes = [str(batch) for batch in batches]
     return render_template(
         "learning-updates.md",
         {
             "initial_reviews": initial,
             "max_reviews_per_class": max(config.budgets),
-            "batch_sizes": ", ".join(str(batch) for batch in batches),
-            "reviews_after_twenty": initial + 20,
-            "reviews_after_forty": initial + 40,
+            "batch_sizes": ", ".join(sizes[:-1]) + " or " + sizes[-1]
+            if len(sizes) > 1
+            else sizes[0],
+            "refit_sizes": ", ".join(str(initial + b) for b in batches[:-1])
+            + (" or " if len(batches) > 1 else "")
+            + str(initial + batches[-1]),
             "refit_warmup": config.refit_warmup,
             "refit_repeats": config.refit_repeats,
             "batch_coverage": skipped_text,
-            "learning_update_rows": table,
-            "learning_update_stage_rows": breakdown,
+            "learning_update_rows": rows,
+            "learning_update_stage_rows": stage_rows,
             "learning_update_finding": finding,
             "refit_warning_count": warning_count,
         },
@@ -634,6 +630,121 @@ def encoder_explanation(config):
 
 def geographic_enhancement_explanation():
     return render_template("geographic-enhancements.md")
+
+
+def learning_comparison(summary, config, class_errors, error_budget):
+    """Lead Experiment 3 with what the paired differences support at each budget."""
+    names = {"logistic_regression": "LR", "mlp": "the MLP"}
+    budgets = sorted(config.budgets)
+
+    def difference(budget, method):
+        return summary["learning_differences"][str(budget)]["hdc_minus_" + method]
+
+    def clear(value):
+        # Decide on the displayed one-decimal bounds, so a bold "[0.0, ...]" never appears.
+        return round(value["lower"] * 100, 1) > 0 or round(value["upper"] * 100, 1) < 0
+
+    def cell(value):
+        text = (
+            f"{value['mean'] * 100:+.1f} [{value['lower'] * 100:.1f}, {value['upper'] * 100:.1f}]"
+        )
+        return f"**{text}**" if clear(value) else text
+
+    rows = "\n".join(
+        f"| {budget} | "
+        + " | ".join(
+            percent(summary["learning"][str(budget)][method]["mean"])
+            for method in ("hdc", "logistic_regression", "mlp")
+        )
+        + " | "
+        + " | ".join(cell(difference(budget, method)) for method in names)
+        + " |"
+        for budget in budgets
+    )
+
+    first = budgets[0]
+    first_diffs = {method: difference(first, method) for method in names}
+    reviews = "review" if first == 1 else "reviews"
+    hdc_first = percent(summary["learning"][str(first)]["hdc"]["mean"])
+    ahead = all(clear(value) and value["mean"] > 0 for value in first_diffs.values())
+    gaps = [first_diffs[method]["mean"] * 100 for method in names]
+    if ahead:
+        opening = (
+            f"**Result.** With {first} {reviews} per class ({first * 4} in total), HDC reaches {hdc_first} macro F1: "
+            f"{gaps[0]:.1f} points above LR and {gaps[1]:.1f} above the MLP, and both intervals exclude zero."
+        )
+    else:
+        opening = (
+            f"**Result.** With {first} {reviews} per class ({first * 4} in total), HDC reaches {hdc_first} macro F1, against "
+            + " and ".join(
+                f"{percent(summary['learning'][str(first)][method]['mean'])} for {name}"
+                for method, name in names.items()
+            )
+            + "."
+        )
+
+    # On par: from this budget onward, the three mean scores stay within 2.5 points.
+    def spread(budget):
+        scores = [
+            summary["learning"][str(budget)][method]["mean"] * 100
+            for method in ("hdc", "logistic_regression", "mlp")
+        ]
+        return max(scores) - min(scores)
+
+    on_par = next(
+        (
+            budget
+            for budget in budgets
+            if all(spread(later) <= 2.5 for later in budgets if later >= budget)
+        ),
+        None,
+    )
+    sentences = [opening]
+    if on_par is not None and on_par > first:
+        sentences.append(
+            f"From {on_par} reviews per class onward, all three are within "
+            f"{max(spread(budget) for budget in budgets if budget >= on_par):.1f} points of one another."
+        )
+        small = []
+        for budget in budgets:
+            if budget < on_par:
+                continue
+            for method, name in names.items():
+                value = difference(budget, method)
+                if clear(value):
+                    leader, other = ("HDC", name) if value["mean"] > 0 else (name, "HDC")
+                    small.append(
+                        f"{leader} ahead of {other} by {abs(value['mean']) * 100:.1f} points at {budget}"
+                    )
+        if small:
+            sentences.append(
+                "Within that range, a few small differences are distinguishable from zero: "
+                + "; ".join(small)
+                + " reviews per class."
+            )
+    headline = " ".join(sentences)
+
+    if ahead and on_par is not None and on_par > first:
+        takeaway = (
+            f"HDC learns most efficiently when labels are scarce: with {first} {reviews} per class, it scores "
+            f"{min(gaps):.1f}–{max(gaps):.1f} points higher macro F1 than LR and the MLP. From {on_par} reviews per class, "
+            "the three are on par."
+        )
+    else:
+        takeaway = (
+            "Experiment 3 compares HDC's macro F1 with LR and the MLP at every review budget."
+        )
+
+    hardest = max(LABELS, key=lambda label: class_errors["hdc"][label])
+    others = [label for label in LABELS if label != hardest]
+    pattern = (
+        f"Averages can hide a harder pattern. At {error_budget} reviews per class, HDC assigns "
+        f"{percent(class_errors['hdc'][hardest])} of {PATTERNS[hardest]} incidents to the wrong pattern, against "
+        f"{percent(class_errors['logistic_regression'][hardest])} for LR and {percent(class_errors['mlp'][hardest])} for the MLP; "
+        f"its error rate on every other pattern is at most {percent(max(class_errors['hdc'][label] for label in others))}. "
+        "The per-pattern table is in the details below."
+    )
+    return rows, headline, takeaway, pattern
 
 
 def create_report(run_dir):
@@ -681,36 +792,28 @@ def create_report(run_dir):
             "hdc_lance_float16",
         )
     )
-    learning_rows = "\n".join(
-        "| "
-        + str(budget)
-        + " | "
-        + " | ".join(
-            interval_text(summary["learning"][str(budget)][method])
-            for method in ("hdc", "logistic_regression", "mlp")
-        )
-        + " |"
-        for budget in config.budgets
-    )
     error_budget = 5 if 5 in config.budgets else min(config.budgets)
-    class_error_rows = "\n".join(
-        "| "
-        + PATTERNS[label].capitalize()
-        + " | "
-        + " | ".join(
-            percent(
-                1
-                - statistics.mean(
-                    row["metrics"]["per_class"][label]["recall"]
-                    for result in results
-                    for row in result["learning"]
-                    if row["budget_per_class"] == error_budget and row["method"] == method
-                )
+    class_errors = {
+        method: {
+            label: 1
+            - statistics.mean(
+                row["metrics"]["per_class"][label]["recall"]
+                for result in results
+                for row in result["learning"]
+                if row["budget_per_class"] == error_budget and row["method"] == method
             )
-            for method in ("hdc", "logistic_regression", "mlp")
-        )
+            for label in LABELS
+        }
+        for method in ("hdc", "logistic_regression", "mlp")
+    }
+    class_error_rows = "\n".join(
+        f"| {PATTERNS[label].capitalize()} | "
+        + " | ".join(percent(class_errors[method][label]) for method in class_errors)
         + " |"
         for label in LABELS
+    )
+    learning_rows, learning_headline, learning_takeaway, hardest_pattern = learning_comparison(
+        summary, config, class_errors, error_budget
     )
     fit_rows = "\n".join(
         "| "
@@ -747,35 +850,50 @@ def create_report(run_dir):
         for budget in config.budgets
     )
     trial_warning_count = sum(bool(info["convergence_warnings"]) for info in trial_fits)
-    learning_difference = summary["learning_differences"][str(error_budget)]
-    difference_text = "; ".join(
-        f"HDC minus {name}: {learning_difference['hdc_minus_' + method]['mean'] * 100:.1f} percentage points [{learning_difference['hdc_minus_' + method]['lower'] * 100:.1f}, {learning_difference['hdc_minus_' + method]['upper'] * 100:.1f}]"
-        for method, name in [("logistic_regression", "LR"), ("mlp", "MLP")]
+    predict = {
+        method: timing_median(results, method + "_encode_predict") for method in UPDATE_METHODS
+    }
+    hdc_encode, hdc_score = (
+        timing_median(results, "hdc_encode"),
+        timing_median(results, "hdc_score"),
     )
-    timing_rows = "\n".join(
-        f"| {name} | {statistics.median(result['resources']['timings'][key]['median_ms'] for result in results):.4f} ms | {statistics.median(result['resources']['timings'][key]['p95_ms'] for result in results):.4f} ms |"
-        for key, name in [
-            ("hdc_add_only", "HDC addition only"),
-            ("hdc_encode", "HDC encoding"),
-            ("hdc_score", "HDC scoring"),
-            ("hdc_encode_predict", "HDC encode–predict"),
-            ("logistic_regression_encode_predict", "LR encode–predict"),
-            ("mlp_encode_predict", "MLP encode–predict"),
-            ("hdc_encode_score_update", "HDC encode–score–update"),
-            ("logistic_regression_review_refit", "LR encode–refit–predict"),
-            ("mlp_review_refit", "MLP encode–refit–predict"),
+    dimension = f"{config.dimension:,}"
+    inputs = results[0]["resources"]["model_input_bytes"] // 4
+    prediction_rows = "\n".join(
+        [
+            f"| HDC | Build the {dimension}-number hypervector ({ms(hdc_encode)} ms), then compare it with four class memories ({ms(hdc_score)} ms) | {ms(predict['hdc'])} |",
+            f"| LR | Assemble {inputs} scaled measurements, then apply the trained linear model | {ms(predict['logistic_regression'])} |",
+            f"| MLP | Assemble the same {inputs} inputs, then apply the trained one-hidden-layer network | {ms(predict['mlp'])} |",
         ]
     )
+    prediction_finding = (
+        f"HDC prediction takes {predict['hdc'] / predict['logistic_regression']:.1f}× as long as LR's. "
+        f"That is expected: {100 * hdc_encode / predict['hdc']:.0f}% of HDC's time goes into building the hypervector, "
+        f"binding, permuting and bundling every measured fact into {dimension} numbers. LR and the MLP read the same "
+        f"joined measurements as {inputs} numbers, so preparing their input is little more than copying values. "
+        f"All three predict in at most {ms(max(predict.values()))} ms, so prediction cost does not separate the methods."
+    )
+    reported = [
+        (
+            result["resources"]["timings"][method + "_encode_predict"][metric]
+            for metric in ("median_ms", "p95_ms")
+        )
+        for result in results
+        for method in UPDATE_METHODS
+    ] + [
+        (row["timings"]["complete_wall_ms"][metric] for metric in ("median_ms", "p95_ms"))
+        for result in results
+        for row in result["resources"]["learning_updates"]["rows"]
+    ]
+    p95_overhead = max(100 * (p95 / median - 1) for median, p95 in reported)
+    update_single = min(update_batches(results))
+    update_single_ms = {
+        method: update_median(results, method, update_single) for method in UPDATE_METHODS
+    }
     counts = results[0]["candidate_counts"]
     path_gain = summary["paired_differences"]["hdc_minus_hdc_without_paths"]
     order_gain = summary["paired_differences"]["hdc_minus_hdc_without_order"]
     best_budget = max(config.budgets)
-    last_f1 = summary["learning"][str(best_budget)]["hdc"]["mean"]
-    learning_direction = (
-        "More reviews improve the aggregate result over the one-example starting point."
-        if last_f1 > summary["learning"][str(min(config.budgets))]["hdc"]["mean"]
-        else "More reviews do not improve the aggregate result over the one-example starting point."
-    )
     budget_80 = next(
         (
             budget
@@ -837,9 +955,14 @@ def create_report(run_dir):
             "Supervised learning still requires labels. Updates can regress, and the scenarios are simulated.",
         ),
         (
+            "Learning from few reviews",
+            learning_takeaway.split(" The results support")[0],
+            "Advantage shrinks to parity as reviews accumulate; balanced, simulated patterns only.",
+        ),
+        (
             "Compute cost",
-            "Addition, prediction and review incorporation are measured separately on CPU against trained LR and MLP.",
-            "Fast addition alone is not serving latency, energy efficiency, or an advantage over the measured controls.",
+            f"HDC learns from one new review in {ms(update_single_ms['hdc'])} ms, versus {ms(update_single_ms['logistic_regression'])} ms (LR) and {ms(update_single_ms['mlp'])} ms (MLP) for a full refit. All three predict in at most {ms(max(predict.values()))} ms.",
+            "One refit can absorb a whole batch, so large batches narrow or reverse the gap. Incremental LR/MLP optimizers, energy and production serving were not measured.",
         ),
         (
             "Storage",
@@ -909,25 +1032,24 @@ def create_report(run_dir):
             "retrieval_error_rows": error_text,
             "quantization_precision_change": f"{statistics.mean(r['float16_quantization']['precision_at_5_change'] for r in results) * 100:.3f}",
             "learning_rows": learning_rows,
-            "learning_direction": learning_direction,
-            "low_sample_finding": low_sample,
+            "learning_headline": learning_headline,
+            "learning_takeaway": learning_takeaway,
+            "hardest_pattern": hardest_pattern,
             "delayed_accuracy": percent(online["metrics"]["hdc"]["accuracy"]),
             "delayed_coverage": percent(online["metrics"]["hdc"]["coverage"]),
             "error_budget": error_budget,
-            "learning_difference": difference_text,
             "classifier_warning_count": warning_count,
             "classifier_fit_count": len(results) * len(config.budgets) * 2,
             "selection_warning_count": trial_warning_count,
             "selection_fit_count": len(trial_fits),
             "class_error_rows": class_error_rows,
             "update_effects": effect_text,
-            "warmup": config.warmup,
-            "benchmark_repeats": config.benchmark_repeats,
-            "refit_warmup": config.refit_warmup,
-            "refit_repeats": config.refit_repeats,
+            "pair_count": len(results),
+            "p95_overhead": f"{p95_overhead:.0f}",
             "runtime_platform": manifest["runtime"]["platform"],
             "runtime_python": manifest["runtime"]["python"],
-            "timing_rows": timing_rows,
+            "prediction_rows": prediction_rows,
+            "prediction_finding": prediction_finding,
             "raw_vector_bytes": f"{results[0]['resources']['hdc_raw_vector_bytes']:,}",
             "search_vector_bytes": f"{results[0]['resources']['hdc_search_vector_bytes']:,}",
             "model_input_bytes": results[0]["resources"]["model_input_bytes"],
@@ -947,7 +1069,6 @@ def create_report(run_dir):
             "eligibility_seconds": f"{results[0]['resources']['exact_gate_s']:.3f}",
             "lance_retrieval_ms": f"{results[0]['resources']['retrieval_latency']['hdc_lance_float16']['median_ms']:.3f}",
             "memory_retrieval_ms": f"{results[0]['resources']['retrieval_latency']['hdc']['median_ms']:.3f}",
-            "refit_training_examples": results[0]["resources"]["review_refit_training_examples"],
             "learning_update_explanation": learning_update_explanation(results, config),
             "claims_rows": claims,
             "geographic_enhancements": geographic_enhancement_explanation(),
