@@ -27,7 +27,7 @@ The experiments examine four questions:
 - **Learning:** How many reviewed incidents does each method need to classify new incidents well?
 - **Resources:** How long do prediction and learning from new reviews take, and how much storage does each representation need?
 
-The learning and cost experiments compare HDC with regularized logistic regression (LR) and a small MLP, all given the same reviewed incidents and connected measurements. Retrieval evaluates HDC on its own, removing order and connectivity as internal checks.
+The learning and cost experiments compare HDC with regularized logistic regression (LR) and a small **multilayer perceptron (MLP)**, a neural network with one hidden layer that learns to classify incidents from their measurements. All three methods receive the same reviewed incidents and connected measurements. Retrieval evaluates HDC on its own, removing order and connectivity as internal checks.
 
 ## How HDC works here, in brief
 
@@ -67,7 +67,7 @@ The [representation walkthrough](../../docs/representation-walkthrough.md) follo
 - **On par, not ahead, once reviews accumulate.** From 5 reviews per class, the three methods are within 2.0 points of one another.
 - **The class memory doesn't learn which facts matter.**
   - It is a running sum of reviewed incidents, so each fact keeps the fixed weight the encoder gave it. LR and the MLP learn a weight for each input from the labels.
-  - A pattern decided by a few facts can be outvoted by facts that vary.
+  - For example, packet loss on a shared backhaul link and its peer phones can indicate a shared-equipment fault, even while the phone's own signal weakens. That weakening signal also makes the incident resemble the "signal getting weaker" class memory. If that pull outweighs the network evidence when comparing the two class memories, HDC chooses the wrong pattern. Adding reviews doesn't teach this memory to give the deciding network facts more weight.
   - This concerns the class memory used here, not HDC encoding; see [Future work](#future-work-teaching-the-class-memory-which-facts-matter).
 
 ## The dataset
