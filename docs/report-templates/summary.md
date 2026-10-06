@@ -27,7 +27,7 @@ The experiments examine four questions:
 - **Learning:** How many reviewed incidents does each method need to classify new incidents well?
 - **Resources:** How long do prediction and learning from new reviews take, and how much storage does each representation need?
 
-The learning and cost experiments compare HDC with regularized logistic regression (LR) and a small MLP, all given the same reviewed incidents and connected measurements. Retrieval evaluates HDC on its own, removing order and connectivity as internal checks.
+The learning and cost experiments compare HDC with regularized logistic regression (LR) and a small **multilayer perceptron (MLP)**, a neural network with one hidden layer that learns to classify incidents from their measurements. All three methods receive the same reviewed incidents and connected measurements. Retrieval evaluates HDC on its own, removing order and connectivity as internal checks.
 
 ## How HDC works here, in brief
 
