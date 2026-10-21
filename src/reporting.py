@@ -80,6 +80,14 @@ def update_rows(results, method, batch):
     ]
 
 
+def learning_row(result, budget, method):
+    return next(
+        row
+        for row in result["learning"]
+        if row["budget_per_class"] == budget and row["method"] == method
+    )
+
+
 def update_median(results, method, batch, stage="complete_wall_ms", metric="median_ms"):
     """Median across seed pairs of the raw (not per-review) batch timing."""
     return statistics.median(
@@ -102,8 +110,6 @@ def ms(value):
 
 
 def figure_style():
-    os.environ.setdefault("MPLCONFIGDIR", "/private/tmp/telus-matplotlib")
-    os.environ.setdefault("XDG_CACHE_HOME", "/private/tmp/telus-cache")
     import matplotlib
 
     matplotlib.use("Agg")
@@ -691,6 +697,11 @@ def future_work_explanation(run_dir, config, pair_dir, data_seed, encoder_seed, 
     wrong = collections.Counter(
         hdc.predict(raws[i]) for i in hard if hdc.predict(raws[i]) != target
     )
+    if not wrong:
+        return (
+            "## Future work: teaching the class memory which facts matter\n\n"
+            f"HDC classified every {PATTERNS[hardest]} incident correctly at {budget} reviews per pattern."
+        )
     confused = wrong.most_common(1)[0][0]
     groups = {}
     for i in hard:
@@ -985,10 +996,8 @@ def create_report(run_dir):
         method: {
             label: 1
             - statistics.mean(
-                row["metrics"]["per_class"][label]["recall"]
+                learning_row(result, error_budget, method)["metrics"]["per_class"][label]["recall"]
                 for result in results
-                for row in result["learning"]
-                if row["budget_per_class"] == error_budget and row["method"] == method
             )
             for label in LABELS
         }
@@ -1003,24 +1012,22 @@ def create_report(run_dir):
     learning_rows, learning_headline, learning_takeaway, hardest_pattern, learned = (
         learning_comparison(summary, config, class_errors, error_budget)
     )
-    fit_rows = "\n".join(
-        "| "
-        + str(budget)
-        + " | "
-        + " | ".join(
-            f"{statistics.median(next(row for row in result['learning'] if row['budget_per_class'] == budget and row['method'] == method)['fit']['fit_ms'] for result in results):.2f}"
-            for method in ("hdc", "logistic_regression", "mlp")
+    fit_ms = {
+        (budget, method): statistics.median(
+            learning_row(result, budget, method)["fit"]["fit_ms"] for result in results
         )
+        for budget in config.budgets
+        for method in UPDATE_METHODS
+    }
+    fit_rows = "\n".join(
+        f"| {budget} | "
+        + " | ".join(f"{fit_ms[budget, method]:.2f}" for method in UPDATE_METHODS)
         + " |"
         for budget in config.budgets
     )
     classifier_bytes = {
         method: statistics.median(
-            next(
-                row
-                for row in result["learning"]
-                if row["budget_per_class"] == max(config.budgets) and row["method"] == method
-            )["fit"]["persistence"]["bytes"]
+            learning_row(result, max(config.budgets), method)["fit"]["persistence"]["bytes"]
             for result in results
         )
         for method in ("logistic_regression", "mlp")
@@ -1100,8 +1107,9 @@ def create_report(run_dir):
         )
         for name, row in effect_examples.items()
     )
-    mismatches = len(read(paths[0] / "retrieval_errors.json"))
-    errors = read(paths[0] / "retrieval_errors.json")[:5]
+    all_errors = read(paths[0] / "retrieval_errors.json")
+    mismatches = len(all_errors)
+    errors = all_errors[:5]
     error_text = (
         "\n".join(
             f"| {row['episode_id']} | {PATTERNS[row['label']]} | {PATTERNS[row['retrieved_label']]} |"
@@ -1110,7 +1118,6 @@ def create_report(run_dir):
         or "| — | No top-1 mismatch in this run | — |"
     )
     operator = results[0]["operators"]
-    all_errors = read(paths[0] / "retrieval_errors.json")
     top_hits_checked = sum(r["evidence_audit"]["top_hits_checked"] for r in results)
     hardest = learned["hardest"]
     hardest_misses = sum(row["label"] == hardest for row in all_errors)
@@ -1146,17 +1153,7 @@ def create_report(run_dir):
     storage_ratio = raw_bytes / input_bytes
     single = update_single_ms
     fits = {
-        method: [
-            statistics.median(
-                next(
-                    row
-                    for row in result["learning"]
-                    if row["budget_per_class"] == budget and row["method"] == method
-                )["fit"]["fit_ms"]
-                for result in results
-            )
-            for budget in sorted(config.budgets)
-        ]
+        method: [fit_ms[budget, method] for budget in sorted(config.budgets)]
         for method in ("logistic_regression", "mlp")
     }
     few = (
