@@ -161,7 +161,6 @@
         "internal_api": "openmp",
         "num_threads": 1,
         "prefix": "libomp",
-        "filepath": "/Users/prrao/code/telus-demo/.venv/lib/python3.13/site-packages/torch/lib/libomp.dylib",
         "version": null
       },
       {
@@ -169,7 +168,6 @@
         "internal_api": "openmp",
         "num_threads": 10,
         "prefix": "libomp",
-        "filepath": "/Users/prrao/code/telus-demo/.venv/lib/python3.13/site-packages/sklearn/.dylibs/libomp.dylib",
         "version": null
       }
     ],

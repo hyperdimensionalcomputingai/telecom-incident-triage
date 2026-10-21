@@ -5,7 +5,8 @@ from dataclasses import replace
 import pytest
 
 import reporting
-from config import Config
+import study
+from config import ROOT, Config
 
 
 def test_named_replacement_preserves_math_and_inserted_content(tmp_path, monkeypatch):
@@ -39,3 +40,15 @@ def test_encoder_template_uses_config_without_damaging_latex():
     assert "(w_S,w_C,w_H)=(1.0,3.0,0.25)" in rendered
     assert r"\frac{x-a_f}{b_f-a_f}" in rendered
     assert not reporting.PLACEHOLDER.search(rendered)
+
+
+def test_smoke_run_renders_complete_report(tmp_path):
+    from threadpoolctl import threadpool_limits
+
+    run_dir = tmp_path / "run"
+    study.prepare(run_dir, Config.read(ROOT / "configs" / "smoke.json"))
+    with threadpool_limits(limits=1):
+        study.run(run_dir)
+    study.report(run_dir)
+    summary = (run_dir / "reports" / "summary.md").read_text()
+    assert "{{" not in summary
