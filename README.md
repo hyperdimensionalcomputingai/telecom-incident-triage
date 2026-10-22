@@ -13,6 +13,14 @@ The experiments examine four questions:
 
 The Python files live directly in [src/](src/).
 
+## Talk slides
+
+[Download the slides (PDF, 32 slides)](docs/telecom-incident-triage-slides.pdf) for **Combining Signal, Context and Memory: Understanding HDC through Telecom Incidents**, presented by Prashanth Rao and David Hughes of HDC Labs. The talk introduces HDC through the telecom scenario, then walks through retrieval, graph evidence and learning from labelled incidents.
+
+For a written explanation, see the [representation walkthrough](docs/representation-walkthrough.md).
+
+The PDF is a static export. The embedded animation on slide 14 does not appear; the surrounding text and slide 16 explain the class-memory update.
+
 ## Reproduce
 
 Requires **Python 3.13** and **uv**. [lance-graph](https://github.com/lancedb/lance-graph) only publishes Linux x86_64 wheels, so elsewhere `uv sync` builds it from source, which needs a Rust toolchain and `protoc`. From the repository root:

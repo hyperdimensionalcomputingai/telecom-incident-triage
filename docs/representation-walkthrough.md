@@ -4,6 +4,8 @@ This walkthrough explains the representation and prototype learner in this codeb
 
 Related figures are available under `runs/reports/figures/`.
 
+For a visual introduction, see the [talk slides (PDF, 32 slides)](telecom-incident-triage-slides.pdf): **Combining Signal, Context and Memory: Understanding HDC through Telecom Incidents**.
+
 ## 1. First, what is happening in the telecom example?
 
 Imagine a commuter travelling with their phone. The phone connects wirelessly to the mobile network. That connection depends on several things:
