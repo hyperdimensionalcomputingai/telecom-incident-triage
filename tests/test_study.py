@@ -251,6 +251,15 @@ def test_stored_manifests_and_edge_sources_resolve(sample):
     )
 
 
+def test_cypher_trail_reaches_exactly_the_stored_sources(sample):
+    sources, vectors = sample[8], sample[9]
+    for row in vectors.table.to_arrow().select(["episode_id", "source_ids"]).to_pylist():
+        trail = sources.evidence_trail(row["episode_id"])
+        assert [r["o.ordinal"] for r in trail["path"]] == [0, 1, 2]
+        assert len(trail["peers"]) == 6
+        assert trail["source_ids"] == row["source_ids"]
+
+
 def test_geoarrow_metadata_survives_roundtrip(sample):
     field = sample[8].observations.schema.field("geometry")
     assert field.type.extension_name == "geoarrow.wkb"

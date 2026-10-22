@@ -32,6 +32,7 @@ PACKAGES = (
     "geodatafusion",
     "datafusion",
     "lancedb",
+    "lance-graph",
     "pylance",
     "torch",
     "torch-hd",
@@ -318,6 +319,7 @@ def evaluate_pair(
     labels,
     reviews,
     lookup,
+    sources,
     candidates,
     setting,
     gate_timing,
@@ -421,6 +423,11 @@ def evaluate_pair(
         evidence["score_scope"] = (
             "Term contributions reconstruct float32 cosine; add the recorded quantization residual for the stored-vector cosine."
         )
+        # The graph walk over stored tables must reach exactly the encoded sources.
+        trail = sources.evidence_trail(episodes[candidate]["episode_id"])
+        if trail["source_ids"] != [source["source_id"] for source in evidence["sources"]]:
+            raise AssertionError("Cypher evidence trail disagrees with encoded sources")
+        evidence["trail"] = trail
         max_raw_error = max(max_raw_error, evidence["raw_reconstruction_max_error"])
         max_score_error = max(max_score_error, evidence["score_reconstruction_error"])
         evidence_by_query[episodes[query]["episode_id"]] = evidence
@@ -668,6 +675,7 @@ def run(run_dir):
                 labels,
                 reviews,
                 lookup,
+                sources,
                 candidates,
                 setting,
                 gate_timing,
