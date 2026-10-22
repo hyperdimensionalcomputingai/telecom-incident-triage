@@ -15,10 +15,10 @@ The Python files live directly in [src/](src/).
 
 ## Reproduce
 
-Requires **Python 3.13** and **uv**. From the repository root:
+Requires **Python 3.13** and **uv**. [lance-graph](https://github.com/lancedb/lance-graph) only publishes Linux x86_64 wheels, so elsewhere `uv sync` builds it from source, which needs a Rust toolchain and `protoc`. From the repository root:
 
 ```sh
-uv sync
+uv sync --locked
 uv run src/prepare.py
 uv run src/run.py
 uv run src/report.py
@@ -29,6 +29,33 @@ The scripts share two paths in [src/settings.py](src/settings.py): `CONFIG_FILE`
 The full study crosses five data seeds with three encoder seeds, with 2,400 episodes per dataset. For a quick pipeline check, change `CONFIG_FILE` to `configs/smoke.json`; its small dataset is not intended for performance claims. Preparation uses the bundled street snapshot.
 
 Run the acceptance checks with `uv run pytest -q`.
+
+## Follow the evidence trail
+
+HDC similarity search returns a comparable earlier episode. To see the facts behind the match, [src/storage.py](src/storage.py) uses [lance-graph](https://github.com/lancedb/lance-graph) to read the stored Lance source tables as a property graph and runs a Cypher query from the retrieved episode. Each relationship reuses a table that already holds both endpoint IDs (for example, `SERVED_BY` is the `observations` table's `observation_id` → `cell_id`), so the graph needs no hand-written joins and no second copy of the data.
+
+```cypher
+MATCH (e:Episode)-[:HAS_OBSERVATION]->(o:Observation)-[:SERVED_BY]->(c:Cell)-[b:BACKHAULED_BY]->(l:Link),
+      (o)-[:FROM_PHONE]->(ph:Phone),
+      (c)-[:CELL_STATE]->(cs:CellStatus),
+      (l)-[:LINK_STATE]->(ls:LinkStatus)
+WHERE e.episode_id = $episode
+  AND o.timestamp_s >= b.valid_from_s AND o.timestamp_s < b.valid_to_s
+  AND cs.timestamp_s = o.timestamp_s AND ls.timestamp_s = o.timestamp_s
+RETURN o.ordinal, o.radio_dbm, ph.handset, cs.cell_load_pct, ls.link_loss_pct, ls.link_latency_ms
+ORDER BY o.ordinal
+```
+
+The path follows the phone's signal to its serving cell's load, then to the backhaul link that was connected at that time and its loss and latency. A second query continues from that link to the other phones sharing it. From Python:
+
+```python
+hits = vectors.search(raw_query, eligible, decision_s)  # HDC similarity search
+trail = sources.evidence_trail(hits[0]["episode_id"])  # Cypher over the same Lance tables
+trail["path"]   # phone signal, cell load, backhaul loss and latency at each of three times
+trail["peers"]  # other phones on that backhaul link at the same times
+```
+
+During a run, the trail for every top-ranked match must reach exactly the source records its hypervector encoded; any disagreement stops the run.
 
 ## Edit the report narrative
 

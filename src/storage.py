@@ -9,8 +9,66 @@ import lancedb
 import pyarrow as pa
 import torch
 from datafusion import SessionContext
+from lance_graph import CypherQuery, GraphConfig
 
 from encoding import unit
+
+# A property-graph view over the stored source tables; no graph copy is written.
+# Each relationship reuses a table that already holds both endpoint IDs.
+NODES = {
+    "Episode": ("episodes", "episode_id"),
+    "Observation": ("observations", "observation_id"),
+    "Phone": ("phones", "phone_id"),
+    "Cell": ("cells", "cell_id"),
+    "Link": ("links", "link_id"),
+    "CellStatus": ("cell_status", "source_id"),
+    "LinkStatus": ("link_status", "source_id"),
+    "Peer": ("peer_observations", "peer_observation_id"),
+}
+RELATIONSHIPS = {
+    "HAS_OBSERVATION": ("observations", "episode_id", "observation_id"),
+    "FROM_PHONE": ("observations", "observation_id", "phone_id"),
+    "SERVED_BY": ("observations", "observation_id", "cell_id"),
+    "BACKHAULED_BY": ("edges", "cell_id", "link_id"),
+    "CELL_STATE": ("cell_status", "cell_id", "source_id"),
+    "LINK_STATE": ("link_status", "link_id", "source_id"),
+    "HOSTS_PEER": ("peer_observations", "cell_id", "peer_observation_id"),
+}
+builder = GraphConfig.builder()
+for label, (_, identity) in NODES.items():
+    builder = builder.with_node_label(label, identity)
+for kind, (_, source, target) in RELATIONSHIPS.items():
+    builder = builder.with_relationship(kind, source, target)
+GRAPH = builder.build()
+# Phone -> serving cell -> backhaul link valid at that time, with same-time cell
+# and link telemetry. Mirrors build_episodes, but as one declarative path.
+PATH = CypherQuery(
+    """
+    MATCH (e:Episode)-[:HAS_OBSERVATION]->(o:Observation)-[:SERVED_BY]->(c:Cell)-[b:BACKHAULED_BY]->(l:Link),
+          (o)-[:FROM_PHONE]->(ph:Phone),
+          (c)-[:CELL_STATE]->(cs:CellStatus),
+          (l)-[:LINK_STATE]->(ls:LinkStatus)
+    WHERE e.episode_id = $episode
+      AND o.timestamp_s >= b.valid_from_s AND o.timestamp_s < b.valid_to_s
+      AND cs.timestamp_s = o.timestamp_s AND ls.timestamp_s = o.timestamp_s
+    RETURN o.ordinal, o.observation_id, o.radio_dbm, ph.phone_id, ph.handset, c.cell_id,
+           b.edge_id, l.link_id, cs.source_id, cs.cell_load_pct, ls.source_id,
+           ls.link_loss_pct, ls.link_latency_ms
+    ORDER BY o.ordinal
+    """
+).with_config(GRAPH)
+# Other phones whose cells share that link at the same time, via their own edge.
+PEERS = CypherQuery(
+    """
+    MATCH (e:Episode)-[:HAS_OBSERVATION]->(o:Observation)-[:SERVED_BY]->(c:Cell)-[b:BACKHAULED_BY]->(l:Link)<-[pb:BACKHAULED_BY]-(:Cell)-[:HOSTS_PEER]->(p:Peer)
+    WHERE e.episode_id = $episode
+      AND o.timestamp_s >= b.valid_from_s AND o.timestamp_s < b.valid_to_s
+      AND p.timestamp_s = o.timestamp_s AND p.edge_id = pb.edge_id
+    RETURN o.ordinal, l.link_id, p.peer_observation_id, p.edge_id, p.peer_radio_dbm,
+           p.peer_loss_pct
+    ORDER BY o.ordinal, p.peer_observation_id
+    """
+).with_config(GRAPH)
 
 
 def predicate(polygon, start, end):
@@ -39,6 +97,14 @@ class SourceStore:
         self.ctx.register_record_batches(
             "observations", [self.observations.to_table().to_batches()]
         )
+        # Read each Lance table once; names sharing a table share one Arrow table.
+        # shortcut: whole tables in memory, fine at tutorial scale; upgrade to lazy
+        # Lance providers once lance-graph's CypherEngine supports them with parameters.
+        arrow = {
+            name: self.db.open_table(name).to_arrow()
+            for name in {spec[0] for spec in (*NODES.values(), *RELATIONSHIPS.values())}
+        }
+        self.graph = {name: arrow[spec[0]] for name, spec in {**NODES, **RELATIONSHIPS}.items()}
 
     def eligible(self, polygon, start, end, crosscheck=True):
         where = predicate(polygon, start, end)
@@ -65,6 +131,22 @@ class SourceStore:
             for identity, observations in groups.items()
             if len(observations) == 3 and identity in self.memory_ids
         )
+
+    def evidence_trail(self, episode_id):
+        """Follow a retrieved episode's graph path to the records an analyst can inspect."""
+        path, peers = (
+            query.with_parameter("episode", episode_id).execute(self.graph).to_pylist()
+            for query in (PATH, PEERS)
+        )
+        keys = ("ph.phone_id", "o.observation_id", "b.edge_id", "cs.source_id", "ls.source_id")
+        return {
+            "path": path,
+            "peers": peers,
+            "source_ids": sorted(
+                {row[key] for row in path for key in keys}
+                | {row[key] for row in peers for key in ("p.peer_observation_id", "p.edge_id")}
+            ),
+        }
 
 
 class VectorStore:

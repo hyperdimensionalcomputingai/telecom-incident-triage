@@ -12,6 +12,7 @@ dependencies = [
   "geodatafusion==0.3.1",
   "datafusion==53.0.0",
   "lancedb==0.39.0",
+  "lance-graph==0.5.4",
   "pylance==12.0.0",
   "torch==2.14.1",
   "torch-hd==5.8.4",
